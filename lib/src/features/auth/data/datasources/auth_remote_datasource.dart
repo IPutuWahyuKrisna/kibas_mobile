@@ -1,0 +1,128 @@
+import 'package:dartz/dartz.dart';
+import 'package:dio/dio.dart';
+import 'package:kibas_mobile/src/core/constant/apis.dart';
+import '../../../../core/error/exceptions.dart';
+import '../../../../core/error/failure.dart';
+import '../models/register_model.dart';
+import '../models/user_model.dart';
+
+abstract class AuthRemoteDataSource {
+  Future<UserModel> login(String email, String password);
+  Future<Either<Failure, String>> register(RegisterModel registerData);
+
+  Future<Either<Failure, List<Map<String, dynamic>>>> getGolonganList();
+  Future<Either<Failure, List<Map<String, dynamic>>>> getKecamatanList();
+  Future<Either<Failure, List<Map<String, dynamic>>>> getKelurahanList();
+  Future<Either<Failure, List<Map<String, dynamic>>>> getAreaList();
+}
+
+class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
+  final Dio dio;
+
+  AuthRemoteDataSourceImpl(this.dio);
+
+  @override
+  Future<UserModel> login(String email, String password) async {
+    print("masuk ke data source");
+    try {
+      final response = await dio.post(
+        "https://kibas.tirtadanuarta.com/api/v1/login",
+        data: {
+          'email': email,
+          'password': password,
+        },
+        options: Options(
+          sendTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+        ),
+      );
+
+      if (response.statusCode == 200) {
+        print("berhasil");
+        final userModel = UserModel.fromJson(response.data['data']);
+        return userModel;
+      } else {
+        throw ServerException.fromDioError(DioException(
+          response: response,
+          type: DioExceptionType.badResponse,
+          requestOptions: response.requestOptions,
+        ));
+      }
+    } on DioException catch (e) {
+      final statusCode = e.response?.statusCode;
+      final errorMessage =
+          e.response?.data?['message'] ?? "Error tidak diketahui";
+      print(
+          "ini erornya dio ${e.error}${e.type}${e.message}${e.requestOptions}${e.response}${e.stackTrace}${e.stringBuilder}");
+      print("ini erornya dio $statusCode");
+      print("ini erornya dio $errorMessage");
+      throw ServerException.fromDioError(e);
+    } catch (e) {
+      print("ini erornya $e");
+      throw UnknownException("Terjadi kesalahan yang tidak diketahui");
+    }
+  }
+
+  @override
+  Future<Either<Failure, String>> register(RegisterModel registerData) async {
+    try {
+      final response = await dio.post(
+        ApiUrls.register,
+        data: registerData.toJson(),
+      );
+
+      if (response.statusCode == 201) {
+        return const Right("Registrasi berhasil!");
+      } else {
+        return const Left(
+            ServerFailure(message: "Gagal melakukan registrasi."));
+      }
+    } on DioException catch (e) {
+      return Left(
+          ServerFailure(message: e.message ?? "Terjadi kesalahan di server."));
+    }
+  }
+
+  /// 🔹 Fetch Golongan List
+  @override
+  Future<Either<Failure, List<Map<String, dynamic>>>> getGolonganList() async {
+    return _fetchDropdownData(ApiUrls.getGolongan);
+  }
+
+  /// 🔹 Fetch Kecamatan List
+  @override
+  Future<Either<Failure, List<Map<String, dynamic>>>> getKecamatanList() async {
+    return _fetchDropdownData(ApiUrls.getKecamata);
+  }
+
+  /// 🔹 Fetch Kelurahan List
+  @override
+  Future<Either<Failure, List<Map<String, dynamic>>>> getKelurahanList() async {
+    return _fetchDropdownData(ApiUrls.getKelurahan);
+  }
+
+  /// 🔹 Fetch Area List
+  @override
+  Future<Either<Failure, List<Map<String, dynamic>>>> getAreaList() async {
+    return _fetchDropdownData(ApiUrls.getAreaRegist);
+  }
+
+  /// 🔹 Helper Method untuk Fetch Data Dropdown
+  Future<Either<Failure, List<Map<String, dynamic>>>> _fetchDropdownData(
+      String url) async {
+    try {
+      final response = await dio.get(url);
+
+      if (response.statusCode == 200 && response.data['data'] != null) {
+        List<Map<String, dynamic>> dataList =
+            List<Map<String, dynamic>>.from(response.data['data']);
+        return Right(dataList);
+      } else {
+        return const Left(ServerFailure(message: "Gagal mengambil data."));
+      }
+    } on DioException {
+      return const Left(
+          ServerFailure(message: "Terjadi kesalahan yang tidak terduga"));
+    }
+  }
+}
