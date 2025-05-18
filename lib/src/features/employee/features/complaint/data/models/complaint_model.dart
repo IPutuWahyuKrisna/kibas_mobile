@@ -18,7 +18,7 @@ class ComplaintModel extends Complaint {
       linkFoto: json['link_foto'],
       status: json['status'],
       pelangganId: json['pelanggan_id'],
-      namaPelanggan: json['nama_pelanggan'],
+      namaPelanggan: json['nama_pelanggan'] ?? "",
       createdAt: json['created_at'],
     );
   }

@@ -4,6 +4,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kibas_mobile/src/config/theme/colors.dart';
+import 'package:kibas_mobile/src/config/theme/index_style.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../bloc/complaint_usres_bloc.dart';
 
@@ -23,6 +24,15 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
 
   /// 🔹 Fungsi untuk memilih gambar dari galeri
   Future<void> pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> pickImageGalery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
@@ -135,15 +145,28 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          TextFormField(
-                            controller: complaintController,
-                            maxLines: 4,
-                            decoration: const InputDecoration(
-                              border: UnderlineInputBorder(),
-                              hintText: 'Masukkan keluhan Anda',
+                          SizedBox(
+                            height: 10,
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 3),
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: ColorConstants.backgroundColor),
+                            child: Center(
+                              child: TextFormField(
+                                controller: complaintController,
+                                maxLines: 4,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Masukkan keluhan Anda',
+                                ),
+                                style: TypographyStyle.bodyLight
+                                    .copyWith(color: Colors.black),
+                              ),
                             ),
-                            style: const TextStyle(
-                                color: Colors.grey, fontSize: 14),
                           ),
                         ],
                       ),
@@ -173,21 +196,58 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
                       const SizedBox(height: 10),
 
                       /// 🔹 Tombol Upload dari Galeri
-                      ElevatedButton(
-                        onPressed: pickImage,
-                        style: ButtonStyle(
-                          backgroundColor:
-                              WidgetStateProperty.all(Colors.lightBlue[100]),
-                          shape: WidgetStateProperty.all(
-                            RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(18),
-                            ),
-                          ),
-                        ),
-                        child: Text(
-                          'Upload dari Galeri',
-                          style: TextStyle(color: Colors.blue[400]),
-                        ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          GestureDetector(
+                              onTap: () {
+                                pickImage();
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 120,
+                                decoration: BoxDecoration(
+                                    color: ColorConstants.whiteColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color:
+                                            ColorConstants.greyColorsecondary,
+                                        width: 0.5)),
+                                child: Center(
+                                  child: Text(
+                                    "Camera",
+                                    style: TypographyStyle.captionsBold
+                                        .copyWith(
+                                            color: ColorConstants
+                                                .blackColorPrimary),
+                                  ),
+                                ),
+                              )),
+                          GestureDetector(
+                              onTap: () {
+                                pickImageGalery();
+                              },
+                              child: Container(
+                                height: 40,
+                                width: 120,
+                                decoration: BoxDecoration(
+                                    color: ColorConstants.whiteColor,
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                        color:
+                                            ColorConstants.greyColorsecondary,
+                                        width: 0.5)),
+                                child: Center(
+                                  child: Text(
+                                    "Galery",
+                                    style: TypographyStyle.captionsBold
+                                        .copyWith(
+                                            color: ColorConstants
+                                                .blackColorPrimary),
+                                  ),
+                                ),
+                              )),
+                        ],
                       ),
 
                       const SizedBox(height: 50),

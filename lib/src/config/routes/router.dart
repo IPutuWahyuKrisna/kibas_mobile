@@ -11,8 +11,8 @@ import '../../features/employee/features/area_employee/presentation/pages/area_p
 import '../../features/employee/features/complaint/presentation/pages/complaint_detail_page.dart';
 import '../../features/employee/features/complaint/presentation/pages/complaint_list_page.dart';
 import '../../features/employee/features/dashbord_employee/presentation/pages/dashboard_employee.dart';
-import '../../features/employee/features/read meter/presentation/pages/form_meter_employee.dart';
-import '../../features/employee/features/read meter/presentation/pages/read_meter_employee.dart';
+import '../../features/users/features/read meter/presentation/pages/form_meter_employee.dart';
+import '../../features/users/features/read meter/presentation/pages/read_meter_employee.dart';
 import '../../features/start pages/presentation/splash__screen.dart';
 import '../../features/users/features/area_employee_users/area_pegawai_users_page.dart';
 import '../../features/users/features/dashboard_user/presentation/pages/dashboard_user.dart';
@@ -40,9 +40,6 @@ final class AppRouter {
       }
 
       if (user.role == "pembaca-meter") {
-        if (path.startsWith('/dashboard_employee/read_meter_employee')) {
-          return null;
-        }
         if (path.startsWith('/dashboard_employee/area_pegawai')) {
           return null;
         }
@@ -79,6 +76,9 @@ final class AppRouter {
           return null;
         }
         if (path.startsWith('/dashboard_user/put_users')) {
+          return null;
+        }
+        if (path.startsWith('/dashboard_user/read_meter_employee')) {
           return null;
         }
         return '/dashboard_user';
@@ -127,18 +127,6 @@ final class AppRouter {
                   },
                 ),
               ]),
-          GoRoute(
-            path: 'read_meter_employee',
-            name: RouteNames.meterEmployee,
-            builder: (context, state) => const MeterEmployee(),
-            routes: [
-              GoRoute(
-                path: 'form_meter_employee',
-                name: RouteNames.addMeterEmployee,
-                builder: (context, state) => const FormMeterEmployee(),
-              ),
-            ],
-          ),
         ],
       ),
       GoRoute(
@@ -193,6 +181,18 @@ final class AppRouter {
                       },
                     ),
                   ]),
+            ],
+          ),
+          GoRoute(
+            path: 'read_meter_employee',
+            name: RouteNames.meterEmployee,
+            builder: (context, state) => const MeterEmployee(),
+            routes: [
+              GoRoute(
+                path: 'form_meter_employee',
+                name: RouteNames.addMeterEmployee,
+                builder: (context, state) => const FormMeterEmployee(),
+              ),
             ],
           ),
           GoRoute(

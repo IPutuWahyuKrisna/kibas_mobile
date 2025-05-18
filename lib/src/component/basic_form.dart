@@ -43,7 +43,8 @@ class BasicForm extends StatelessWidget {
               child: TextFormField(
                 keyboardType: inputType,
                 controller: controller,
-                style: textStyle,
+                style: TypographyStyle.bodyMedium
+                    .copyWith(color: ColorConstants.blackColorPrimary),
                 decoration: InputDecoration(
                   hintText: hintText,
                   border: InputBorder.none,

@@ -3,8 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kibas_mobile/src/config/theme/colors.dart';
 import '../../../../../../component/snack_bar.dart';
+import '../../../../../../config/theme/index_style.dart';
+import '../../../../../../core/services/global_service_locator.dart';
+import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../bloc/read_meter_bloc.dart';
 
 class FormMeterEmployee extends StatefulWidget {
@@ -24,6 +26,15 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
 
   /// 🔹 Fungsi untuk memilih gambar dari galeri
   Future<void> pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.camera);
+    if (pickedFile != null) {
+      setState(() {
+        selectedImage = File(pickedFile.path);
+      });
+    }
+  }
+
+  Future<void> pickImageGalery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
@@ -49,10 +60,13 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
       );
       return;
     }
+    final userService = coreInjection<UserLocalStorageService>();
+    final user = userService.getUser();
+    final noSambungan = "${user?.pelanggan?.noPelanggan}";
 
     context.read<ReadMeterBloc>().add(PostMeterRequested(
           imageFile: selectedImage!,
-          noRekening: noRekeningController.text,
+          noRekening: noSambungan,
           angkaFinal: angkaFinalController.text,
         ));
   }
@@ -64,7 +78,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         title: const Text(
-          'Baca Meter',
+          'Baca Meter Mandiri',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         elevation: 0,
@@ -130,47 +144,39 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
                             children: [
                               const Text(
                                 textAlign: TextAlign.left,
-                                'Angka Final',
+                                'Angka Meter',
                                 style: TextStyle(
                                   color: ColorConstants.blackColorPrimary,
                                   fontSize: 14,
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              TextFormField(
-                                controller: angkaFinalController,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  border: UnderlineInputBorder(),
-                                  hintText: 'Masukan angka',
-                                ),
-                                style: const TextStyle(
-                                    color: Colors.grey, fontSize: 14),
+                              SizedBox(
+                                height: 10,
                               ),
-                            ],
-                          ),
-                          const SizedBox(height: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                textAlign: TextAlign.left,
-                                'No Rekening',
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 20, vertical: 3),
+                                height: 50,
+                                decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(15),
+                                    color: ColorConstants.backgroundColor),
+                                child: Center(
+                                  child: TextFormField(
+                                    controller: angkaFinalController,
+                                    keyboardType: TextInputType.number,
+                                    decoration: const InputDecoration(
+                                      border: InputBorder.none,
+                                      hintText: 'Masukan angka',
+                                    ),
+                                    style: TypographyStyle.bodyLight
+                                        .copyWith(color: Colors.black),
+                                    // const TextStyle(
+                                    //     fontSize: 16,
+                                    //     fontWeight: FontWeight.bold,
+                                    //     color: Colors.black),
+                                  ),
                                 ),
-                              ),
-                              TextFormField(
-                                controller: noRekeningController,
-                                keyboardType: TextInputType.number,
-                                decoration: const InputDecoration(
-                                  border: UnderlineInputBorder(),
-                                  hintText: 'Masukan nomor rekening',
-                                ),
-                                style: const TextStyle(
-                                    color: Colors.grey, fontSize: 14),
                               ),
                             ],
                           ),
@@ -195,21 +201,58 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
                                   ),
                           ),
                           const SizedBox(height: 10),
-                          ElevatedButton(
-                            onPressed: pickImage,
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all(
-                                  Colors.lightBlue[100]),
-                              shape: WidgetStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                              ),
-                            ),
-                            child: Text(
-                              'Upload dari Galeri',
-                              style: TextStyle(color: Colors.blue[400]),
-                            ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                  onTap: () {
+                                    pickImage();
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstants.whiteColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: ColorConstants
+                                                .greyColorsecondary,
+                                            width: 0.5)),
+                                    child: Center(
+                                      child: Text(
+                                        "Camera",
+                                        style: TypographyStyle.captionsBold
+                                            .copyWith(
+                                                color: ColorConstants
+                                                    .blackColorPrimary),
+                                      ),
+                                    ),
+                                  )),
+                              GestureDetector(
+                                  onTap: () {
+                                    pickImageGalery();
+                                  },
+                                  child: Container(
+                                    height: 40,
+                                    width: 120,
+                                    decoration: BoxDecoration(
+                                        color: ColorConstants.whiteColor,
+                                        borderRadius: BorderRadius.circular(10),
+                                        border: Border.all(
+                                            color: ColorConstants
+                                                .greyColorsecondary,
+                                            width: 0.5)),
+                                    child: Center(
+                                      child: Text(
+                                        "Galery",
+                                        style: TypographyStyle.captionsBold
+                                            .copyWith(
+                                                color: ColorConstants
+                                                    .blackColorPrimary),
+                                      ),
+                                    ),
+                                  )),
+                            ],
                           ),
                         ],
                       ),

@@ -6,6 +6,7 @@ import '../../../../component/snack_bar.dart';
 import '../../../../config/theme/index_style.dart';
 import '../../../../config/routes/router.dart';
 import '../bloc/auth_bloc.dart'; // 🟢 Import CustomSnackBar
+import 'package:url_launcher/url_launcher.dart';
 
 class LoginPages extends StatefulWidget {
   const LoginPages({super.key});
@@ -45,6 +46,13 @@ class _LoginPagesState extends State<LoginPages> {
     context
         .read<AuthBloc>()
         .add(LoginButtonPressed(email: email, password: password));
+  }
+
+  Future<void> _launchPrivacyPolicy() async {
+    final Uri url = Uri.parse('https://kibas.tirtadanuarta.com/apps/policy');
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Gagal membuka link');
+    }
   }
 
   @override
@@ -113,15 +121,16 @@ class _LoginPagesState extends State<LoginPages> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           BasicForm(
-                            inputType: TextInputType.emailAddress,
+                            inputType: TextInputType.text,
                             label: "Email Pengguna",
-                            hintText: "wedyapancer@gmail.com",
+                            hintText:
+                                "Silahkan masukan email atau nomor sambungan",
                             controller: emailController,
                           ),
                           const SizedBox(height: 30),
                           PasswordForm(
                             label: "Sandi",
-                            hintText: "Password123",
+                            hintText: "Silahkan masukan password",
                             controller: passwordController,
                           ),
                         ],
@@ -168,19 +177,30 @@ class _LoginPagesState extends State<LoginPages> {
                       margin: const EdgeInsets.only(bottom: 20),
                       padding: Margin.mediumMargin,
                       width: MediaQuery.of(context).size.width,
-                      child: const Column(
+                      child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text(
-                            "Kebijakan Privasi",
-                            style: TextStyle(
-                              color: ColorConstants.purpleColor,
-                              fontWeight: FontWeight.bold,
+                          GestureDetector(
+                            onTap: _launchPrivacyPolicy,
+                            child: const Text(
+                              "Kebijakan Privasi",
+                              style: TextStyle(
+                                color: ColorConstants.purpleColor,
+                                fontWeight: FontWeight.bold,
+                                decoration: TextDecoration
+                                    .underline, // opsional, biar kelihatan bisa diklik
+                              ),
                             ),
                           ),
-                          Text(
+                          const Text(
                             "Tirta Danu Arta",
+                            style: TextStyle(
+                              color: ColorConstants.greyColorPrimary,
+                            ),
+                          ),
+                          const Text(
+                            "Powered By Wedya Pancer",
                             style: TextStyle(
                               color: ColorConstants.greyColorPrimary,
                             ),

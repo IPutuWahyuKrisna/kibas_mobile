@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kibas_mobile/src/config/theme/colors.dart';
 import 'package:kibas_mobile/src/core/services/read_meter_services.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
@@ -22,7 +23,7 @@ class MeterEmployee extends StatelessWidget {
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
         title: const Text(
-          'Baca Meter',
+          'Baca Meter Mandiri',
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         elevation: 0,
@@ -123,6 +124,7 @@ class MeterEmployee extends StatelessWidget {
             context.read<ReadMeterBloc>().add(GetListMeterEvent(token));
           }
         },
+        backgroundColor: ColorConstants.blueColor,
         child: const Icon(
           Icons.add,
           color: Colors.white,

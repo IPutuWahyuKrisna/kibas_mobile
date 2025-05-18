@@ -9,7 +9,6 @@ import '../models/user_model.dart';
 abstract class AuthRemoteDataSource {
   Future<UserModel> login(String email, String password);
   Future<Either<Failure, String>> register(RegisterModel registerData);
-
   Future<Either<Failure, List<Map<String, dynamic>>>> getGolonganList();
   Future<Either<Failure, List<Map<String, dynamic>>>> getKecamatanList();
   Future<Either<Failure, List<Map<String, dynamic>>>> getKelurahanList();
@@ -25,12 +24,33 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> login(String email, String password) async {
     print("masuk ke data source");
     try {
-      final response = await dio.post(
-        "https://kibas.tirtadanuarta.com/api/v1/login",
-        data: {
+      // Cek apakah input adalah angka (nomor rekening)
+      final isNumeric = RegExp(r'^\d+$').hasMatch(email);
+
+      // Cek apakah input adalah email
+      final isEmail =
+          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+
+      Map<String, dynamic> requestBody;
+
+      if (isNumeric) {
+        requestBody = {
+          'no_rekening': email,
+          'password': password,
+        };
+      } else if (isEmail) {
+        requestBody = {
           'email': email,
           'password': password,
-        },
+        };
+      } else {
+        throw const FormatException(
+            "Format input tidak valid: harus email atau angka.");
+      }
+
+      final response = await dio.post(
+        "https://kibas.tirtadanuarta.com/api/v1/login",
+        data: requestBody,
         options: Options(
           sendTimeout: const Duration(seconds: 30),
           receiveTimeout: const Duration(seconds: 30),
@@ -71,6 +91,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         data: registerData.toJson(),
       );
 
+      print("${response.statusCode}");
       if (response.statusCode == 201) {
         return const Right("Registrasi berhasil!");
       } else {

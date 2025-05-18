@@ -67,12 +67,13 @@ class _RekeningDetailPageState extends State<RekeningDetailPage> {
                                     fontSize: 18, fontWeight: FontWeight.bold)),
                             const SizedBox(height: 8),
                             Text("Pelanggan ID: ${rekening.pelangganId}"),
-                            Text("Area ID: ${rekening.areaId}"),
-                            Text("Kelurahan ID: ${rekening.kelurahanId}"),
-                            Text("Kecamatan ID: ${rekening.kecamatanId}"),
-                            Text("Golongan ID: ${rekening.golonganId}"),
-                            Text("Rayon ID: ${rekening.rayonId}"),
-                            Text("Lokasi: (${rekening.lat}, ${rekening.lng})"),
+                            Text("Area: ${state.labelMapping['area']}"),
+                            Text(
+                                "Kecamatan: ${state.labelMapping['kecamatan']}"),
+                            Text(
+                                "Kelurahan: ${state.labelMapping['kelurahan']}"),
+                            Text("Golongan: ${state.labelMapping['golongan']}"),
+                            Text("Rayon: ${state.labelMapping['rayon']}"),
                             // Tambahkan padding ekstra agar tombol overlay tidak menutupi konten
                             const SizedBox(height: 80),
                           ],

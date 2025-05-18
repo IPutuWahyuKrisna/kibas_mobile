@@ -60,12 +60,37 @@ class RekeningBloc extends Bloc<RekeningEvent, RekeningState> {
       FetchRekeningDetailEvent event, Emitter<RekeningState> emit) async {
     emit(RekeningDetailLoading());
 
-    final Either<Failure, RekeningDetailEntity> result =
-        await getRekeningDetailUseCase(event.rekeningId);
+    final detailResult = await getRekeningDetailUseCase(event.rekeningId);
+    final golongan = await getGolonganListUseCase.execute();
+    final kecamatan = await getKecamatanListUseCase.execute();
+    final kelurahan = await getKelurahanListUseCase.execute();
+    final area = await getAreaListUseCase.execute();
+    final rayon = await getRayonListUseCase.execute();
 
-    result.fold(
+    detailResult.fold(
       (failure) => emit(RekeningDetailError(failure.message)),
-      (rekeningDetail) => emit(RekeningDetailLoaded(rekeningDetail)),
+      (rekening) {
+        final golonganName =
+            _lookupName(golongan, rekening.golonganId, 'id', 'golongan');
+        final kecamatanName =
+            _lookupName(kecamatan, rekening.kecamatanId, 'id', 'kecamatan');
+        final kelurahanName =
+            _lookupName(kelurahan, rekening.kelurahanId, 'id', 'kelurahan');
+        final areaName = _lookupName(area, rekening.areaId, 'id', 'area');
+        final rayonCode =
+            _lookupName(rayon, rekening.rayonId, 'id', 'kode_rayon');
+
+        print(
+            "golongan: $golonganName kecamatan: $kecamatanName kelurahan: $kelurahanName area: $areaName rayon: $rayonCode");
+
+        emit(RekeningDetailLoaded(rekening, {
+          "golongan": golonganName,
+          "kecamatan": kecamatanName,
+          "kelurahan": kelurahanName,
+          "area": areaName,
+          "rayon": rayonCode,
+        }));
+      },
     );
   }
 
@@ -111,4 +136,22 @@ class RekeningBloc extends Bloc<RekeningEvent, RekeningState> {
           emit(const PutRekeningSuccess("Data rekening berhasil diperbarui")),
     );
   }
+}
+
+String _lookupName(
+  Either<Failure, List<Map<String, dynamic>>> result,
+  int id,
+  String idKey,
+  String labelKey,
+) {
+  return result.fold(
+    (_) => "-",
+    (list) {
+      final match = list.firstWhere(
+        (item) => item[idKey].toString() == id.toString(),
+        orElse: () => {},
+      );
+      return match[labelKey]?.toString() ?? "-";
+    },
+  );
 }

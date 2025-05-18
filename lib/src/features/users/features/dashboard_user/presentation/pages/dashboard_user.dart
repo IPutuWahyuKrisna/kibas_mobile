@@ -24,7 +24,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
     final token = user?.token ?? "";
     final idUsers = user!.pelanggan?.id ?? "";
     final email = user.email;
-    final role = user.role;
+    final noPelanggan = user.pelanggan?.noPelanggan;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -149,7 +149,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              role, // Tampilkan role
+                              "$noPelanggan", // Tampilkan role
                               style: const TextStyle(color: Colors.white),
                             ),
                             const SizedBox(height: 5),
@@ -221,18 +221,18 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                   InkWell(
                     onTap: () {
                       try {
-                        context.goNamed(RouteNames.areaPegawaiUsers);
+                        context.goNamed(RouteNames.meterEmployee);
                         // ignore: empty_catches
                       } catch (e) {}
                     },
                     child: const Column(
                       children: [
                         Image(
-                          image: AssetImage('assets/area.png'),
+                          image: AssetImage('assets/menu1.png'),
                           width: 80,
                           height: 80,
                         ),
-                        Text('Area'),
+                        Text('Baca Meter'),
                       ],
                     ),
                   ),

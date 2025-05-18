@@ -47,11 +47,12 @@ class RekeningDetailLoading extends RekeningState {
 
 class RekeningDetailLoaded extends RekeningState {
   final RekeningDetailEntity rekeningDetail;
+  final Map<String, dynamic> labelMapping;
 
-  const RekeningDetailLoaded(this.rekeningDetail);
+  const RekeningDetailLoaded(this.rekeningDetail, this.labelMapping);
 
   @override
-  List<Object> get props => [rekeningDetail];
+  List<Object> get props => [rekeningDetail, labelMapping];
 }
 
 class RekeningDetailError extends RekeningState {

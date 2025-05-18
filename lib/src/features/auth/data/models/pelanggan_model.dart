@@ -16,9 +16,9 @@ class PelangganModel extends Pelanggan {
     return PelangganModel(
       id: json['id'],
       noPelanggan: json['no_pelanggan'],
-      namaPelanggan: json['nama_pelanggan'],
+      namaPelanggan: json['nama_pelanggan'] ?? "",
       nikPelanggan: json['nik_pelanggan'],
-      alamatPelanggan: json['alamat_pelanggan'],
+      alamatPelanggan: json['alamat_pelanggan'] ?? "",
       kecamatan: json['location']?['kecamatan']?['kecamatan'] ?? '',
       area: json['location']?['area']?['area'] ?? '',
       rekening: List<String>.from(

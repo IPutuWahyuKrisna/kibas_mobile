@@ -1,10 +1,10 @@
 import 'package:get_it/get_it.dart';
-import '../../features/employee/features/read meter/data/repositories/read_meter_repository_impl.dart';
-import '../../features/employee/features/read meter/data/datasources/read_meter_remote_data_source.dart';
-import '../../features/employee/features/read meter/domain/repositories/read_meter_repository.dart';
-import '../../features/employee/features/read meter/domain/usecases/fetch_read_meter_usecase.dart';
-import '../../features/employee/features/read meter/domain/usecases/post_meter_usecase.dart';
-import '../../features/employee/features/read meter/presentation/bloc/read_meter_bloc.dart';
+import '../../features/users/features/read meter/data/repositories/read_meter_repository_impl.dart';
+import '../../features/users/features/read meter/data/datasources/read_meter_remote_data_source.dart';
+import '../../features/users/features/read meter/domain/repositories/read_meter_repository.dart';
+import '../../features/users/features/read meter/domain/usecases/fetch_read_meter_usecase.dart';
+import '../../features/users/features/read meter/domain/usecases/post_meter_usecase.dart';
+import '../../features/users/features/read meter/presentation/bloc/read_meter_bloc.dart';
 import 'image_compression_service.dart';
 
 final meterInjec = GetIt.instance;

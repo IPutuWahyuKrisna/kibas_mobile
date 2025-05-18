@@ -45,20 +45,36 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, String>> register(RegisterEntity registerData) {
-    return remoteDataSource.register(RegisterModel(
-      email: registerData.email,
-      password: registerData.password,
-      passwordConfirmation: registerData.passwordConfirmation,
-      noPelanggan: registerData.noPelanggan,
-      namaPelanggan: registerData.namaPelanggan,
-      nikPelanggan: registerData.nikPelanggan,
-      alamatPelanggan: registerData.alamatPelanggan,
-      golonganId: registerData.golonganId,
-      kecamatanId: registerData.kecamatanId,
-      kelurahanId: registerData.kelurahanId,
-      areaId: registerData.areaId,
-    ));
+  Future<Either<Failure, String>> register(RegisterEntity registerData) async {
+    try {
+      await remoteDataSource.register(RegisterModel(
+          email: registerData.email,
+          password: registerData.password,
+          passwordConfirmation: registerData.passwordConfirmation,
+          noPelanggan: registerData.noPelanggan,
+          noRekening: registerData.noRekening,
+          nikPelanggan: registerData.nikPelanggan));
+      return const Right("Pendaftaran Berhasil Dilakukan");
+    } on ServerException catch (e) {
+      return Left(ServerFailure(message: e.message));
+    } on NetworkException catch (e) {
+      return Left(NetworkFailure(message: e.message));
+    } on CacheException catch (e) {
+      return Left(CacheFailure(message: e.message));
+    } on UnknownException catch (e) {
+      return Left(UnknownFailure(message: e.message));
+    } catch (e) {
+      print(e);
+      return const Left(
+          UnknownFailure(message: "Terjadi kesalahan yang tidak diketahui"));
+    }
+    // return remoteDataSource.register(RegisterModel(
+    //   email: registerData.email,
+    //   password: registerData.password,
+    //   passwordConfirmation: registerData.passwordConfirmation,
+    //   noPelanggan: registerData.noPelanggan,
+    //   nikPelanggan: registerData.nikPelanggan,
+    // ));
   }
 
   @override
