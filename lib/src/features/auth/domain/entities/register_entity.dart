@@ -4,7 +4,6 @@ class RegisterEntity extends Equatable {
   final String email;
   final String password;
   final String passwordConfirmation;
-  final String noPelanggan;
   final String noRekening;
   final String nikPelanggan;
 
@@ -12,7 +11,6 @@ class RegisterEntity extends Equatable {
     required this.email,
     required this.password,
     required this.passwordConfirmation,
-    required this.noPelanggan,
     required this.noRekening,
     required this.nikPelanggan,
   });
@@ -22,7 +20,6 @@ class RegisterEntity extends Equatable {
         email,
         password,
         passwordConfirmation,
-        noPelanggan,
         noRekening,
         nikPelanggan,
       ];

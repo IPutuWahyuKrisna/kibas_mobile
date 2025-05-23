@@ -29,14 +29,21 @@ class FetchComplaintDetailUsersEvent extends ComplaintUsersEvent {
 class SubmitComplaintEvent extends ComplaintUsersEvent {
   final File image;
   final String complaint;
+  final double latitude;
+  final double longitude;
+  final String jenisPengaduan;
 
   const SubmitComplaintEvent({
     required this.image,
     required this.complaint,
+    required this.latitude,
+    required this.longitude,
+    required this.jenisPengaduan,
   });
 
   @override
-  List<Object?> get props => [image, complaint];
+  List<Object?> get props =>
+      [image, complaint, latitude, longitude, jenisPengaduan];
 }
 
 class DeleteComplaintEvent extends ComplaintUsersEvent {
@@ -48,11 +55,15 @@ class DeleteComplaintEvent extends ComplaintUsersEvent {
   List<Object?> get props => [id];
 }
 
-class SubmitPutComplaintEvent extends ComplaintUsersEvent {
-  final PutComplaintModel putComplaint;
+class SubmitRatingComplaintEvent extends ComplaintUsersEvent {
+  final int pengaduanId;
+  final int rating;
 
-  const SubmitPutComplaintEvent({required this.putComplaint});
+  const SubmitRatingComplaintEvent({
+    required this.pengaduanId,
+    required this.rating,
+  });
 
   @override
-  List<Object> get props => [putComplaint];
+  List<Object?> get props => [pengaduanId, rating];
 }

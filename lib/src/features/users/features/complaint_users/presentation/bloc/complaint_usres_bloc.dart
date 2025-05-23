@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:kibas_mobile/src/features/users/features/complaint_users/domain/entities/detail_complain.dart';
 
 import '../../data/models/put_complaint_model.dart';
 import '../../domain/entities/complaint_users_entity.dart';
@@ -33,7 +34,7 @@ class ComplaintUsersBloc
     on<FetchComplaintDetailUsersEvent>(_onFetchComplaintDetail);
     on<SubmitComplaintEvent>(_onSubmitComplaint);
     on<DeleteComplaintEvent>(_onDeleteComplaint);
-    on<SubmitPutComplaintEvent>(_onSubmitPutComplaint);
+    on<SubmitRatingComplaintEvent>(_onSubmitRatingComplaint);
   }
 
   Future<void> _onFetchAllComplaints(FetchAllComplaintsUsersEvent event,
@@ -57,15 +58,20 @@ class ComplaintUsersBloc
   }
 
   Future<void> _onSubmitComplaint(
-      SubmitComplaintEvent event, Emitter<ComplaintUsersState> emit) async {
+    SubmitComplaintEvent event,
+    Emitter<ComplaintUsersState> emit,
+  ) async {
     emit(ComplaintUsersLoading());
     final result = await postComplaintUseCase.execute(
       image: event.image,
       complaint: event.complaint,
+      latitude: event.latitude,
+      longitude: event.longitude,
+      jenisPengaduan: event.jenisPengaduan,
     );
     result.fold(
       (failure) => emit(ComplaintUsersError(message: failure.message)),
-      (response) => emit(PostComplaintSuccess(message: response)),
+      (message) => emit(PostComplaintSuccess(message: message)),
     );
   }
 
@@ -81,15 +87,21 @@ class ComplaintUsersBloc
     );
   }
 
-  Future<void> _onSubmitPutComplaint(
-      SubmitPutComplaintEvent event, Emitter<ComplaintUsersState> emit) async {
+  Future<void> _onSubmitRatingComplaint(
+    SubmitRatingComplaintEvent event,
+    Emitter<ComplaintUsersState> emit,
+  ) async {
     emit(ComplaintUsersLoading());
 
-    final result = await putComplaintUseCase.execute(event.putComplaint);
-
+    final result = await putComplaintUseCase.execute(
+      PutComplaintModel(
+        pengaduanId: event.pengaduanId,
+        rating: event.rating,
+      ),
+    );
+    print(result);
     result.fold(
-      (failure) => emit(
-          ComplaintUsersError(message: failure.message)), // 🛑 Tampilkan error
+      (failure) => emit(ComplaintUsersError(message: failure.message)),
       (message) => emit(PutComplaintSuccess(message: message)),
     );
   }

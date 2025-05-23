@@ -1,22 +1,21 @@
-import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:kibas_mobile/src/core/constant/apis.dart';
+import 'package:kibas_mobile/src/features/users/features/complaint_users/data/models/complain_detail_model.dart';
 import '../../../../../../core/error/exceptions.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../../../../core/services/global_service_locator.dart';
 import '../../../../../../core/services/image_compression_service.dart';
 import '../../../../../../core/utils/user_local_storage_service.dart';
+import '../../domain/entities/detail_complain.dart';
 import '../models/complaint_usres_model.dart';
+import '../models/post_complaint_model.dart';
 import '../models/put_complaint_model.dart';
 
 abstract class ComplaintUsersRemoteDataSource {
   Future<List<ComplaintModelUsers>> getAllComplaintsUsers(String token);
-  Future<ComplaintModelUsers> getComplaintDetailUsers(String token, int id);
-  Future<Either<Failure, String>> postComplaint({
-    required File image,
-    required String complaint,
-  });
+  Future<DetailComplaintUsers> getComplaintDetailUsers(String token, int id);
+  Future<Either<Failure, String>> postComplaint(PostComplaintModel complaint);
   Future<String> deleteComplaint(int id);
   Future<Either<Failure, String>> putComplaint(PutComplaintModel complaint);
 }
@@ -31,7 +30,7 @@ class ComplaintUsersRemoteDataSourceImpl
   @override
   Future<List<ComplaintModelUsers>> getAllComplaintsUsers(String token) async {
     final response = await dio.get(
-      ApiUrls.complaint,
+      ApiUrls.getAllPengaduan,
       options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
     if (response.statusCode == 200) {
@@ -43,10 +42,10 @@ class ComplaintUsersRemoteDataSourceImpl
   }
 
   @override
-  Future<ComplaintModelUsers> getComplaintDetailUsers(
+  Future<DetailComplaintUsers> getComplaintDetailUsers(
       String token, int id) async {
     final response = await dio.get(
-      "https://kibas.tirtadanuarta.com/api/v1/pengaduan/$id",
+      "${ApiUrls.getPengaduanDetail}/$id/detail",
       options: Options(
         headers: {
           'Authorization': 'Bearer $token',
@@ -55,7 +54,7 @@ class ComplaintUsersRemoteDataSourceImpl
     );
 
     if (response.statusCode == 200) {
-      return ComplaintModelUsers.fromJson(response.data['data']);
+      return DetailComplaintModelUsers.fromJson(response.data['data']);
     } else {
       throw Exception('Gagal mengambil detail pengaduan!');
     }
@@ -63,33 +62,38 @@ class ComplaintUsersRemoteDataSourceImpl
 
   @override
   Future<Either<Failure, String>> postComplaint(
-      {required File image, required String complaint}) async {
+      PostComplaintModel complaint) async {
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
     final id = user?.pelanggan?.id ?? "";
     final token = user?.token ?? "";
 
     try {
-      final compressedFile = await compressionService.compressImage(image);
+      final compressedFile =
+          await compressionService.compressImage(complaint.image);
       if (compressedFile == null) {
         return const Left(ImageProcessingFailure(
-            message:
-                "Gagal mengompresi gambar! Pastikan ukuran gambar di bawah 2MB."));
+          message:
+              "Gagal mengompresi gambar! Pastikan ukuran gambar di bawah 2MB.",
+        ));
       }
 
-      FormData formData = FormData.fromMap({
+      final formData = FormData.fromMap({
         "image": await MultipartFile.fromFile(compressedFile.path),
-        "keluhan": complaint,
+        "complaint": complaint.complaint,
         "pelanggan_id": id,
+        "latitude": complaint.latitude,
+        "longitude": complaint.longitude,
+        "angkafinal": complaint.jenisPengaduan,
       });
 
-      Response response = await dio.post(
-        "https://kibas.tirtadanuarta.com/api/v1/pengaduan",
+      final response = await dio.post(
+        ApiUrls.postPengaduan,
         data: formData,
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
-            'Content-Type': 'multipart/form-data'
+            'Content-Type': 'multipart/form-data',
           },
           sendTimeout: const Duration(seconds: 10),
           receiveTimeout: const Duration(seconds: 10),
@@ -138,24 +142,23 @@ class ComplaintUsersRemoteDataSourceImpl
       final userService = coreInjection<UserLocalStorageService>();
       final user = userService.getUser();
       final token = user?.token ?? "";
-
-      final String url = "${ApiUrls.putComplaint}${complaint.id}";
-
-      final response = await dio.put(
-        url,
+      print(
+        "ini isi datanya : ${complaint.pengaduanId}, ${complaint.rating}",
+      );
+      final response = await dio.post(
+        ApiUrls.putPengaduan,
         data: {
-          "id": complaint.id, // ID harus dikirim dalam body
-          "keluhan": complaint.keluhan,
-          "pelanggan_id": complaint.pelangganId
+          "pengaduan_id": complaint.pengaduanId,
+          "rating": complaint.rating
         },
         options: Options(
           headers: {
-            'Authorization': 'Bearer $token', // 🔥 Pastikan Bearer Token benar
+            'Authorization': 'Bearer $token',
             'Content-Type': 'application/json',
             'Accept': 'application/json',
           },
           validateStatus: (status) {
-            return status! < 500; // Jangan throw error untuk status 4xx
+            return status! < 500;
           },
         ),
       );

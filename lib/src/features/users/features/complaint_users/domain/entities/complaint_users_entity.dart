@@ -1,19 +1,27 @@
 class ComplaintUsers {
   final int id;
-  final String keluhan;
-  final String linkFoto;
-  final int status;
   final int pelangganId;
-  final String namaPelanggan;
-  final String? createdAt;
+  final String? linkUrl;
+  final double pengaduanLat;
+  final double pengaduanLong;
+  final String status;
+  final int? rating;
+  final DateTime tanggalPengaduan;
+  final DateTime? tanggalSelesai;
+  final String? keteranganSelesai;
+  final String jenisPengaduan;
 
-  ComplaintUsers({
+  const ComplaintUsers({
     required this.id,
-    required this.keluhan,
-    required this.linkFoto,
-    required this.status,
     required this.pelangganId,
-    required this.namaPelanggan,
-    this.createdAt,
+    this.linkUrl,
+    required this.pengaduanLat,
+    required this.pengaduanLong,
+    required this.status,
+    this.rating,
+    required this.tanggalPengaduan,
+    this.tanggalSelesai,
+    this.keteranganSelesai,
+    required this.jenisPengaduan,
   });
 }

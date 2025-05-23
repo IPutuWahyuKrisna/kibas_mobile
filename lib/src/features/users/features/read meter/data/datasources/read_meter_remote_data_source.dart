@@ -13,7 +13,6 @@ abstract class ReadMeterRemoteDataSource {
   Future<List<ReadMeterModel>> getListMeter(String token);
   Future<Either<Failure, String>> postMeter({
     required File linkFoto,
-    required String noRekening,
     required String angkaFinal,
   });
 }
@@ -29,7 +28,7 @@ class ReadMeterRemoteDataSourceImpl implements ReadMeterRemoteDataSource {
   Future<List<ReadMeterModel>> getListMeter(String token) async {
     try {
       final response = await dio.get(
-        ApiUrls.readMeterGet,
+        ApiUrls.getReadMeter,
         options: Options(headers: {'Authorization': 'Bearer $token'}),
       );
 
@@ -48,7 +47,6 @@ class ReadMeterRemoteDataSourceImpl implements ReadMeterRemoteDataSource {
   @override
   Future<Either<Failure, String>> postMeter({
     required File linkFoto,
-    required String noRekening,
     required String angkaFinal,
   }) async {
     final userService = coreInjection<UserLocalStorageService>();
@@ -66,12 +64,11 @@ class ReadMeterRemoteDataSourceImpl implements ReadMeterRemoteDataSource {
 
       FormData formData = FormData.fromMap({
         "link_foto": await MultipartFile.fromFile(compressedFile.path),
-        "no_rekening": noRekening,
-        "angka_final": angkaFinal,
+        "angka_final": angkaFinal
       });
 
       Response response = await dio.post(
-        ApiUrls.readMeterPost,
+        ApiUrls.postReadMeter,
         data: formData,
         options: Options(
           headers: {
@@ -82,6 +79,7 @@ class ReadMeterRemoteDataSourceImpl implements ReadMeterRemoteDataSource {
           receiveTimeout: const Duration(seconds: 10),
         ),
       );
+      print(response.statusCode);
 
       if (response.statusCode == 201) {
         return const Right("Data meter berhasil dikirim!");

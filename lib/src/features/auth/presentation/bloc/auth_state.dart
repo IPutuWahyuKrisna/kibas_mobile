@@ -41,16 +41,16 @@ class RegisterError extends AuthState {
 
 class DropdownLoading extends AuthState {}
 
-class DropdownLoaded extends AuthState {
-  final List<Map<String, dynamic>> golonganList;
-  final List<Map<String, dynamic>> kecamatanList;
-  final List<Map<String, dynamic>> kelurahanList;
-  final List<Map<String, dynamic>> areaList;
+// class DropdownLoaded extends AuthState {
+//   final List<Map<String, dynamic>> golonganList;
+//   final List<Map<String, dynamic>> kecamatanList;
+//   final List<Map<String, dynamic>> kelurahanList;
+//   final List<Map<String, dynamic>> areaList;
 
-  const DropdownLoaded({
-    required this.golonganList,
-    required this.kecamatanList,
-    required this.kelurahanList,
-    required this.areaList,
-  });
-}
+//   const DropdownLoaded({
+//     required this.golonganList,
+//     required this.kecamatanList,
+//     required this.kelurahanList,
+//     required this.areaList,
+//   });
+// }

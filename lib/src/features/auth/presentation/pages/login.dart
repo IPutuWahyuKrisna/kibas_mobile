@@ -5,7 +5,7 @@ import '../../../../component/index_component.dart';
 import '../../../../component/snack_bar.dart';
 import '../../../../config/theme/index_style.dart';
 import '../../../../config/routes/router.dart';
-import '../bloc/auth_bloc.dart'; // 🟢 Import CustomSnackBar
+import '../bloc/auth_bloc.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class LoginPages extends StatefulWidget {
@@ -18,8 +18,6 @@ class LoginPages extends StatefulWidget {
 class _LoginPagesState extends State<LoginPages> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-
-  /// 🟢 Validasi input email dan password
   void _validateAndSubmit() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
@@ -41,8 +39,6 @@ class _LoginPagesState extends State<LoginPages> {
       );
       return;
     }
-    print("masuk ke fungtion");
-    // 🟢 Kirim event login ke AuthBloc
     context
         .read<AuthBloc>()
         .add(LoginButtonPressed(email: email, password: password));
@@ -62,12 +58,11 @@ class _LoginPagesState extends State<LoginPages> {
       body: BlocConsumer<AuthBloc, AuthState>(
         listener: (context, state) {
           if (state is AuthStateSuccess) {
+            print("Role di UI: ${state.userModel.role}");
             if (state.userModel.role == "pelanggan") {
-              context.goNamed(
-                  RouteNames.dashboardUser); // 🟢 Pindah ke dashboard user
+              context.goNamed(RouteNames.dashboardUser);
             } else if (state.userModel.role == "pembaca-meter") {
-              context.goNamed(RouteNames
-                  .dashboardEmployee); // 🟢 Pindah ke dashboard employee
+              context.goNamed(RouteNames.dashboardEmployee);
             }
           } else if (state is AuthStateFailure) {
             SchedulerBinding.instance.addPostFrameCallback((_) {

@@ -11,7 +11,16 @@ class PostComplaintUseCase {
   Future<Either<Failure, String>> execute({
     required File image,
     required String complaint,
+    required double latitude,
+    required double longitude,
+    required String jenisPengaduan,
   }) {
-    return repository.postComplaint(image: image, complaint: complaint);
+    return repository.postComplaint(
+      image: image,
+      complaint: complaint,
+      latitude: latitude,
+      longitude: longitude,
+      jenisPengaduan: jenisPengaduan,
+    );
   }
 }

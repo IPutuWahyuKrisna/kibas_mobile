@@ -5,7 +5,6 @@ class RegisterModel extends RegisterEntity {
       {required super.email,
       required super.password,
       required super.passwordConfirmation,
-      required super.noPelanggan,
       required super.noRekening,
       required super.nikPelanggan});
 
@@ -14,19 +13,17 @@ class RegisterModel extends RegisterEntity {
         email: json['email'],
         password: json['password'],
         passwordConfirmation: json['password_confirmation'],
-        noPelanggan: json['no_pelanggan'],
-        noRekening: json['no_rekening'],
-        nikPelanggan: json['nik_pelanggan']);
+        noRekening: json['no_sambungan'],
+        nikPelanggan: json['nik']);
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "no_pelanggan": noPelanggan,
-      "no_rekening": noRekening,
+      "no_sambungan": noRekening,
       "email": email,
       "password": password,
       "password_confirmation": passwordConfirmation,
-      "nik_pelanggan": nikPelanggan
+      "nik": nikPelanggan
     };
   }
 }

@@ -24,7 +24,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
     final token = user?.token ?? "";
     final idUsers = user!.pelanggan?.id ?? "";
     final email = user.email;
-    final noPelanggan = user.pelanggan?.noPelanggan;
+    final rekening = user.pelanggan?.rekening;
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -48,25 +48,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                     Row(
                       children: [
                         GestureDetector(
-                          onTap: () async {
-                            final result = await context
-                                .pushNamed(RouteNames.putUsersProfile);
-                            // Jika hasilnya true, panggil setState untuk merefresh tampilan (user data akan diambil ulang)
-                            if (result == true) {
-                              setState(() {});
-                            }
-                          },
-                          child: const Icon(
-                            Icons.edit_note,
-                            color: Colors.white,
-                            size: 30,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        GestureDetector(
                           onTap: () {
-                            // Tampilkan dialog konfirmasi logout
-
                             showDialog(
                               context: context,
                               builder: (context) => AlertDialog(
@@ -149,7 +131,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                             ),
                             const SizedBox(height: 10),
                             Text(
-                              "$noPelanggan", // Tampilkan role
+                              "$rekening", // Tampilkan role
                               style: const TextStyle(color: Colors.white),
                             ),
                             const SizedBox(height: 5),
@@ -200,9 +182,30 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                   InkWell(
                     onTap: () {
                       try {
+                        if (rekening != "") {
+                          context.go(
+                              '/dashboard_user/rekening'); // 🔥 Format benar
+                        } else {}
+                        // ignore: empty_catches
+                      } catch (e) {}
+                    },
+                    child: const Column(
+                      children: [
+                        Image(
+                          image: AssetImage('assets/menu4.png'),
+                          width: 80,
+                          height: 80,
+                        ),
+                        Text('Rekening'),
+                      ],
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () {
+                      try {
                         if (idUsers != "") {
                           context.go(
-                              '/dashboard_user/rekening/$idUsers'); // 🔥 Format benar
+                              '/dashboard_user/notifikasi'); // 🔥 Format benar
                         } else {}
                         // ignore: empty_catches
                       } catch (e) {}
@@ -214,14 +217,14 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                           width: 80,
                           height: 80,
                         ),
-                        Text('Rekening'),
+                        Text('Notifikasi'),
                       ],
                     ),
                   ),
                   InkWell(
                     onTap: () {
                       try {
-                        context.goNamed(RouteNames.meterEmployee);
+                        context.goNamed(RouteNames.getMeter);
                         // ignore: empty_catches
                       } catch (e) {}
                     },

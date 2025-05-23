@@ -3,6 +3,8 @@ import 'package:dio/dio.dart';
 import 'package:kibas_mobile/src/core/constant/apis.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
+import '../../../../core/services/auth_service.dart';
+import '../../../../core/utils/user_local_storage_service.dart';
 import '../models/register_model.dart';
 import '../models/user_model.dart';
 
@@ -22,35 +24,13 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
   @override
   Future<UserModel> login(String email, String password) async {
-    print("masuk ke data source");
     try {
-      // Cek apakah input adalah angka (nomor rekening)
-      final isNumeric = RegExp(r'^\d+$').hasMatch(email);
-
-      // Cek apakah input adalah email
-      final isEmail =
-          RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
-
-      Map<String, dynamic> requestBody;
-
-      if (isNumeric) {
-        requestBody = {
-          'no_rekening': email,
-          'password': password,
-        };
-      } else if (isEmail) {
-        requestBody = {
+      final response = await dio.post(
+        ApiUrls.login,
+        data: {
           'email': email,
           'password': password,
-        };
-      } else {
-        throw const FormatException(
-            "Format input tidak valid: harus email atau angka.");
-      }
-
-      final response = await dio.post(
-        "https://kibas.tirtadanuarta.com/api/v1/login",
-        data: requestBody,
+        },
         options: Options(
           sendTimeout: const Duration(seconds: 30),
           receiveTimeout: const Duration(seconds: 30),
@@ -59,7 +39,9 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
 
       if (response.statusCode == 200) {
         print("berhasil");
-        final userModel = UserModel.fromJson(response.data['data']);
+        final userModel = UserModel.fromJson(response.data["data"]);
+        await authInjec<UserLocalStorageService>().saveUser(userModel);
+        authInjec<UserLocalStorageService>().getUser();
         return userModel;
       } else {
         throw ServerException.fromDioError(DioException(
@@ -69,16 +51,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         ));
       }
     } on DioException catch (e) {
-      final statusCode = e.response?.statusCode;
-      final errorMessage =
-          e.response?.data?['message'] ?? "Error tidak diketahui";
-      print(
-          "ini erornya dio ${e.error}${e.type}${e.message}${e.requestOptions}${e.response}${e.stackTrace}${e.stringBuilder}");
-      print("ini erornya dio $statusCode");
-      print("ini erornya dio $errorMessage");
       throw ServerException.fromDioError(e);
     } catch (e) {
-      print("ini erornya $e");
       throw UnknownException("Terjadi kesalahan yang tidak diketahui");
     }
   }
@@ -90,8 +64,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         ApiUrls.register,
         data: registerData.toJson(),
       );
-
-      print("${response.statusCode}");
       if (response.statusCode == 201) {
         return const Right("Registrasi berhasil!");
       } else {

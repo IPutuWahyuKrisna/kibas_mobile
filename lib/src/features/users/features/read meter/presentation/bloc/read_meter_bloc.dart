@@ -45,7 +45,6 @@ class ReadMeterBloc extends Bloc<ReadMeterEvent, ReadMeterState> {
 
     final result = await postMeterUseCase.execute(
       imageFile: event.imageFile,
-      noRekening: event.noRekening,
       angkaFinal: event.angkaFinal,
     );
 

@@ -2,24 +2,28 @@ import '../../domain/entities/put_complaint_entity.dart';
 
 class PutComplaintModel extends PutComplaintEntity {
   const PutComplaintModel({
-    required super.id,
-    required super.keluhan,
-    required super.pelangganId,
+    required super.pengaduanId,
+    required super.rating,
   });
 
   factory PutComplaintModel.fromJson(Map<String, dynamic> json) {
     return PutComplaintModel(
-      id: json['id'],
-      keluhan: json['keluhan'],
-      pelangganId: json['pelanggan_id'],
+      pengaduanId: json['pengaduan_id'],
+      rating: json['rating'],
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      "id": id,
-      "keluhan": keluhan,
-      "pelanggan_id": pelangganId,
+      'pengaduan_id': pengaduanId,
+      'rating': rating,
     };
+  }
+
+  factory PutComplaintModel.fromEntity(PutComplaintEntity entity) {
+    return PutComplaintModel(
+      pengaduanId: entity.pengaduanId,
+      rating: entity.rating,
+    );
   }
 }

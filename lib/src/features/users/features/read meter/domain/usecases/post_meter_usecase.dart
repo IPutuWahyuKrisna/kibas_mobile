@@ -10,12 +10,10 @@ class SubmitPostmeterUseCase {
 
   Future<Either<Failure, String>> execute({
     required File imageFile,
-    required String noRekening,
     required String angkaFinal,
   }) async {
     return await repository.postMeter(
       linkFoto: imageFile,
-      noRekening: noRekening,
       angkaFinal: angkaFinal,
     );
   }

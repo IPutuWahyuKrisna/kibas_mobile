@@ -21,8 +21,7 @@ class PelangganModel extends Pelanggan {
       alamatPelanggan: json['alamat_pelanggan'] ?? "",
       kecamatan: json['location']?['kecamatan']?['kecamatan'] ?? '',
       area: json['location']?['area']?['area'] ?? '',
-      rekening: List<String>.from(
-          (json['rekening'] ?? []).map((e) => e['no_rekening'])),
+      rekening: json['rekening']?['no_rekening'] ?? '',
     );
   }
 
@@ -37,7 +36,7 @@ class PelangganModel extends Pelanggan {
         'kecamatan': {'kecamatan': kecamatan},
         'area': {'area': area},
       },
-      'rekening': rekening.map((e) => {'no_rekening': e}).toList(),
+      'rekening': {"no_rekening": rekening},
     };
   }
 }

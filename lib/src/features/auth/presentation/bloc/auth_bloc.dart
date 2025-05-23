@@ -27,7 +27,6 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }) : super(AuthInitial()) {
     on<LoginButtonPressed>(_onLoginButtonPressed);
     on<SubmitRegisterEvent>(_onSubmitRegister);
-    on<FetchDropdownEvent>(_onFetchDropdown);
   }
 
   Future<void> _onLoginButtonPressed(
@@ -35,6 +34,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthStateLoading());
     final result = await authRepository.login(event.email, event.password);
     print("masuk bloc");
+    print(result);
     result.fold(
       (failure) {
         emit(AuthStateFailure(failure.message));
@@ -56,23 +56,5 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       (failure) => emit(RegisterError(message: failure.message)),
       (message) => emit(RegisterSuccess(message: message)),
     );
-  }
-
-  /// 🔹 Fetch Data Dropdown (Golongan, Kecamatan, Kelurahan, Area)
-  Future<void> _onFetchDropdown(
-      FetchDropdownEvent event, Emitter<AuthState> emit) async {
-    emit(DropdownLoading());
-
-    final golonganResult = await getGolonganListUseCase.execute();
-    final kecamatanResult = await getKecamatanListUseCase.execute();
-    final kelurahanResult = await getKelurahanListUseCase.execute();
-    final areaResult = await getAreaListUseCase.execute();
-
-    emit(DropdownLoaded(
-      golonganList: golonganResult.getOrElse(() => []),
-      kecamatanList: kecamatanResult.getOrElse(() => []),
-      kelurahanList: kelurahanResult.getOrElse(() => []),
-      areaList: areaResult.getOrElse(() => []),
-    ));
   }
 }

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
+import 'package:kibas_mobile/src/config/theme/index_style.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
 import '../../../../../../core/services/global_service_locator.dart';
@@ -29,6 +31,10 @@ class _ComplaintListUsersPageState extends State<ComplaintListUsersPage> {
 
   @override
   Widget build(BuildContext context) {
+    final userService = coreInjection<UserLocalStorageService>();
+    final user = userService.getUser();
+    final token = user?.token ?? "";
+    final namaPelanggan = user!.pelanggan?.namaPelanggan ?? "";
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.lightBlue[50],
@@ -61,9 +67,6 @@ class _ComplaintListUsersPageState extends State<ComplaintListUsersPage> {
             } else if (state is AllComplaintsUsersLoaded) {
               return RefreshIndicator(
                 onRefresh: () async {
-                  final userService = coreInjection<UserLocalStorageService>();
-                  final user = userService.getUser();
-                  final token = user?.token ?? "";
                   context
                       .read<ComplaintUsersBloc>()
                       .add(FetchAllComplaintsUsersEvent(token));
@@ -71,30 +74,27 @@ class _ComplaintListUsersPageState extends State<ComplaintListUsersPage> {
                   await Future.delayed(const Duration(seconds: 1));
                 },
                 child: ListView.builder(
-                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                   itemCount: state.complaints.length,
                   itemBuilder: (context, index) {
                     final complaint = state.complaints[index];
 
                     // Menentukan teks dan warna status
-                    String statusText;
+
                     Color statusColor;
 
-                    switch (complaint.status) {
-                      case 1:
-                        statusText = "Menunggu";
-                        statusColor = Colors.blue;
+                    switch (complaint.status.toLowerCase()) {
+                      case 'pending':
+                        statusColor = Colors.orangeAccent;
                         break;
-                      case 2:
-                        statusText = "Proses";
-                        statusColor = Colors.amber;
+                      case 'proses':
+                        statusColor = Colors.lightBlue;
                         break;
-                      case 3:
-                        statusText = "Selesai";
-                        statusColor = Colors.green;
+                      case 'selesai':
+                        statusColor = Colors.teal;
                         break;
                       default:
-                        statusText = "Tidak Diketahui";
                         statusColor = Colors.grey;
                     }
 
@@ -105,89 +105,61 @@ class _ComplaintListUsersPageState extends State<ComplaintListUsersPage> {
                           context.go(
                               '/dashboard_user/list_complaint_users/detail_complaint_users/${complaint.id}');
                         },
-                        child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18),
+                        child: Container(
+                          padding: EdgeInsets.all(20),
+                          decoration: BoxDecoration(
+                            color: ColorConstants.whiteColor,
+                            borderRadius: BorderRadius.circular(20),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.fromLTRB(20, 10, 20, 30),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      complaint.jenisPengaduan,
+                                      style: const TextStyle(
+                                        color: Colors.black87,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: BoxDecoration(
+                                      color: statusColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          vertical: 3, horizontal: 10),
                                       child: Text(
-                                        complaint.keluhan,
+                                        complaint.status,
                                         style: const TextStyle(
-                                          color: Colors.black87,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 16,
-                                        ),
-                                        overflow: TextOverflow.ellipsis,
+                                            color: Colors.white),
                                       ),
                                     ),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        color: statusColor,
-                                        borderRadius: BorderRadius.circular(10),
-                                      ),
-                                      child: Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            vertical: 3, horizontal: 10),
-                                        child: Text(
-                                          statusText,
-                                          style: const TextStyle(
-                                              color: Colors.white),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                const SizedBox(height: 5),
-                                Row(
-                                  children: [
-                                    const Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text('Keluhan ',
-                                            style:
-                                                TextStyle(color: Colors.grey)),
-                                        Text('Nama Pelanggan ',
-                                            style:
-                                                TextStyle(color: Colors.grey)),
-                                        Text('Tanggal Keluhan ',
-                                            style:
-                                                TextStyle(color: Colors.grey)),
-                                      ],
-                                    ),
-                                    const SizedBox(width: 10),
-                                    Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        SizedBox(
-                                          width: 150,
-                                          child: Text(': ${complaint.keluhan}',
-                                              style: const TextStyle(
-                                                  color: Colors.black)),
-                                        ),
-                                        Text(': ${complaint.namaPelanggan}',
-                                            style: const TextStyle(
-                                                color: Colors.black)),
-                                        Text(
-                                            ': ${complaint.createdAt ?? "Tidak Ada Data"}',
-                                            style: const TextStyle(
-                                                color: Colors.black)),
-                                      ],
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                  'Pada tanggal ${DateFormat("d MMMM yyyy").format(DateTime.parse("${complaint.tanggalPengaduan}"))} anda $namaPelanggan melakukan pengaduan terkait keluhan karena ${complaint.jenisPengaduan}',
+                                  style:
+                                      TypographyStyle.subTitleMedium.copyWith(
+                                    color: ColorConstants.greyColorsecondary,
+                                  )),
+                              const SizedBox(height: 10),
+                              Text('Petugas yang di tugaskan adalah ',
+                                  style:
+                                      TypographyStyle.subTitleMedium.copyWith(
+                                    color: ColorConstants.greyColorsecondary,
+                                  )),
+                            ],
                           ),
                         ),
                       ),

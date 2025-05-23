@@ -10,20 +10,25 @@ class UserLocalStorageService {
   Future<void> saveUser(UserModel user) async {
     try {
       final userData = user.toJson();
+      print("Data yang akan disimpan: $userData"); // Debug
       await box.write('user', userData);
-      // ignore: empty_catches
-    } catch (e) {}
+      print("Data berhasil disimpan"); // Debug
+    } catch (e) {
+      print("Error saat menyimpan user: $e"); // Jangan kosongkan catch
+    }
   }
 
   /// 🟢 Mengambil data user dari GetStorage
   UserModel? getUser() {
     try {
       final userData = box.read('user');
+      print("Data yang dibaca: $userData"); // Debug
       if (userData != null) {
         return UserModel.fromJson(Map<String, dynamic>.from(userData));
-      } else {}
-      // ignore: empty_catches
-    } catch (e) {}
+      }
+    } catch (e) {
+      print("Error saat membaca user: $e"); // Jangan kosongkan catch
+    }
     return null;
   }
 

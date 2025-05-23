@@ -1,7 +1,8 @@
 import 'package:go_router/go_router.dart';
 import 'package:kibas_mobile/src/core/services/auth_service.dart';
+import 'package:kibas_mobile/src/features/users/features/Notification/presentation/pages/notifikasi.dart';
 import 'package:kibas_mobile/src/features/users/features/complaint_users/presentation/pages/complaint_users_detail_page.dart';
-import 'package:kibas_mobile/src/features/users/features/complaint_users/presentation/pages/complaint_usres_list_page.dart';
+import 'package:kibas_mobile/src/features/users/features/complaint_users/presentation/pages/complaint_users_list_page.dart';
 import 'package:kibas_mobile/src/features/users/features/complaint_users/presentation/pages/post_complaint_page.dart';
 import 'package:kibas_mobile/src/features/users/features/rekening/presentation/pages/put_rekening_page.dart';
 import '../../core/utils/user_local_storage_service.dart';
@@ -32,6 +33,8 @@ final class AppRouter {
       final user = userService.getUser();
       final path = state.uri.toString();
 
+      print(user);
+
       if (user == null) {
         if (path.startsWith('/login') || path.startsWith('/login/regist')) {
           return null;
@@ -49,10 +52,8 @@ final class AppRouter {
         return '/dashboard_employee';
       }
 
+      //pelanggan
       if (user.role == "pelanggan") {
-        if (path.startsWith('/dashboard_user/area_users')) {
-          return null;
-        }
         if (path.startsWith('/dashboard_user/list_complaint_users')) {
           return null;
         }
@@ -60,7 +61,10 @@ final class AppRouter {
             '/dashboard_user/list_complaint_users/detail_complaint_users/')) {
           return null;
         }
-        if (path.startsWith('/dashboard_user/rekening/')) {
+        if (path.startsWith('/dashboard_user/rekening')) {
+          return null;
+        }
+        if (path.startsWith('/dashboard_user/notifikasi')) {
           return null;
         }
         if (path
@@ -78,9 +82,10 @@ final class AppRouter {
         if (path.startsWith('/dashboard_user/put_users')) {
           return null;
         }
-        if (path.startsWith('/dashboard_user/read_meter_employee')) {
+        if (path.startsWith('/dashboard_user/get_meter')) {
           return null;
         }
+
         return '/dashboard_user';
       }
 
@@ -145,13 +150,14 @@ final class AppRouter {
             builder: (context, state) => const PutUsersPage(),
           ),
           GoRoute(
-            path: 'rekening/:pelangganId',
-            name: RouteNames.rekeningList,
-            builder: (context, state) {
-              final pelangganId =
-                  int.tryParse(state.pathParameters['pelangganId'] ?? '0') ?? 0;
-              return RekeningListPage(pelangganId: pelangganId);
-            },
+            path: 'notifikasi',
+            name: RouteNames.notifikasi,
+            builder: (context, state) => const NotificationPages(),
+          ),
+          GoRoute(
+            path: 'rekening',
+            name: RouteNames.rekening,
+            builder: (context, state) => const RekeningListPage(),
             routes: [
               GoRoute(
                 path: 'post_rekening',
@@ -184,13 +190,13 @@ final class AppRouter {
             ],
           ),
           GoRoute(
-            path: 'read_meter_employee',
-            name: RouteNames.meterEmployee,
+            path: 'get_meter',
+            name: RouteNames.getMeter,
             builder: (context, state) => const MeterEmployee(),
             routes: [
               GoRoute(
-                path: 'form_meter_employee',
-                name: RouteNames.addMeterEmployee,
+                path: 'post_meter',
+                name: RouteNames.postMeter,
                 builder: (context, state) => const FormMeterEmployee(),
               ),
             ],

@@ -115,7 +115,7 @@ class MeterEmployee extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           // Menggunakan pushNamed agar menunggu nilai balik dari halaman FormMeterEmployee
-          final result = await context.pushNamed(RouteNames.addMeterEmployee);
+          final result = await context.pushNamed(RouteNames.postMeter);
           if (result == true) {
             final userService = coreInjection<UserLocalStorageService>();
             final user = userService.getUser();

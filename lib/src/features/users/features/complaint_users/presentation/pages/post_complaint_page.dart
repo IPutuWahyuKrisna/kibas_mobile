@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:kibas_mobile/src/config/theme/colors.dart';
 import 'package:kibas_mobile/src/config/theme/index_style.dart';
@@ -32,6 +33,26 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
     }
   }
 
+  Future<Position> getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      throw Exception('Layanan lokasi dinonaktifkan.');
+    }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied ||
+          permission == LocationPermission.deniedForever) {
+        throw Exception('Izin lokasi ditolak.');
+      }
+    }
+
+    return await Geolocator.getCurrentPosition(
+        locationSettings:
+            const LocationSettings(accuracy: LocationAccuracy.high));
+  }
+
   Future<void> pickImageGalery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -42,7 +63,7 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
   }
 
   /// 🔹 Fungsi untuk mengirim data ke Bloc
-  void submitComplaint() {
+  void submitComplaint() async {
     if (selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Silakan pilih gambar terlebih dahulu!")),
@@ -60,10 +81,27 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
     setState(() {
       isSubmitting = true;
     });
-    context.read<ComplaintUsersBloc>().add(SubmitComplaintEvent(
-          image: selectedImage!,
-          complaint: complaintController.text.trim(),
-        ));
+
+    try {
+      final position = await getCurrentLocation();
+      context.read<ComplaintUsersBloc>().add(
+            SubmitComplaintEvent(
+              image: selectedImage!,
+              complaint: complaintController.text,
+              latitude: position.latitude,
+              longitude: position.longitude,
+              jenisPengaduan:
+                  complaintController.text, // asumsi angkaFinal = isi keluhan
+            ),
+          );
+    } catch (e) {
+      setState(() {
+        isSubmitting = false;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Gagal mendapatkan lokasi: $e")),
+      );
+    }
   }
 
   @override
@@ -92,7 +130,7 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
               selectedImage = null;
               complaintController.clear();
             });
-            // Mengembalikan nilai true agar halaman sebelumnya tahu ada data baru dan harus refresh
+
             Navigator.pop(context, true);
           } else if (state is ComplaintUsersError) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -145,11 +183,11 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
                               fontWeight: FontWeight.bold,
                             ),
                           ),
-                          SizedBox(
+                          const SizedBox(
                             height: 10,
                           ),
                           Container(
-                            padding: EdgeInsets.symmetric(
+                            padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 3),
                             height: 50,
                             decoration: BoxDecoration(

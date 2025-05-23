@@ -24,11 +24,6 @@ class AuthRepositoryImpl implements AuthRepository {
     try {
       // 🟢 Request login ke remote data source
       final userModel = await remoteDataSource.login(email, password);
-
-      // 🟢 Simpan data user ke GetStorage
-      await authInjec<UserLocalStorageService>().saveUser(userModel);
-      // 🟢 Kembalikan hasil dalam bentuk User (domain entity)
-      localStorageService.getUser();
       return Right(userModel);
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
@@ -51,7 +46,6 @@ class AuthRepositoryImpl implements AuthRepository {
           email: registerData.email,
           password: registerData.password,
           passwordConfirmation: registerData.passwordConfirmation,
-          noPelanggan: registerData.noPelanggan,
           noRekening: registerData.noRekening,
           nikPelanggan: registerData.nikPelanggan));
       return const Right("Pendaftaran Berhasil Dilakukan");

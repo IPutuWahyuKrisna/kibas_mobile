@@ -172,7 +172,7 @@ class DashboardEmployeePages extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       try {
-                        context.goNamed(RouteNames.meterEmployee);
+                        context.goNamed(RouteNames.getMeter);
                         // ignore: empty_catches
                       } catch (e) {}
                     },

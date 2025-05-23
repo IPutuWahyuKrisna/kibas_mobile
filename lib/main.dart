@@ -59,7 +59,7 @@ class MainApp extends StatelessWidget {
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
-        routerConfig: AppRouter.router, // 🟢 Gunakan GoRouter
+        routerConfig: AppRouter.router,
       ),
     );
   }

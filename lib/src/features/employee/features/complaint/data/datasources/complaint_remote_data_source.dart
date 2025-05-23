@@ -15,7 +15,7 @@ class ComplaintRemoteDataSourceImpl implements ComplaintRemoteDataSource {
   @override
   Future<List<ComplaintModel>> getAllComplaints(String token) async {
     final response = await dio.get(
-      ApiUrls.complaint,
+      ApiUrls.getAllPengaduan,
       options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
 

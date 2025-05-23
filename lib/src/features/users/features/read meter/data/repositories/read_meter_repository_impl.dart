@@ -25,13 +25,11 @@ class ReadMeterRepositoryImpl implements MeterRepositoryDomain {
   @override
   Future<Either<Failure, String>> postMeter({
     required File linkFoto,
-    required String noRekening,
     required String angkaFinal,
   }) async {
     try {
       await remoteDataSource.postMeter(
         linkFoto: linkFoto,
-        noRekening: noRekening,
         angkaFinal: angkaFinal,
       );
       return const Right("Data baca meter berhasil dikirim!");

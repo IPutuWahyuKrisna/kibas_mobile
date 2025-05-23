@@ -52,8 +52,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
       return;
     }
 
-    if (noRekeningController.text.isEmpty ||
-        angkaFinalController.text.isEmpty) {
+    if (angkaFinalController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
             content: Text("Harap isi semua bidang terlebih dahulu!")),
@@ -151,11 +150,11 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              SizedBox(
+                              const SizedBox(
                                 height: 10,
                               ),
                               Container(
-                                padding: EdgeInsets.symmetric(
+                                padding: const EdgeInsets.symmetric(
                                     horizontal: 20, vertical: 3),
                                 height: 50,
                                 decoration: BoxDecoration(

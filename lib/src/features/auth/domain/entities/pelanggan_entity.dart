@@ -6,7 +6,7 @@ class Pelanggan {
   final String alamatPelanggan;
   final String kecamatan;
   final String area;
-  final List<String> rekening;
+  final String rekening;
 
   Pelanggan({
     required this.id,

@@ -21,7 +21,7 @@ class AllComplaintsUsersLoaded extends ComplaintUsersState {
 }
 
 class ComplaintDetailUsersLoaded extends ComplaintUsersState {
-  final ComplaintUsers complaint;
+  final DetailComplaintUsers complaint;
 
   const ComplaintDetailUsersLoaded({required this.complaint});
 
@@ -57,8 +57,9 @@ class ComplaintUsersError extends ComplaintUsersState {
 
 class PutComplaintSuccess extends ComplaintUsersState {
   final String message;
+
   const PutComplaintSuccess({required this.message});
 
   @override
-  List<Object> get props => [message];
+  List<Object?> get props => [message];
 }
