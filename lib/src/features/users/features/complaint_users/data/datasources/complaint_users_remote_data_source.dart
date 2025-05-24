@@ -66,7 +66,6 @@ class ComplaintUsersRemoteDataSourceImpl
       PostComplaintModel complaint) async {
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
-    final id = user?.pelanggan?.id ?? "";
     final token = user?.token ?? "";
 
     try {
