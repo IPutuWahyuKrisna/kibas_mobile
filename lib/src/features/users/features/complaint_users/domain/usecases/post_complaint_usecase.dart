@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import '../../../../../../core/error/failure.dart';
@@ -13,7 +14,7 @@ class PostComplaintUseCase {
     required String complaint,
     required double latitude,
     required double longitude,
-    required String jenisPengaduan,
+    required int jenisPengaduan,
   }) {
     return repository.postComplaint(
       image: image,

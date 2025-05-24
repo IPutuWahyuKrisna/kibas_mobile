@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:kibas_mobile/src/features/users/features/complaint_users/domain/entities/detail_complain.dart';
@@ -15,7 +16,7 @@ abstract class ComplaintRepositoryDomainUsers {
     required String complaint,
     required double latitude,
     required double longitude,
-    required String jenisPengaduan,
+    required int jenisPengaduan,
   });
 
   Future<Either<Failure, String>> deleteComplaint(int id);

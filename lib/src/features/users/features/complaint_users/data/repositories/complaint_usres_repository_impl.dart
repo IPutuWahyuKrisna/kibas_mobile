@@ -1,3 +1,4 @@
+import 'dart:ffi';
 import 'dart:io';
 import 'package:dartz/dartz.dart';
 import 'package:kibas_mobile/src/features/users/features/complaint_users/data/models/put_complaint_model.dart';
@@ -20,6 +21,7 @@ class ComplaintUsersRepositoryImpl implements ComplaintRepositoryDomainUsers {
       final complaints = await remoteDataSource.getAllComplaintsUsers(token);
       return Right(complaints);
     } catch (e) {
+      print(e);
       return const Left(
           ServerFailure(message: 'Gagal mengambil data pengaduan!'));
     }
@@ -45,7 +47,7 @@ class ComplaintUsersRepositoryImpl implements ComplaintRepositoryDomainUsers {
     required String complaint,
     required double latitude,
     required double longitude,
-    required String jenisPengaduan,
+    required int jenisPengaduan,
   }) async {
     try {
       final model = PostComplaintModel(

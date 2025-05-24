@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:kibas_mobile/src/core/constant/apis.dart';
+import 'package:kibas_mobile/src/features/users/features/rekening/data/models/tagihan_model.dart';
+import '../../../../../../core/error/exceptions.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../../../../core/services/global_service_locator.dart';
 import '../../../../../../core/utils/user_local_storage_service.dart';
@@ -17,6 +19,7 @@ abstract class RekeningRemoteDataSource {
   Future<Either<Failure, List<Map<String, dynamic>>>> getKelurahanList();
   Future<Either<Failure, List<Map<String, dynamic>>>> getAreaList();
   Future<Either<Failure, List<Map<String, dynamic>>>> getRayonList();
+  Future<List<TagihanModel>> getTagihan();
 }
 
 class RekeningRemoteDataSourceImpl implements RekeningRemoteDataSource {
@@ -58,6 +61,26 @@ class RekeningRemoteDataSourceImpl implements RekeningRemoteDataSource {
       return RekeningDetailModel.fromJson(response.data['data']);
     } else {
       throw Exception("Gagal mengambil detail rekening");
+    }
+  }
+
+  @override
+  Future<List<TagihanModel>> getTagihan() async {
+    try {
+      final userService = coreInjection<UserLocalStorageService>();
+      final user = userService.getUser();
+      final token = user?.token ?? "";
+      final response = await dio.get(ApiUrls.getTagihan,
+          options: Options(headers: {'Authorization': 'Bearer $token'}));
+
+      if (response.statusCode == 200) {
+        final List data = response.data['data'];
+        return data.map((e) => TagihanModel.fromJson(e)).toList();
+      } else {
+        throw ServerException("Gagal mengambil data tagihan");
+      }
+    } catch (e) {
+      throw ServerException("Gagal terhubung ke server: $e");
     }
   }
 

@@ -31,7 +31,7 @@ class SubmitComplaintEvent extends ComplaintUsersEvent {
   final String complaint;
   final double latitude;
   final double longitude;
-  final String jenisPengaduan;
+  final int jenisPengaduan;
 
   const SubmitComplaintEvent({
     required this.image,

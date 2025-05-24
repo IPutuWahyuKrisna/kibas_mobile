@@ -6,7 +6,7 @@ class DetailComplaintModelUsers extends DetailComplaintUsers {
     required super.id,
     required super.pelangganId,
     required super.namaPelanggan,
-    required super.linkUrl,
+    super.linkUrl,
     required super.status,
     super.rating,
     super.tanggalPengaduan,

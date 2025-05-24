@@ -6,7 +6,7 @@ class PostComplaintEntity extends Equatable {
   final String complaint;
   final double latitude;
   final double longitude;
-  final String jenisPengaduan;
+  final int jenisPengaduan;
 
   const PostComplaintEntity({
     required this.image,

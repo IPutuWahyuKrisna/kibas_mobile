@@ -16,6 +16,10 @@ class FetchRekeningEvent extends RekeningEvent {
   List<Object> get props => [pelangganId];
 }
 
+class FetchTagihanEvent extends RekeningEvent {
+  const FetchTagihanEvent();
+}
+
 class FetchRekeningDetailEvent extends RekeningEvent {
   final int rekeningId;
 

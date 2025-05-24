@@ -17,6 +17,24 @@ class RekeningLoading extends RekeningState {
   List<Object> get props => [];
 }
 
+class TagihanLoaded extends RekeningState {
+  final List<TagihanEntity> tagihanList;
+
+  const TagihanLoaded(this.tagihanList);
+
+  @override
+  List<Object> get props => [tagihanList];
+}
+
+class TagihanError extends RekeningState {
+  final String message;
+
+  const TagihanError(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 class RekeningLoaded extends RekeningState {
   final List<RekeningEntity> rekeningList;
 
@@ -41,6 +59,11 @@ class RekeningDetailInitial extends RekeningState {
 }
 
 class RekeningDetailLoading extends RekeningState {
+  @override
+  List<Object> get props => [];
+}
+
+class TagihanLoading extends RekeningState {
   @override
   List<Object> get props => [];
 }

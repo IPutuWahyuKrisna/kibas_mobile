@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:kibas_mobile/src/core/services/auth_service.dart';
 import 'package:kibas_mobile/src/features/auth/data/models/user_model.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';

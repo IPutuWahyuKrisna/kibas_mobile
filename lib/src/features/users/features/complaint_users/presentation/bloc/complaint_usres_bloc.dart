@@ -41,6 +41,7 @@ class ComplaintUsersBloc
       Emitter<ComplaintUsersState> emit) async {
     emit(ComplaintUsersLoading());
     final result = await getAllComplaints(event.token);
+    print(result);
     result.fold(
       (failure) => emit(ComplaintUsersError(message: failure.message)),
       (data) => emit(AllComplaintsUsersLoaded(complaints: data)),
@@ -51,6 +52,7 @@ class ComplaintUsersBloc
       Emitter<ComplaintUsersState> emit) async {
     emit(ComplaintUsersLoading());
     final result = await getComplaintDetail(event.token, event.id);
+
     result.fold(
       (failure) => emit(ComplaintUsersError(message: failure.message)),
       (data) => emit(ComplaintDetailUsersLoaded(complaint: data)),

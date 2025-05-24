@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:kibas_mobile/src/features/users/features/rekening/domain/entities/tagihan.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../domain/entities/rekening_detail_entity.dart';
 import '../../domain/entities/rekening_entity.dart';
@@ -15,6 +16,16 @@ class RekeningRepositoryImpl implements RekeningRepository {
       int pelangganId) async {
     try {
       final result = await remoteDataSource.getRekening(pelangganId);
+      return Right(result);
+    } catch (e) {
+      return Left(ServerFailure(message: e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<TagihanEntity>>> getTagihan() async {
+    try {
+      final result = await remoteDataSource.getTagihan();
       return Right(result);
     } catch (e) {
       return Left(ServerFailure(message: e.toString()));

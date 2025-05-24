@@ -33,6 +33,7 @@ class ComplaintUsersRemoteDataSourceImpl
       ApiUrls.getAllPengaduan,
       options: Options(headers: {'Authorization': 'Bearer $token'}),
     );
+    print(response.statusCode);
     if (response.statusCode == 200) {
       final data = List<Map<String, dynamic>>.from(response.data['data']);
       return data.map((json) => ComplaintModelUsers.fromJson(json)).toList();
@@ -81,10 +82,9 @@ class ComplaintUsersRemoteDataSourceImpl
       final formData = FormData.fromMap({
         "image": await MultipartFile.fromFile(compressedFile.path),
         "complaint": complaint.complaint,
-        "pelanggan_id": id,
         "latitude": complaint.latitude,
         "longitude": complaint.longitude,
-        "angkafinal": complaint.jenisPengaduan,
+        "jenis_pengaduan": complaint.jenisPengaduan,
       });
 
       final response = await dio.post(
@@ -99,8 +99,8 @@ class ComplaintUsersRemoteDataSourceImpl
           receiveTimeout: const Duration(seconds: 10),
         ),
       );
-
-      if (response.statusCode == 201) {
+      print(response.statusCode);
+      if (response.statusCode == 200) {
         return Right(response.data["message"]);
       } else if (response.statusCode == 400) {
         return const Left(

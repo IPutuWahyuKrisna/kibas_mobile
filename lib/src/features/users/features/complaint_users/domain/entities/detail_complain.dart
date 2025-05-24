@@ -2,7 +2,7 @@ class DetailComplaintUsers {
   final int id;
   final int pelangganId;
   final String namaPelanggan;
-  final String linkUrl;
+  final String? linkUrl;
   final String status;
   final int? rating;
   final DateTime? tanggalPengaduan;
@@ -16,7 +16,7 @@ class DetailComplaintUsers {
     required this.id,
     required this.pelangganId,
     required this.namaPelanggan,
-    required this.linkUrl,
+    this.linkUrl,
     required this.status,
     this.rating,
     this.tanggalPengaduan,

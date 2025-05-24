@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import '../../../../../../core/error/failure.dart';
 import '../entities/rekening_detail_entity.dart';
 import '../entities/rekening_entity.dart';
+import '../entities/tagihan.dart';
 
 abstract class RekeningRepository {
   Future<Either<Failure, List<RekeningEntity>>> getRekening(int pelangganId);
@@ -16,4 +17,5 @@ abstract class RekeningRepository {
   Future<Either<Failure, List<Map<String, dynamic>>>> getKelurahanList();
   Future<Either<Failure, List<Map<String, dynamic>>>> getAreaList();
   Future<Either<Failure, List<Map<String, dynamic>>>> getRayonList();
+  Future<Either<Failure, List<TagihanEntity>>> getTagihan();
 }

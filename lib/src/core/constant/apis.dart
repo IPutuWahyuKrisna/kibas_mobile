@@ -11,6 +11,7 @@ class ApiUrls {
   static const getAllPengaduan = '$baseURL/pengaduan/all';
   static const postPengaduan = '$baseURL/pengaduan';
   static const putPengaduan = '$baseURL/pengaduan/update';
+  static const getJenisPengaduan = '$baseURL/jenis-pengaduan';
 
   // Bacameter Pelanggan
   static const getReadMeter = '$baseURL/bacameter';

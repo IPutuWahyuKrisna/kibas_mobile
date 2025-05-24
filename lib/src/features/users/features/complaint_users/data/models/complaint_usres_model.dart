@@ -4,14 +4,14 @@ class ComplaintModelUsers extends ComplaintUsers {
   const ComplaintModelUsers({
     required super.id,
     required super.pelangganId,
-    required super.linkUrl,
-    required super.pengaduanLat,
-    required super.pengaduanLong,
+    super.linkUrl,
+    super.pengaduanLat,
+    super.pengaduanLong,
     required super.status,
-    required super.rating,
+    super.rating,
     required super.tanggalPengaduan,
-    required super.tanggalSelesai,
-    required super.keteranganSelesai,
+    super.tanggalSelesai,
+    super.keteranganSelesai,
     required super.jenisPengaduan,
   });
 
@@ -20,8 +20,12 @@ class ComplaintModelUsers extends ComplaintUsers {
       id: json['id'] as int,
       pelangganId: json['pelanggan_id'] as int,
       linkUrl: json['link_url'] as String?,
-      pengaduanLat: double.parse(json['pengaduan_lat']),
-      pengaduanLong: double.parse(json['pengaduan_long']),
+      pengaduanLat: json['pengaduan_lat'] != null
+          ? double.tryParse(json['pengaduan_lat'].toString())
+          : null,
+      pengaduanLong: json['pengaduan_long'] != null
+          ? double.tryParse(json['pengaduan_long'].toString())
+          : null,
       status: json['status'] as String,
       rating: json['rating'] as int?,
       tanggalPengaduan: DateTime.parse(json['tanggal_pengaduan']),
@@ -38,8 +42,8 @@ class ComplaintModelUsers extends ComplaintUsers {
       'id': id,
       'pelanggan_id': pelangganId,
       'link_url': linkUrl,
-      'pengaduan_lat': pengaduanLat.toStringAsFixed(7),
-      'pengaduan_long': pengaduanLong.toStringAsFixed(7),
+      'pengaduan_lat': pengaduanLat?.toStringAsFixed(7),
+      'pengaduan_long': pengaduanLong?.toStringAsFixed(7),
       'status': status,
       'rating': rating,
       'tanggal_pengaduan': tanggalPengaduan.toIso8601String(),

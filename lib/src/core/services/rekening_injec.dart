@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:dio/dio.dart';
+import 'package:kibas_mobile/src/features/users/features/rekening/domain/usecases/get_tagihan_usecase.dart';
 
 import '../../features/users/features/rekening/data/datasources/rekening_remote_data_source.dart';
 import '../../features/users/features/rekening/data/repositories/rekening_repository_impl.dart';
@@ -46,6 +47,8 @@ void initRekeningModule() {
       () => PostRekeningUseCase(rekeningInjec<RekeningRepository>()));
   rekeningInjec.registerLazySingleton(
       () => PutRekeningUseCase(rekeningInjec<RekeningRepository>()));
+  rekeningInjec.registerLazySingleton(
+      () => GetTagihanUseCase(rekeningInjec<RekeningRepository>()));
 
   // 🔹 Register BLoC
   rekeningInjec.registerFactory<RekeningBloc>(
@@ -59,6 +62,7 @@ void initRekeningModule() {
       getAreaListUseCase: rekeningInjec(),
       postRekeningUseCase: rekeningInjec(),
       putRekeningUseCase: rekeningInjec(),
+      getTagihanUseCase: rekeningInjec(),
     ),
   );
 }

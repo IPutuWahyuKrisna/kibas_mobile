@@ -4,9 +4,11 @@ import 'package:equatable/equatable.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../domain/entities/rekening_detail_entity.dart';
 import '../../domain/entities/rekening_entity.dart';
+import '../../domain/entities/tagihan.dart';
 import '../../domain/usecases/get_dropdownd_rekening.dart';
 import '../../domain/usecases/get_rekening_detail_usecase.dart';
 import '../../domain/usecases/get_rekening_usecase.dart';
+import '../../domain/usecases/get_tagihan_usecase.dart';
 import '../../domain/usecases/post_rekening_usecase.dart';
 import '../../domain/usecases/put_rekening_usecase.dart'; // Pastikan impor ini ada
 
@@ -23,6 +25,7 @@ class RekeningBloc extends Bloc<RekeningEvent, RekeningState> {
   final GetRayonListUseCase getRayonListUseCase;
   final PostRekeningUseCase postRekeningUseCase; // Tambahkan field ini
   final PutRekeningUseCase putRekeningUseCase;
+  final GetTagihanUseCase getTagihanUseCase;
 
   RekeningBloc(
       {required this.getRekeningUseCase,
@@ -30,6 +33,7 @@ class RekeningBloc extends Bloc<RekeningEvent, RekeningState> {
       required this.getGolonganListUseCase,
       required this.getKecamatanListUseCase,
       required this.getKelurahanListUseCase,
+      required this.getTagihanUseCase,
       required this.getAreaListUseCase,
       required this.getRayonListUseCase,
       required this.postRekeningUseCase,
@@ -41,6 +45,18 @@ class RekeningBloc extends Bloc<RekeningEvent, RekeningState> {
     on<FetchDropdownDataEvent>(_onFetchDropdownRekening);
     on<PostRekeningEvent>(_onPostRekening);
     on<PutRekeningEvent>(_onPutRekening); // Registrasi event handler untuk POST
+    on<FetchTagihanEvent>(
+        _onFetchTagihan); // Registrasi event handler untuk POST
+  }
+  Future<void> _onFetchTagihan(
+      FetchTagihanEvent event, Emitter<RekeningState> emit) async {
+    emit(TagihanLoading());
+    final result = await getTagihanUseCase.execute();
+    print(result);
+    result.fold(
+      (failure) => emit(TagihanError(failure.message)),
+      (data) => emit(TagihanLoaded(data)),
+    );
   }
 
   Future<void> _onFetchRekening(
