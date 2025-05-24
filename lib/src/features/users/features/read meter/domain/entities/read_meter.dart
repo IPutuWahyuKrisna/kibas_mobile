@@ -1,13 +1,17 @@
-class ReadMeter {
-  final String noRekening;
+class ReadMeterEntity {
+  final int id;
   final String linkFoto;
-  final int angkaFinal;
-  final String? createdAt;
+  final String status;
+  final String angkaFinal;
+  final String? keterangan;
+  final String createdAt;
 
-  ReadMeter({
-    required this.noRekening,
+  const ReadMeterEntity({
+    required this.id,
     required this.linkFoto,
+    required this.status,
     required this.angkaFinal,
-    this.createdAt,
+    required this.keterangan,
+    required this.createdAt,
   });
 }

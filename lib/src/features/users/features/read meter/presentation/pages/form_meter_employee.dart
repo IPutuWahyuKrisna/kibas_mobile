@@ -72,6 +72,9 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
 
   @override
   Widget build(BuildContext context) {
+    final userService = coreInjection<UserLocalStorageService>();
+    final user = userService.getUser();
+    final token = user?.token ?? "";
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.blue[50],
@@ -89,6 +92,9 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
             SchedulerBinding.instance.addPostFrameCallback((_) {
               CustomSnackBar.show(context, state.message,
                   backgroundColor: Colors.green);
+              context.read<ReadMeterBloc>().add(
+                    GetListMeterEvent(token),
+                  );
             });
             setState(() {
               isSubmitting = false;
@@ -96,6 +102,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
               noRekeningController.clear();
               angkaFinalController.clear();
             });
+
             Future.delayed(const Duration(seconds: 2), () {
               // ignore: use_build_context_synchronously
               Navigator.pop(context, true);

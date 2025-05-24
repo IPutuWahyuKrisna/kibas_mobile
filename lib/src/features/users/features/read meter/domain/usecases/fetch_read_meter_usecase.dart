@@ -9,7 +9,7 @@ class GetListMeterUseCase {
 
   GetListMeterUseCase(this.repository);
 
-  Future<Either<Failure, List<ReadMeter>>> execute(String token) {
-    return repository.getListMeter(token);
+  Future<Either<Failure, List<ReadMeterEntity>>> execute() {
+    return repository.fetchReadMeter();
   }
 }

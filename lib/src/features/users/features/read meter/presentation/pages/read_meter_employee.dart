@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:kibas_mobile/src/config/theme/colors.dart';
 import 'package:kibas_mobile/src/core/services/read_meter_services.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
+import '../../../../../../config/theme/index_style.dart';
 import '../../../../../../core/services/global_service_locator.dart';
 import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../bloc/read_meter_bloc.dart';
@@ -17,6 +19,12 @@ class MeterEmployee extends StatelessWidget {
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
     final token = user?.token ?? "";
+
+    String formatDate(DateTime date) {
+      // Ubah format DateTime menjadi "01 January 2024"
+      final DateFormat formatter = DateFormat('dd MMMM yyyy');
+      return formatter.format(date);
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -51,7 +59,7 @@ class MeterEmployee extends StatelessWidget {
                     final item = data[index];
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 5, horizontal: 10),
+                          vertical: 20, horizontal: 20),
                       child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -63,7 +71,8 @@ class MeterEmployee extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                item.createdAt ?? 'Tanggal tidak tersedia',
+                                formatDate(DateTime.parse(item
+                                    .createdAt)), // Parse the string to DateTime first
                                 style: TextStyle(
                                   color: Colors.grey[700],
                                   fontSize: 16,
@@ -71,26 +80,15 @@ class MeterEmployee extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  const Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text('No Rekening'),
-                                      Text('Final Stan Meter'),
-                                    ],
-                                  ),
-                                  const SizedBox(width: 10),
-                                  Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(': ${item.noRekening}'),
-                                      Text(': ${item.angkaFinal} m3'),
-                                    ],
-                                  ),
-                                ],
+                              Text(
+                                "Angka FInal : ${item.angkaFinal}",
+                                style: TypographyStyle.captionsBold.copyWith(
+                                    color: ColorConstants.blackColorPrimary),
+                              ),
+                              Text(
+                                "Status : ${item.status}",
+                                style: TypographyStyle.captionsBold.copyWith(
+                                    color: ColorConstants.blackColorPrimary),
                               ),
                             ],
                           ),
@@ -105,7 +103,7 @@ class MeterEmployee extends StatelessWidget {
                 CustomSnackBar.show(context, state.message,
                     backgroundColor: Colors.red);
               });
-              return Center(child: Text(state.message));
+              return Center(child: Text('No data found'));
             } else {
               return const Center(child: Text('No data found'));
             }

@@ -12,13 +12,12 @@ class ReadMeterRepositoryImpl implements MeterRepositoryDomain {
   ReadMeterRepositoryImpl(this.remoteDataSource);
 
   @override
-  Future<Either<Failure, List<ReadMeter>>> getListMeter(String token) async {
+  Future<Either<Failure, List<ReadMeterEntity>>> fetchReadMeter() async {
     try {
-      final meterList = await remoteDataSource.getListMeter(token);
-      return Right(meterList.map((e) => e as ReadMeter).toList());
+      final result = await remoteDataSource.fetchReadMeter();
+      return Right(result);
     } catch (e) {
-      return const Left(
-          ServerFailure(message: 'Gagal mengambil data baca meter!'));
+      return Left(ServerFailure(message: e.toString()));
     }
   }
 

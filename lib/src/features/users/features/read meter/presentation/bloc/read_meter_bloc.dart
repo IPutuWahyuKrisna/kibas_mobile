@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import '../../data/models/read_meter_model.dart';
 import '../../domain/entities/read_meter.dart';
 import '../../domain/usecases/fetch_read_meter_usecase.dart';
 import '../../domain/usecases/post_meter_usecase.dart';
@@ -28,7 +29,7 @@ class ReadMeterBloc extends Bloc<ReadMeterEvent, ReadMeterState> {
   ) async {
     emit(ReadMeterLoading());
 
-    final result = await getListMeterUseCase.execute(event.token);
+    final result = await getListMeterUseCase.execute();
 
     result.fold(
       (failure) => emit(ReadMeterError(message: failure.message)),

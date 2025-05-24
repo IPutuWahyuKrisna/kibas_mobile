@@ -14,7 +14,7 @@ class ReadMeterLoading extends ReadMeterState {}
 class PostmeterLoading extends ReadMeterState {}
 
 class ReadMeterLoaded extends ReadMeterState {
-  final List<ReadMeter> meterList;
+  final List<ReadMeterEntity> meterList;
 
   const ReadMeterLoaded({required this.meterList});
 

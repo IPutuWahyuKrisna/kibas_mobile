@@ -10,7 +10,7 @@ import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../models/read_meter_model.dart';
 
 abstract class ReadMeterRemoteDataSource {
-  Future<List<ReadMeterModel>> getListMeter(String token);
+  Future<List<ReadMeterModel>> fetchReadMeter();
   Future<Either<Failure, String>> postMeter({
     required File linkFoto,
     required String angkaFinal,
@@ -25,8 +25,11 @@ class ReadMeterRemoteDataSourceImpl implements ReadMeterRemoteDataSource {
 
   /// 🔹 GET: Fetch Data Read Meter
   @override
-  Future<List<ReadMeterModel>> getListMeter(String token) async {
+  Future<List<ReadMeterModel>> fetchReadMeter() async {
     try {
+      final userService = coreInjection<UserLocalStorageService>();
+      final user = userService.getUser();
+      final token = user?.token ?? "";
       final response = await dio.get(
         ApiUrls.getReadMeter,
         options: Options(headers: {'Authorization': 'Bearer $token'}),

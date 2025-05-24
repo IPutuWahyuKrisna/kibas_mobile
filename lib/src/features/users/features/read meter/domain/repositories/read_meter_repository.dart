@@ -5,7 +5,7 @@ import '../entities/read_meter.dart';
 import 'dart:io';
 
 abstract class MeterRepositoryDomain {
-  Future<Either<Failure, List<ReadMeter>>> getListMeter(String token);
+  Future<Either<Failure, List<ReadMeterEntity>>> fetchReadMeter();
   Future<Either<Failure, String>> postMeter({
     required File linkFoto,
     required String angkaFinal,
