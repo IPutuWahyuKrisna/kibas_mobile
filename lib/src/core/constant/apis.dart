@@ -20,7 +20,7 @@ class ApiUrls {
   static const getTagihan = '$baseURL/tagihan/all';
 
   //Pengumuman Pelanggan
-  static const getMyPengumuman = '$baseURL/pengumuman';
+  static const getMyPengumuman = '$baseURL/pengumuman/all';
   static const getAllPengumuman = '$baseURL/pengumuman/general';
 
   //Pengmuman Pegawai

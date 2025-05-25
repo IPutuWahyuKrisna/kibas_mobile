@@ -10,10 +10,13 @@ import 'src/core/services/complaint_services.dart';
 import 'src/core/services/complaint_users_services.dart';
 import 'src/core/services/dashboard_employee_services.dart';
 import 'src/core/services/global_service_locator.dart';
+import 'src/core/services/notification_injection.dart';
 import 'src/core/services/permission_service.dart';
 import 'src/core/services/put_user_services.dart';
 import 'src/core/services/read_meter_services.dart';
 import 'src/core/services/rekening_injec.dart';
+import 'src/features/users/features/Notification/presentation/bloc/notification_bloc.dart';
+import 'src/features/users/features/Notification/presentation/pages/notifikasi.dart';
 import 'src/features/users/features/read meter/presentation/bloc/read_meter_bloc.dart';
 import 'src/features/users/features/complaint_users/presentation/bloc/complaint_usres_bloc.dart';
 import 'src/features/users/features/dashboard_user/presentation/bloc/dashboard_user_bloc.dart';
@@ -21,6 +24,7 @@ import 'src/features/users/features/dashboard_user/presentation/bloc/dashboard_u
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await GetStorage.init();
+  initNotificationInjection();
   setupCoreServices();
   setupAuthServices();
   setupDashboardServices();
@@ -52,6 +56,10 @@ class MainApp extends StatelessWidget {
         ),
         BlocProvider<DashboardUserBloc>(
           create: (_) => putUserInjec<DashboardUserBloc>(),
+        ),
+        BlocProvider(
+          create: (_) => sl<NotificationBloc>(),
+          child: const NotificationPages(),
         ),
         BlocProvider<RekeningBloc>(
           create: (_) => rekeningInjec<RekeningBloc>(),
