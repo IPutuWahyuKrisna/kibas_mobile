@@ -172,7 +172,7 @@ class _ComplaintListUsersPageState extends State<ComplaintListUsersPage> {
                 CustomSnackBar.show(context, state.message,
                     backgroundColor: Colors.red);
               });
-              return Center(child: Text(state.message));
+              return Center(child: Text('Tidak ada data.'));
             } else {
               return const Center(child: Text('Tidak ada data.'));
             }

@@ -189,10 +189,10 @@ class DashboardEmployeePages extends StatelessWidget {
                   ),
                   InkWell(
                     onTap: () {
-                      try {
-                        context.goNamed(RouteNames.areaPegawai);
-                        // ignore: empty_catches
-                      } catch (e) {}
+                      // try {
+                      //   context.goNamed(RouteNames.areaPegawai);
+                      //   // ignore: empty_catches
+                      // } catch (e) {}
                     },
                     child: const Column(
                       children: [
@@ -271,20 +271,10 @@ class DashboardEmployeePages extends StatelessWidget {
                                       width: 300,
                                       child: Text(
                                         announcement
-                                            .pengumuman, // Detail pengumuman
+                                            .content, // Detail pengumuman
                                         textAlign: TextAlign.start,
                                         style:
                                             const TextStyle(color: Colors.grey),
-                                      ),
-                                    ),
-                                    const SizedBox(height: 15),
-                                    Text(
-                                      announcement.areaName,
-                                      textAlign:
-                                          TextAlign.right, // Area pengumuman
-                                      style: const TextStyle(
-                                        fontSize: 13,
-                                        color: Colors.cyan,
                                       ),
                                     ),
                                     const SizedBox(height: 15),

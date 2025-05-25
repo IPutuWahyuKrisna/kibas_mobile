@@ -16,7 +16,7 @@ class AreaPegawaiRemoteDataSourceImpl implements AreaPegawaiRemoteDataSource {
   Future<AreaPegawaiModel> getAreaPegawai(String token) async {
     try {
       final response = await dio.get(
-        ApiUrls.getArea, // 🟢 Endpoint untuk get area pegawai
+        " ApiUrls.getArea", // 🟢 Endpoint untuk get area pegawai
         options: Options(
           headers: {'Authorization': 'Bearer $token'},
           sendTimeout: const Duration(seconds: 30),

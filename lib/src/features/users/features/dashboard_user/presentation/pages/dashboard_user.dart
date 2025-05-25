@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
+import '../../../../../../config/theme/index_style.dart';
 import '../../../../../../core/services/dashboard_employee_services.dart';
 import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../../../../../employee/features/dashbord_employee/presentation/bloc/dashbord_employee_bloc.dart';
@@ -25,6 +26,22 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
     final idUsers = user!.pelanggan?.id ?? "";
     final email = user.email;
     final rekening = user.pelanggan?.rekening;
+
+    String truncateText(String text, [int length = 25]) {
+      if (text.length <= length) {
+        return text;
+      } else {
+        return '${text.substring(0, length)}...';
+      }
+    }
+
+    String truncateTextBody(String text, [int length = 100]) {
+      if (text.length <= length) {
+        return text;
+      } else {
+        return '${text.substring(0, length)}...';
+      }
+    }
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
@@ -292,49 +309,50 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                             return Padding(
                               padding: const EdgeInsets.symmetric(
                                   vertical: 5, horizontal: 10),
-                              child: Card(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18.0),
-                                ),
-                                child: Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 20),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        announcement.judul, // Judul pengumuman
-                                        textAlign: TextAlign.left,
-                                        style: const TextStyle(
-                                          color: Colors.grey,
-                                          fontWeight: FontWeight.bold,
-                                          fontSize: 18,
+                              child: GestureDetector(
+                                onTap: () {
+                                  context.goNamed(
+                                    RouteNames.detailPengumuman,
+                                    extra:
+                                        announcement, // pastikan ini adalah AnnouncementEntity
+                                  );
+                                },
+                                child: Card(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 20),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                            truncateText(
+                                              announcement.judul,
+                                            ), // Judul pengumuman
+                                            textAlign: TextAlign.left,
+                                            style: TypographyStyle.bodyBold
+                                                .copyWith(
+                                                    color: ColorConstants
+                                                        .blackColorPrimary)),
+                                        const SizedBox(height: 15),
+                                        SizedBox(
+                                          width: 300,
+                                          child: Text(
+                                              truncateTextBody(announcement
+                                                  .content), // Detail pengumuman
+                                              textAlign: TextAlign.start,
+                                              style: TypographyStyle
+                                                  .captionsMedium
+                                                  .copyWith(
+                                                      color: ColorConstants
+                                                          .greyColorPrimary)),
                                         ),
-                                      ),
-                                      const SizedBox(height: 15),
-                                      SizedBox(
-                                        width: 300,
-                                        child: Text(
-                                          announcement
-                                              .pengumuman, // Detail pengumuman
-                                          textAlign: TextAlign.start,
-                                          style: const TextStyle(
-                                              color: Colors.grey),
-                                        ),
-                                      ),
-                                      const SizedBox(height: 15),
-                                      Text(
-                                        announcement.areaName,
-                                        textAlign:
-                                            TextAlign.right, // Area pengumuman
-                                        style: const TextStyle(
-                                          fontSize: 13,
-                                          color: Colors.cyan,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 15),
-                                    ],
+                                        const SizedBox(height: 15),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ),
@@ -347,6 +365,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                         CustomSnackBar.show(context, state.message,
                             backgroundColor: Colors.red);
                       });
+                      print(state.message);
                       return const Center(child: Text("Data Tidak ditemukan"));
                     } else {
                       return const Center(child: Text('No data found!'));

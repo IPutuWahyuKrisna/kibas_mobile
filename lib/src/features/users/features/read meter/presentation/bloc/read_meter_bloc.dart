@@ -14,14 +14,12 @@ class ReadMeterBloc extends Bloc<ReadMeterEvent, ReadMeterState> {
 
   ReadMeterBloc({
     required this.getListMeterUseCase,
-    required this.postMeterUseCase, // ✅ Tambahkan postMeterUseCase ke dalam konstruktor
+    required this.postMeterUseCase,
   }) : super(ReadMeterInitial()) {
     on<GetListMeterEvent>(_onGetListMeter);
-    on<PostMeterRequested>(
-        _onSubmitPostmeter); // ✅ Tambahkan handler event untuk postmeter
+    on<PostMeterRequested>(_onSubmitPostmeter);
   }
 
-  /// 🔹 Fetch Data Read Meter (GET)
   Future<void> _onGetListMeter(
     GetListMeterEvent event,
     Emitter<ReadMeterState> emit,
@@ -49,8 +47,7 @@ class ReadMeterBloc extends Bloc<ReadMeterEvent, ReadMeterState> {
     );
 
     result.fold(
-      (failure) => emit(
-          PostMeterFailure(failure.message)), // ✅ Error khusus untuk postmeter
+      (failure) => emit(PostMeterFailure(failure.message)),
       (response) => emit(PostMeterSuccess(response)),
     );
   }

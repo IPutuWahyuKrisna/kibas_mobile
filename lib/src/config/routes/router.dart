@@ -12,6 +12,7 @@ import '../../features/employee/features/area_employee/presentation/pages/area_p
 import '../../features/employee/features/complaint/presentation/pages/complaint_detail_page.dart';
 import '../../features/employee/features/complaint/presentation/pages/complaint_list_page.dart';
 import '../../features/employee/features/dashbord_employee/presentation/pages/dashboard_employee.dart';
+import '../../features/users/features/dashboard_user/presentation/pages/announcement_detail.dart';
 import '../../features/users/features/read meter/presentation/pages/form_meter_employee.dart';
 import '../../features/users/features/read meter/presentation/pages/read_meter_employee.dart';
 import '../../features/start pages/presentation/splash__screen.dart';
@@ -85,6 +86,9 @@ final class AppRouter {
         if (path.startsWith('/dashboard_user/get_meter')) {
           return null;
         }
+        if (path.startsWith('/dashboard_user/detail-pengumuman')) {
+          return null;
+        }
 
         return '/dashboard_user';
       }
@@ -140,15 +144,20 @@ final class AppRouter {
         builder: (context, state) => const DashboardUserPages(),
         routes: [
           GoRoute(
-            path: 'area_users',
-            name: RouteNames.areaPegawaiUsers,
-            builder: (context, state) => const AreaPegawaiUserPage(),
+            path: '/detail-pengumuman',
+            name: RouteNames.detailPengumuman,
+            builder: (context, state) => const AnnouncementDetail(),
           ),
-          GoRoute(
-            path: 'put_users',
-            name: RouteNames.putUsersProfile,
-            builder: (context, state) => const PutUsersPage(),
-          ),
+          // GoRoute(
+          //   path: 'area_users',
+          //   name: RouteNames.areaPegawaiUsers,
+          //   builder: (context, state) => const AreaPegawaiUserPage(),
+          // ),
+          // GoRoute(
+          //   path: 'put_users',
+          //   name: RouteNames.putUsersProfile,
+          //   builder: (context, state) => const PutUsersPage(),
+          // ),
           GoRoute(
             path: 'notifikasi',
             name: RouteNames.notifikasi,
@@ -159,34 +168,34 @@ final class AppRouter {
             name: RouteNames.rekening,
             builder: (context, state) => const RekeningListPage(),
             routes: [
-              GoRoute(
-                path: 'post_rekening',
-                name: RouteNames.postRekening,
-                builder: (context, state) => const PostRekeningPage(),
-              ),
-              GoRoute(
-                  path:
-                      'detail/:rekeningId', // 🔥 Sub-route tidak pakai '/dashboard_user/rekening/'
-                  name: RouteNames.rekeningDetail,
-                  builder: (context, state) {
-                    final rekeningId = int.tryParse(
-                            state.pathParameters['rekeningId'] ?? '0') ??
-                        0;
-                    return RekeningDetailPage(rekeningId: rekeningId);
-                  },
-                  routes: [
-                    GoRoute(
-                      path: 'edit/:editRekeningId',
-                      name: RouteNames.putRekening,
-                      builder: (context, state) {
-                        final editrekeningId = int.tryParse(
-                                state.pathParameters['editRekeningId'] ??
-                                    '0') ??
-                            0;
-                        return PutRekeningPage(editRekeningId: editrekeningId);
-                      },
-                    ),
-                  ]),
+              // GoRoute(
+              //   path: 'post_rekening',
+              //   name: RouteNames.postRekening,
+              //   builder: (context, state) => const PostRekeningPage(),
+              // ),
+              // GoRoute(
+              //     path:
+              //         'detail/:rekeningId', // 🔥 Sub-route tidak pakai '/dashboard_user/rekening/'
+              //     name: RouteNames.rekeningDetail,
+              //     builder: (context, state) {
+              //       final rekeningId = int.tryParse(
+              //               state.pathParameters['rekeningId'] ?? '0') ??
+              //           0;
+              //       return RekeningDetailPage(rekeningId: rekeningId);
+              //     },
+              //     routes: [
+              //       GoRoute(
+              //         path: 'edit/:editRekeningId',
+              //         name: RouteNames.putRekening,
+              //         builder: (context, state) {
+              //           final editrekeningId = int.tryParse(
+              //                   state.pathParameters['editRekeningId'] ??
+              //                       '0') ??
+              //               0;
+              //           return PutRekeningPage(editRekeningId: editrekeningId);
+              //         },
+              //       ),
+              //     ]),
             ],
           ),
           GoRoute(

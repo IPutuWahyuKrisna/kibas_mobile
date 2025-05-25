@@ -3,23 +3,23 @@ import '../../domain/entities/announcement_entity.dart';
 class AnnouncementModel extends Announcement {
   AnnouncementModel({
     required super.id,
-    required super.pengumuman,
     required super.judul,
-    required super.penulis,
+    required super.content,
     required super.linkFoto,
-    required super.areaId,
-    required super.areaName,
+    required super.tanggalMulai,
+    required super.tanggalBerakhir,
+    required super.targetScope,
   });
 
   factory AnnouncementModel.fromJson(Map<String, dynamic> json) {
     return AnnouncementModel(
       id: json['id'],
-      pengumuman: json['pengumuman'],
       judul: json['judul'],
-      penulis: json['penulis'],
+      content: json['content'],
       linkFoto: json['link_foto'],
-      areaId: json['area_id'],
-      areaName: json['area_name'],
+      tanggalMulai: json['tanggal_mulai'],
+      tanggalBerakhir: json['tanggal_berakhir'],
+      targetScope: json['target_scope'],
     );
   }
 }

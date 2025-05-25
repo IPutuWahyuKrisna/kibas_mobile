@@ -25,6 +25,7 @@ class DashbordEmployeeBloc
       GetAnnouncementsEvent event, Emitter<DashbordEmployeeState> emit) async {
     emit(DashboardLoading());
     final result = await getAllAnnouncementsUseCase.execute(event.token);
+    print(result);
     result.fold(
       (failure) => emit(DashboardError(failure.message)),
       (announcements) => emit(DashboardLoaded(announcements)),

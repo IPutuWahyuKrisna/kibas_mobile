@@ -1,19 +1,19 @@
 class Announcement {
   final int id;
-  final String pengumuman;
   final String judul;
-  final String penulis;
+  final String content;
   final String linkFoto;
-  final int areaId;
-  final String areaName;
+  final String tanggalMulai;
+  final String tanggalBerakhir;
+  final String targetScope;
 
   Announcement({
     required this.id,
-    required this.pengumuman,
     required this.judul,
-    required this.penulis,
+    required this.content,
     required this.linkFoto,
-    required this.areaId,
-    required this.areaName,
+    required this.tanggalMulai,
+    required this.tanggalBerakhir,
+    required this.targetScope,
   });
 }

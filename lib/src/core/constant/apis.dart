@@ -4,7 +4,6 @@ class ApiUrls {
   //Authentication
   static const register = '$baseURL/register';
   static const login = '$baseURL/login';
-  static const logOut = '$baseURL/logout';
 
   //Pengaduan Pelanggan
   static const getPengaduanDetail = '$baseURL/pengaduan';
@@ -22,14 +21,14 @@ class ApiUrls {
 
   //Pengumuman Pelanggan
   static const getMyPengumuman = '$baseURL/pengumuman';
-  static const getAllPengumuman = '$baseURL/pengumuman/all';
-  static const getPengumumanArea = '$baseURL/pengumuman/all';
-  static const getPengumumanKecamatan = '$baseURL/pengumuman/all';
-  static const getPengumumanKelurahan = '$baseURL/pengumuman/all';
-  static const getPengumumanRayon = '$baseURL/pengumuman/all';
+  static const getAllPengumuman = '$baseURL/pengumuman/general';
 
+  //Pengmuman Pegawai
+  static const getPengumumanPegawai = '$baseURL/pengumuman';
+  static const postPengumumanPegawai = '$baseURL/pengumuman/all';
+
+  static const logOut = '$baseURL/logout';
   static const userProfile = '${baseURL}users/profile';
-  static const allAnnounsment = '$baseURL/pengumuman-all';
   static const deleteComplaint = '$baseURL/pengaduan/';
   static const getArea = '$baseURL/pegawai-area';
   static const getKecamata = '$baseURL/kecamatan';

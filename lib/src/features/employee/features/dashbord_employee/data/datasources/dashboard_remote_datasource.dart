@@ -23,7 +23,7 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
     final tokenUser = user?.token ?? "";
     try {
       final response = await dio.get(
-        ApiUrls.allAnnounsment,
+        ApiUrls.getAllPengumuman,
         options: Options(
           headers: {
             'Authorization': 'Bearer $tokenUser',
@@ -32,10 +32,10 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
           receiveTimeout: const Duration(seconds: 30),
         ),
       );
-
+      print(response.statusCode);
       if (response.statusCode == 200) {
-        final data = List<Map<String, dynamic>>.from(
-            response.data['data']['pengumuman']);
+        print(response);
+        final data = List<Map<String, dynamic>>.from(response.data['data']);
         return data.map((json) => AnnouncementModel.fromJson(json)).toList();
       } else {
         throw ServerException.fromDioError(DioException(
@@ -53,7 +53,7 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
   Future<LogoutModel> logout(String token) async {
     try {
       final response = await dio.post(
-        ApiUrls.logOut,
+        "ApiUrls.logOut",
         options: Options(
           headers: {
             'Authorization': 'Bearer $token',
