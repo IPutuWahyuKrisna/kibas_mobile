@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "115982602021",
+    "project_id": "kibas-app",
+    "storage_bucket": "kibas-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:115982602021:android:eac77916d69d2c039014cc",
+        "android_client_info": {
+          "package_name": "id.kibas.pdam"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_0xcX476b4cee2wi2oICfKIwfHCGDlaw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';
-import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
 import '../../../../../../config/theme/index_style.dart';
-import '../../../../../../core/services/dashboard_employee_services.dart';
 import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../../../../../employee/features/dashbord_employee/domain/entities/announcement_entity.dart';
-import '../../../../../employee/features/dashbord_employee/presentation/bloc/dashbord_employee_bloc.dart';
 
 class AnnouncementDetail extends StatefulWidget {
   const AnnouncementDetail({super.key});
@@ -172,7 +167,7 @@ class _AnnouncementDetailState extends State<AnnouncementDetail> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image(
-                                image: AssetImage('assets/new photo.png'),
+                                image: AssetImage('assets/logo_kibas.png'),
                                 height: 190,
                                 fit: BoxFit.contain,
                               ),

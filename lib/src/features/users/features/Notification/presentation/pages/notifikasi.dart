@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
-import '../../../../../../config/routes/router.dart';
+import 'package:intl/intl.dart';
 import '../../../../../../config/theme/index_style.dart';
 import '../../domain/entities/myannouncement.dart';
 import '../bloc/notification_bloc.dart';
@@ -18,6 +17,12 @@ class _NotificationPagesState extends State<NotificationPages> {
   void initState() {
     super.initState();
     context.read<NotificationBloc>().add(FetchMyAnnouncementsEvent());
+  }
+
+  String formatDate(DateTime date) {
+    // Ubah format DateTime menjadi "01 January 2024"
+    final DateFormat formatter = DateFormat('dd MMMM yyyy');
+    return formatter.format(date);
   }
 
   @override
@@ -109,7 +114,7 @@ class _NotificationPagesState extends State<NotificationPages> {
 
                         /// Periode
                         Text(
-                          "Berlaku: ${item.tanggalMulai} - ${item.tanggalBerakhir}",
+                          "Berlaku: ${formatDate(DateTime.parse(item.tanggalMulai))} - ${formatDate(DateTime.parse(item.tanggalBerakhir))}",
                           style: TypographyStyle.bodyMedium.copyWith(
                             color: ColorConstants.whiteColor,
                           ),
@@ -133,7 +138,6 @@ class _NotificationPagesState extends State<NotificationPages> {
               },
             );
           }
-
           return const SizedBox(); // default fallback
         },
       ),

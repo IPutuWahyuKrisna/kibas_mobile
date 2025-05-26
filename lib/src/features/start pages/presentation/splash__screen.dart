@@ -31,7 +31,7 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Center(
               child: Image(
-                image: AssetImage('assets/kibas.png'),
+                image: AssetImage('assets/logo_kibas.png'),
                 height: 240,
               ),
             )
