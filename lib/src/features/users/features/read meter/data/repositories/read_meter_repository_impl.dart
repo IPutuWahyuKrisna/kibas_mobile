@@ -46,9 +46,8 @@ class ReadMeterRepositoryImpl implements MeterRepositoryDomain {
       return const Left(
           UnknownFailure(message: "Terjadi kesalahan yang tidak diketahui!"));
     } catch (e) {
-      return const Left(UnknownFailure(
-          message:
-              "Terjadi kesalahan yang tidak terduga! Silakan coba lagi nanti."));
+      return const Left(
+          UnknownFailure(message: "Anda sudah melakukan bacameter bulan ini"));
     }
   }
 }

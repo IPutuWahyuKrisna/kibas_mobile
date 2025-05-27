@@ -126,7 +126,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
             });
           } else if (state is PostMeterFailure) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
-              CustomSnackBar.show(context, "Gagal menambah data baca meter",
+              CustomSnackBar.show(context, state.error,
                   backgroundColor: Colors.red);
             });
             setState(() {

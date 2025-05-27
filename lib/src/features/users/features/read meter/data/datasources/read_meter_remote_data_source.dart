@@ -56,47 +56,39 @@ class ReadMeterRemoteDataSourceImpl implements ReadMeterRemoteDataSource {
     final user = userService.getUser();
     final token = user?.token ?? "";
 
-    try {
-      // 🔹 Kompres gambar sebelum upload
-      final compressedFile = await compressionService.compressImage(linkFoto);
-      if (compressedFile == null) {
-        return const Left(ImageProcessingFailure(
-            message:
-                "Gagal mengompresi gambar! Pastikan ukuran gambar di bawah 2MB."));
-      }
-
-      FormData formData = FormData.fromMap({
-        "link_foto": await MultipartFile.fromFile(compressedFile.path),
-        "angka_final": angkaFinal
-      });
-
-      Response response = await dio.post(
-        ApiUrls.postReadMeter,
-        data: formData,
-        options: Options(
-          headers: {
-            'Authorization': 'Bearer $token',
-            'Content-Type': 'multipart/form-data',
-          },
-          sendTimeout: const Duration(seconds: 10),
-          receiveTimeout: const Duration(seconds: 10),
-        ),
-      );
-      print(response.statusCode);
-
-      if (response.statusCode == 201) {
-        return const Right("Data meter berhasil dikirim!");
-      } else {
-        return const Left(ServerFailure(
-            message: "Gagal mengirim data meter! Coba lagi nanti."));
-      }
-    } on ImageProcessingFailure {
-      return const Left(
-          ImageProcessingFailure(message: "Gagal memproses gambar!"));
-    } catch (e) {
-      return const Left(UnknownFailure(
+    final compressedFile = await compressionService.compressImage(linkFoto);
+    if (compressedFile == null) {
+      return const Left(ImageProcessingFailure(
           message:
-              "Terjadi kesalahan tidak terduga! Silakan coba lagi nanti."));
+              "Gagal mengompresi gambar! Pastikan ukuran gambar di bawah 2MB."));
+    }
+
+    final formData = FormData.fromMap({
+      "link_foto": await MultipartFile.fromFile(compressedFile.path),
+      "angka_final": angkaFinal
+    });
+
+    final response = await dio.post(
+      ApiUrls.postReadMeter,
+      data: formData,
+      options: Options(
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'multipart/form-data',
+        },
+        sendTimeout: const Duration(seconds: 10),
+        receiveTimeout: const Duration(seconds: 10),
+      ),
+    );
+
+    if (response.statusCode == 201) {
+      return const Right("Data meter berhasil dikirim!");
+    } else if (response.statusCode == 422) {
+      return const Left(
+          ServerFailure(message: "Anda sudah melakukan baca meter bulan ini."));
+    } else {
+      return const Left(ServerFailure(
+          message: "Gagal mengirim data meter! Coba lagi nanti."));
     }
   }
 }

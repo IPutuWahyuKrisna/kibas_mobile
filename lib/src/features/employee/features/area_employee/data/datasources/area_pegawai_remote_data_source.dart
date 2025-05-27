@@ -29,8 +29,6 @@ class AreaPegawaiRemoteDataSourceImpl implements AreaPegawaiRemoteDataSource {
         final firstKey = data.keys.first;
         final areaData = data[firstKey];
 
-        // 🟢 Log untuk cek data
-
         return AreaPegawaiModel.fromJson(areaData);
       } else {
         throw ServerException.fromDioError(DioException(

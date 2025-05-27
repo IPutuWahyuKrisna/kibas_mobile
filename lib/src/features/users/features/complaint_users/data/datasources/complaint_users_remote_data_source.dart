@@ -79,8 +79,7 @@ class ComplaintUsersRemoteDataSourceImpl
       }
 
       final formData = FormData.fromMap({
-        "image": await MultipartFile.fromFile(compressedFile.path),
-        "complaint": complaint.complaint,
+        "link_url": await MultipartFile.fromFile(compressedFile.path),
         "latitude": complaint.latitude,
         "longitude": complaint.longitude,
         "jenis_pengaduan": complaint.jenisPengaduan,
