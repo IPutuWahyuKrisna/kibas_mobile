@@ -80,8 +80,8 @@ class ComplaintUsersRemoteDataSourceImpl
 
       final formData = FormData.fromMap({
         "link_url": await MultipartFile.fromFile(compressedFile.path),
-        "latitude": complaint.latitude,
-        "longitude": complaint.longitude,
+        "pengaduan_lat": complaint.latitude,
+        "pengaduan_long": complaint.longitude,
         "jenis_pengaduan": complaint.jenisPengaduan,
       });
 
