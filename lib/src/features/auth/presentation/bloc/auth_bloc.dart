@@ -51,6 +51,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     emit(AuthStateLoading());
 
     final result = await registerUseCase.execute(event.registerData);
+    print("masuk bloc");
+    print(result);
 
     result.fold(
       (failure) => emit(RegisterError(message: failure.message)),

@@ -102,7 +102,7 @@ class _PutRekeningPageState extends State<PutRekeningPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: ColorConstants.backgroundColor,
+      backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
         title: const Text(
           'Update Rekening',

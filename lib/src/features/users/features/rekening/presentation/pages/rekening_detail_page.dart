@@ -41,7 +41,7 @@ class _RekeningDetailPageState extends State<RekeningDetailPage> {
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Detail Rekening"),
-          backgroundColor: Colors.blue[400],
+          backgroundColor: Colors.lightBlue[50],
           elevation: 0,
         ),
         body: BlocBuilder<RekeningBloc, RekeningState>(
@@ -62,43 +62,43 @@ class _RekeningDetailPageState extends State<RekeningDetailPage> {
                     width: MediaQuery.of(context).size.width,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(20),
-                      color: Colors.blue[400],
+                      color: ColorConstants.backgroundSecondary,
                     ),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text("No. Rekening: ${rekening.noRekening}",
-                            style: TypographyStyle.bodyBold
-                                .copyWith(color: ColorConstants.whiteColor)),
+                            style: TypographyStyle.bodyBold.copyWith(
+                                color: ColorConstants.blackColorPrimary)),
                         Text(
                           "Pelanggan ID: ${rekening.pelangganId}",
-                          style: TypographyStyle.bodyLight
-                              .copyWith(color: ColorConstants.whiteColor),
+                          style: TypographyStyle.bodyLight.copyWith(
+                              color: ColorConstants.blackColorPrimary),
                         ),
                         Text(
                           "Area: ${state.labelMapping['area']}",
-                          style: TypographyStyle.bodyLight
-                              .copyWith(color: ColorConstants.whiteColor),
+                          style: TypographyStyle.bodyLight.copyWith(
+                              color: ColorConstants.blackColorPrimary),
                         ),
                         Text(
                           "Kecamatan: ${state.labelMapping['kecamatan']}",
-                          style: TypographyStyle.bodyLight
-                              .copyWith(color: ColorConstants.whiteColor),
+                          style: TypographyStyle.bodyLight.copyWith(
+                              color: ColorConstants.blackColorPrimary),
                         ),
                         Text(
                           "Kelurahan: ${state.labelMapping['kelurahan']}",
-                          style: TypographyStyle.bodyLight
-                              .copyWith(color: ColorConstants.whiteColor),
+                          style: TypographyStyle.bodyLight.copyWith(
+                              color: ColorConstants.blackColorPrimary),
                         ),
                         Text(
                           "Golongan: ${state.labelMapping['golongan']}",
-                          style: TypographyStyle.bodyLight
-                              .copyWith(color: ColorConstants.whiteColor),
+                          style: TypographyStyle.bodyLight.copyWith(
+                              color: ColorConstants.blackColorPrimary),
                         ),
                         Text(
                           "Rayon: ${state.labelMapping['rayon']}",
-                          style: TypographyStyle.bodyLight
-                              .copyWith(color: ColorConstants.whiteColor),
+                          style: TypographyStyle.bodyLight.copyWith(
+                              color: ColorConstants.blackColorPrimary),
                         ),
                       ],
                     ),
@@ -113,7 +113,7 @@ class _RekeningDetailPageState extends State<RekeningDetailPage> {
                 },
               );
               return Center(
-                child: Text("Error: ${state.message}"),
+                child: Text("Belum Ada Data"),
               );
             } else {
               return const Center(

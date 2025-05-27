@@ -38,6 +38,61 @@ class _RegisterPageState extends State<RegisterPage> {
   void submitRegister() {
     final nik = nikPelangganController.text;
 
+    if (emailController.text.isEmpty) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        CustomSnackBar.show(
+          context,
+          "Email tidak boleh kosong!",
+          backgroundColor: Colors.red,
+        );
+      });
+      return;
+    }
+
+    if (passwordController.text.isEmpty) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        CustomSnackBar.show(
+          context,
+          "Password tidak boleh kosong!",
+          backgroundColor: Colors.red,
+        );
+      });
+      return;
+    }
+
+    if (passwordConfirmController.text.isEmpty) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        CustomSnackBar.show(
+          context,
+          "Konfirmasi password tidak boleh kosong!",
+          backgroundColor: Colors.red,
+        );
+      });
+      return;
+    }
+
+    if (noRekeningController.text.isEmpty) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        CustomSnackBar.show(
+          context,
+          "No rekening tidak boleh kosong!",
+          backgroundColor: Colors.red,
+        );
+      });
+      return;
+    }
+
+    if (nikPelangganController.text.isEmpty) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        CustomSnackBar.show(
+          context,
+          "NIK pelanggan tidak boleh kosong!",
+          backgroundColor: Colors.red,
+        );
+      });
+      return;
+    }
+
     // Validasi panjang NIK harus 16 digit
     if (nik.length != 16 || !RegExp(r'^\d{16}$').hasMatch(nik)) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -47,6 +102,10 @@ class _RegisterPageState extends State<RegisterPage> {
           backgroundColor: Colors.red,
         );
       });
+      return;
+    }
+    if (passwordController.text != passwordConfirmController.text) {
+      CustomSnackBar.show(context, "Password tidak sama!");
       return;
     }
 
@@ -89,11 +148,14 @@ class _RegisterPageState extends State<RegisterPage> {
             });
           } else if (state is RegisterError) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
-              CustomSnackBar.show(context, state.message,
+              CustomSnackBar.show(context, "Data Pengguna tidak ditemukan",
                   backgroundColor: Colors.red);
             });
           }
         }, builder: (context, state) {
+          if (state is AuthStateLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,

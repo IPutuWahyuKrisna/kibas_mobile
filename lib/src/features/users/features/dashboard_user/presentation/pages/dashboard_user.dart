@@ -26,6 +26,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
     final idUsers = user!.pelanggan?.id ?? "";
     final email = user.email;
     final rekening = user.pelanggan?.rekening;
+    final nama = user.pelanggan?.namaPelanggan;
 
     String truncateText(String text, [int length = 25]) {
       if (text.length <= length) {
@@ -152,6 +153,8 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                               style: const TextStyle(color: Colors.white),
                             ),
                             const SizedBox(height: 5),
+
+                            // kalo bisa kasi antara nama sama email
                             SizedBox(
                               width: 200,
                               child: Text(
@@ -170,7 +173,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Image(
-                                image: AssetImage('assets/new photo.png'),
+                                image: AssetImage('assets/logo_kibas.png'),
                                 height: 190,
                                 fit: BoxFit.contain,
                               ),
@@ -192,7 +195,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
             const SizedBox(height: 20),
             // Menu Buttons
             Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 40),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -365,7 +368,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                         CustomSnackBar.show(context, state.message,
                             backgroundColor: Colors.red);
                       });
-                      print(state.message);
+
                       return const Center(child: Text("Data Tidak ditemukan"));
                     } else {
                       return const Center(child: Text('No data found!'));

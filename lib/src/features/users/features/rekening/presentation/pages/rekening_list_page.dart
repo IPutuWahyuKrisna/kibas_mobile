@@ -27,8 +27,12 @@ class _RekeningListPageState extends State<RekeningListPage> {
     final user = userService.getUser();
 
     return Scaffold(
+      backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
-        title: const Text("Daftar Rekening Pelanggan"),
+        title: const Text(
+          "Daftar Rekening Pelanggan",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.blue[400],
         elevation: 0,
       ),
@@ -65,29 +69,29 @@ class _RekeningListPageState extends State<RekeningListPage> {
                       width: MediaQuery.of(context).size.width,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(20),
-                        color: Colors.blue[400],
+                        color: ColorConstants.backgroundSecondary,
                       ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text("No. Sambungan: ${user!.pelanggan?.rekening}",
-                              style: TypographyStyle.bodyBold
-                                  .copyWith(color: ColorConstants.whiteColor)),
+                              style: TypographyStyle.bodyBold.copyWith(
+                                  color: ColorConstants.blackColorPrimary)),
                           Text("Nama: ${user.pelanggan?.namaPelanggan}",
-                              style: TypographyStyle.bodyLight
-                                  .copyWith(color: ColorConstants.whiteColor)),
+                              style: TypographyStyle.bodyLight.copyWith(
+                                  color: ColorConstants.blackColorPrimary)),
                           Text("Alamat: ${user.pelanggan?.alamatPelanggan}",
-                              style: TypographyStyle.bodyLight
-                                  .copyWith(color: ColorConstants.whiteColor)),
+                              style: TypographyStyle.bodyLight.copyWith(
+                                  color: ColorConstants.blackColorPrimary)),
                           Text("Kecamatan: ${user.pelanggan?.kecamatan}",
-                              style: TypographyStyle.bodyLight
-                                  .copyWith(color: ColorConstants.whiteColor)),
+                              style: TypographyStyle.bodyLight.copyWith(
+                                  color: ColorConstants.blackColorPrimary)),
                           Text("Area: ${user.pelanggan?.area}",
-                              style: TypographyStyle.bodyLight
-                                  .copyWith(color: ColorConstants.whiteColor)),
+                              style: TypographyStyle.bodyLight.copyWith(
+                                  color: ColorConstants.blackColorPrimary)),
                           Text("No Pelanggan: ${user.pelanggan?.noPelanggan}",
-                              style: TypographyStyle.bodyLight
-                                  .copyWith(color: ColorConstants.whiteColor)),
+                              style: TypographyStyle.bodyLight.copyWith(
+                                  color: ColorConstants.blackColorPrimary)),
                         ],
                       ),
                     );
@@ -106,7 +110,7 @@ class _RekeningListPageState extends State<RekeningListPage> {
                           Container(
                             padding: const EdgeInsets.all(12),
                             decoration: BoxDecoration(
-                              color: Colors.blue[400],
+                              color: ColorConstants.backgroundSecondary,
                               borderRadius: BorderRadius.circular(16),
                             ),
                             child: Column(
@@ -118,7 +122,9 @@ class _RekeningListPageState extends State<RekeningListPage> {
                                   children: [
                                     Text(tagihan.periode,
                                         style: TypographyStyle.bodyBold
-                                            .copyWith(color: Colors.white)),
+                                            .copyWith(
+                                                color: ColorConstants
+                                                    .blackColorPrimary)),
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                           vertical: 2, horizontal: 8),
@@ -138,11 +144,13 @@ class _RekeningListPageState extends State<RekeningListPage> {
                                 ),
                                 const SizedBox(height: 4),
                                 Text("Total Tagihan: ${tagihan.totalTagihan}",
-                                    style: TypographyStyle.bodyLight
-                                        .copyWith(color: Colors.white)),
+                                    style: TypographyStyle.bodyLight.copyWith(
+                                        color:
+                                            ColorConstants.blackColorPrimary)),
                                 Text("Denda: ${tagihan.denda}",
-                                    style: TypographyStyle.bodyLight
-                                        .copyWith(color: Colors.white)),
+                                    style: TypographyStyle.bodyLight.copyWith(
+                                        color:
+                                            ColorConstants.blackColorPrimary)),
                               ],
                             ),
                           ),

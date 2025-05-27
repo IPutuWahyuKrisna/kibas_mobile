@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:kibas_mobile/src/core/constant/apis.dart';
 import '../../../../core/error/exceptions.dart';
 import '../../../../core/error/failure.dart';
@@ -25,12 +26,10 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   @override
   Future<UserModel> login(String email, String password) async {
     try {
+      final fcmToken = await FirebaseMessaging.instance.getToken();
       final response = await dio.post(
         ApiUrls.login,
-        data: {
-          'email': email,
-          'password': password,
-        },
+        data: {'email': email, 'password': password, 'fcm_token': fcmToken},
         options: Options(
           sendTimeout: const Duration(seconds: 30),
           receiveTimeout: const Duration(seconds: 30),
@@ -63,8 +62,17 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       final response = await dio.post(
         ApiUrls.register,
         data: registerData.toJson(),
+        options: Options(
+          sendTimeout: const Duration(seconds: 30),
+          receiveTimeout: const Duration(seconds: 30),
+        ),
       );
-      if (response.statusCode == 201) {
+      print(response);
+      if (response.statusCode == 404) {
+        return const Left(
+            ServerFailure(message: "Gagal melakukan registrasi."));
+      } else if (response.statusCode == 201) {
+        print("berhasil kleng");
         return const Right("Registrasi berhasil!");
       } else {
         return const Left(
@@ -73,6 +81,8 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on DioException catch (e) {
       return Left(
           ServerFailure(message: e.message ?? "Terjadi kesalahan di server."));
+    } catch (e) {
+      throw UnknownException("Terjadi kesalahan yang tidak diketahui");
     }
   }
 

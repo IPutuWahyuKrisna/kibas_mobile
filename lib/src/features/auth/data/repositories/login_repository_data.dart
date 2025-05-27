@@ -41,13 +41,17 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<Either<Failure, String>> register(RegisterEntity registerData) async {
     try {
-      await remoteDataSource.register(RegisterModel(
-          email: registerData.email,
-          password: registerData.password,
-          passwordConfirmation: registerData.passwordConfirmation,
-          noRekening: registerData.noRekening,
-          nikPelanggan: registerData.nikPelanggan));
-      return const Right("Pendaftaran Berhasil Dilakukan");
+      // Simpan hasil dari remote data source
+      final result = await remoteDataSource.register(RegisterModel(
+        email: registerData.email,
+        password: registerData.password,
+        passwordConfirmation: registerData.passwordConfirmation,
+        noRekening: registerData.noRekening,
+        nikPelanggan: registerData.nikPelanggan,
+      ));
+
+      // Propagasi hasil langsung ke atas
+      return result;
     } on ServerException catch (e) {
       return Left(ServerFailure(message: e.message));
     } on NetworkException catch (e) {
@@ -61,14 +65,14 @@ class AuthRepositoryImpl implements AuthRepository {
       return const Left(
           UnknownFailure(message: "Terjadi kesalahan yang tidak diketahui"));
     }
-    // return remoteDataSource.register(RegisterModel(
-    //   email: registerData.email,
-    //   password: registerData.password,
-    //   passwordConfirmation: registerData.passwordConfirmation,
-    //   noPelanggan: registerData.noPelanggan,
-    //   nikPelanggan: registerData.nikPelanggan,
-    // ));
   }
+  // return remoteDataSource.register(RegisterModel(
+  //   email: registerData.email,
+  //   password: registerData.password,
+  //   passwordConfirmation: registerData.passwordConfirmation,
+  //   noPelanggan: registerData.noPelanggan,
+  //   nikPelanggan: registerData.nikPelanggan,
+  // ));
 
   @override
   Future<Either<Failure, List<Map<String, dynamic>>>> getGolonganList() {

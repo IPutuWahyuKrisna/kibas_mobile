@@ -28,8 +28,12 @@ class _NotificationPagesState extends State<NotificationPages> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
-        title: const Text("Notifikasi Pengumuman"),
+        title: const Text(
+          "Notifikasi Pengumuman",
+          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+        ),
         backgroundColor: Colors.blue[400],
         elevation: 0,
       ),
@@ -42,8 +46,8 @@ class _NotificationPagesState extends State<NotificationPages> {
           if (state is NotificationError) {
             return Center(
               child: Text(
-                state.message,
-                style: const TextStyle(color: Colors.red),
+                "Belum ada notifikasi",
+                style: const TextStyle(color: ColorConstants.blackColorPrimary),
               ),
             );
           }
@@ -53,8 +57,10 @@ class _NotificationPagesState extends State<NotificationPages> {
                 state.announcements;
 
             if (announcements.isEmpty) {
-              return const Center(
-                  child: Text("Tidak ada pengumuman saat ini."));
+              return Container(
+                child:
+                    const Center(child: Text("Tidak ada pengumuman saat ini.")),
+              );
             }
 
             return ListView.builder(
@@ -71,7 +77,7 @@ class _NotificationPagesState extends State<NotificationPages> {
                     padding: const EdgeInsets.all(16),
                     margin: const EdgeInsets.only(bottom: 16),
                     decoration: BoxDecoration(
-                      color: Colors.blue[400],
+                      color: ColorConstants.backgroundSecondary,
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Column(
@@ -85,7 +91,7 @@ class _NotificationPagesState extends State<NotificationPages> {
                               child: Text(
                                 item.judul,
                                 style: TypographyStyle.bodyBold.copyWith(
-                                  color: ColorConstants.whiteColor,
+                                  color: ColorConstants.blackColorPrimary,
                                 ),
                                 overflow: TextOverflow.ellipsis,
                               ),
@@ -104,7 +110,7 @@ class _NotificationPagesState extends State<NotificationPages> {
                               child: Text(
                                 item.targetScope,
                                 style: TypographyStyle.bodyMedium.copyWith(
-                                  color: Colors.white,
+                                  color: ColorConstants.blackColorPrimary,
                                 ),
                               ),
                             ),
@@ -116,7 +122,7 @@ class _NotificationPagesState extends State<NotificationPages> {
                         Text(
                           "Berlaku: ${formatDate(DateTime.parse(item.tanggalMulai))} - ${formatDate(DateTime.parse(item.tanggalBerakhir))}",
                           style: TypographyStyle.bodyMedium.copyWith(
-                            color: ColorConstants.whiteColor,
+                            color: ColorConstants.blackColorPrimary,
                           ),
                         ),
 
@@ -128,7 +134,7 @@ class _NotificationPagesState extends State<NotificationPages> {
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
                           style: TypographyStyle.bodyLight.copyWith(
-                            color: ColorConstants.whiteColor,
+                            color: ColorConstants.blackColorPrimary,
                           ),
                         ),
                       ],

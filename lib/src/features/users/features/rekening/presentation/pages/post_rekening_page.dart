@@ -91,7 +91,7 @@ class _PostRekeningPageState extends State<PostRekeningPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      backgroundColor: ColorConstants.backgroundColor,
+      backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
         title: const Text(
           'Tambah Rekening',

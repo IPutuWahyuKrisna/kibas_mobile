@@ -59,6 +59,23 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
       );
       return;
     }
+    if (angkaFinalController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Harap isi semua bidang terlebih dahulu!"),
+        ),
+      );
+      return;
+    }
+
+    if (angkaFinalController.text.length > 4) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Angka maksimal hanya 4 digit!"),
+        ),
+      );
+      return;
+    }
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
     final noSambungan = "${user?.pelanggan?.noPelanggan}";

@@ -8,10 +8,6 @@ class FCMHandler {
     // Minta izin (iOS)
     await messaging.requestPermission();
 
-    // Token (untuk backend atau debug)
-    final token = await messaging.getToken();
-    print("🔥 FCM Token: $token");
-
     // Foreground
     FirebaseMessaging.onMessage.listen((message) {
       final notif = message.notification;
