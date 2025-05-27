@@ -27,11 +27,11 @@ class ReadMeterRepositoryImpl implements MeterRepositoryDomain {
     required String angkaFinal,
   }) async {
     try {
-      await remoteDataSource.postMeter(
+      final result = await remoteDataSource.postMeter(
         linkFoto: linkFoto,
         angkaFinal: angkaFinal,
       );
-      return const Right("Data baca meter berhasil dikirim!");
+      return result;
     } on ServerException {
       return const Left(ServerFailure(
           message: "Gagal menghubungi server! Silakan coba lagi nanti."));
