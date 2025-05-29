@@ -97,7 +97,7 @@ class ComplaintUsersRemoteDataSourceImpl
           receiveTimeout: const Duration(seconds: 10),
         ),
       );
-      print(response.statusCode);
+
       if (response.statusCode == 200) {
         return Right(response.data["message"]);
       } else if (response.statusCode == 400) {

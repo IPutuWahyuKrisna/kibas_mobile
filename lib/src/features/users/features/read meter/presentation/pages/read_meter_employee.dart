@@ -100,7 +100,7 @@ class MeterEmployee extends StatelessWidget {
               );
             } else if (state is ReadMeterError) {
               SchedulerBinding.instance.addPostFrameCallback((_) {
-                CustomSnackBar.show(context, state.message,
+                CustomSnackBar.show(context, "Tidak Ada Data",
                     backgroundColor: Colors.red);
               });
               return Center(child: Text('No data found'));

@@ -192,10 +192,14 @@ class _RegisterPageState extends State<RegisterPage> {
                 const SizedBox(height: 30),
                 PrimaryButton(
                   label: "Daftar",
-                  onPressed: submitRegister,
+                  onPressed: () {
+                    submitRegister();
+                  },
                   height: 45,
                   width: MediaQuery.of(context).size.width,
-                ),
+                  isLoading: state is AuthStateLoading,
+                  enabled: state is! AuthStateLoading,
+                )
               ],
             ),
           );

@@ -30,6 +30,14 @@ class _ComplaintDetailUsersPageState extends State<ComplaintDetailUsersPage> {
     super.dispose();
   }
 
+  String truncateText(String text, [int length = 25]) {
+    if (text.length <= length) {
+      return text;
+    } else {
+      return '${text.substring(0, length)}...';
+    }
+  }
+
   void _submitRating() {
     final rating = int.tryParse(_ratingController.text);
     if (rating != null && rating >= 1 && rating <= 5) {
@@ -137,7 +145,7 @@ class _ComplaintDetailUsersPageState extends State<ComplaintDetailUsersPage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    complaint.jenisPengaduan,
+                                    truncateText(complaint.jenisPengaduan),
                                     style: const TextStyle(
                                       color: Colors.black87,
                                       fontWeight: FontWeight.bold,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import '../../../../../../component/index_component.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/theme/index_style.dart';
 import '../../../../../../core/services/global_service_locator.dart';
@@ -135,6 +136,9 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
           }
         },
         builder: (context, state) {
+          if (state is ReadMeterLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
           return Column(
             children: [
               Container(
@@ -283,32 +287,16 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          ElevatedButton(
-                            onPressed: isSubmitting ? null : submit,
-                            style: ButtonStyle(
-                              backgroundColor: WidgetStateProperty.all(
-                                  isSubmitting
-                                      ? Colors.grey
-                                      : Colors.blue[400]),
-                              shape: WidgetStateProperty.all(
-                                RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                              ),
-                            ),
-                            child: isSubmitting
-                                ? const SizedBox(
-                                    height: 20,
-                                    width: 20,
-                                    child: CircularProgressIndicator(
-                                        strokeWidth: 2, color: Colors.white),
-                                  )
-                                : const Text(
-                                    'Simpan',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 20),
-                                  ),
-                          ),
+                          PrimaryButton(
+                            label: "Simpan",
+                            onPressed: () {
+                              submit();
+                            },
+                            height: 45,
+                            width: MediaQuery.of(context).size.width,
+                            isLoading: state is ReadMeterLoading,
+                            enabled: state is! ReadMeterLoading,
+                          )
                         ],
                       ),
                     ],

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:kibas_mobile/src/core/services/auth_service.dart';
 import 'package:kibas_mobile/src/features/users/features/Notification/presentation/pages/notifikasi.dart';
@@ -27,211 +28,173 @@ export 'package:go_router/go_router.dart';
 part 'routes_name.dart';
 
 final class AppRouter {
-  static final router = GoRouter(
+  static final GlobalKey<NavigatorState> _rootNavigatorKey =
+      GlobalKey<NavigatorState>();
+
+  static GoRouter get router => _router;
+
+  static final _router = GoRouter(
+    navigatorKey: _rootNavigatorKey,
     initialLocation: '/splash',
-    redirect: (context, state) {
-      final userService = authInjec<UserLocalStorageService>();
-      final user = userService.getUser();
-      final path = state.uri.toString();
-
-      print(user);
-
-      if (user == null) {
-        if (path.startsWith('/login') || path.startsWith('/login/regist')) {
-          return null;
-        }
-        return '/login';
-      }
-
-      if (user.role == "pembaca-meter") {
-        if (path.startsWith('/dashboard_employee/area_pegawai')) {
-          return null;
-        }
-        if (path.startsWith('/dashboard_employee/list_complaint')) {
-          return null;
-        }
-        return '/dashboard_employee';
-      }
-
-      //pelanggan
-      if (user.role == "pelanggan") {
-        if (path.startsWith('/dashboard_user/list_complaint_users')) {
-          return null;
-        }
-        if (path.startsWith(
-            '/dashboard_user/list_complaint_users/detail_complaint_users/')) {
-          return null;
-        }
-        if (path.startsWith('/dashboard_user/rekening')) {
-          return null;
-        }
-        if (path.startsWith('/dashboard_user/notifikasi')) {
-          return null;
-        }
-        if (path
-            .startsWith('/dashboard_user/list_complaint_users/post_complain')) {
-          return null;
-        }
-        if (path.startsWith(
-            '/dashboard_user/rekening/:pelangganId/post_rekening')) {
-          return null;
-        }
-        if (path.startsWith(
-            '/dashboard_user/rekening/:pelangganId/detail/:rekeningId/edit/:editRekeningId')) {
-          return null;
-        }
-        if (path.startsWith('/dashboard_user/put_users')) {
-          return null;
-        }
-        if (path.startsWith('/dashboard_user/get_meter')) {
-          return null;
-        }
-        if (path.startsWith('/dashboard_user/detail-pengumuman')) {
-          return null;
-        }
-
-        return '/dashboard_user';
-      }
-
-      return null;
-    },
+    redirect: _redirectLogic,
     routes: [
-      GoRoute(
-        path: '/splash',
-        name: RouteNames.splashScreen,
-        builder: (context, state) => const SplashScreen(),
-      ),
-      GoRoute(
-          path: '/login',
-          name: RouteNames.login,
-          builder: (context, state) => const LoginPages(),
-          routes: [
-            GoRoute(
-              path: 'regist',
-              name: RouteNames.regist,
-              builder: (context, state) => const RegisterPage(),
-            ),
-          ]),
-      GoRoute(
-        path: '/dashboard_employee',
-        name: RouteNames.dashboardEmployee,
-        builder: (context, state) => const DashboardEmployeePages(),
-        routes: [
-          GoRoute(
-            path: 'area_pegawai',
-            name: RouteNames.areaPegawai,
-            builder: (context, state) => const AreaPegawaiPage(),
-          ),
-          GoRoute(
-              path: 'list_complaint',
-              name: RouteNames.listComplaintGet,
-              builder: (context, state) => const ComplaintListPage(),
-              routes: [
-                GoRoute(
-                  path: 'detail_complaint/:id',
-                  name: RouteNames.detailComplaintGet,
-                  builder: (context, state) {
-                    final id = int.parse(state.pathParameters['id'] ?? '0');
-                    return ComplaintDetailPage(id: id);
-                  },
-                ),
-              ]),
-        ],
-      ),
-      GoRoute(
-        path: '/dashboard_user',
-        name: RouteNames.dashboardUser,
-        builder: (context, state) => const DashboardUserPages(),
-        routes: [
-          GoRoute(
-            path: '/detail-pengumuman',
-            name: RouteNames.detailPengumuman,
-            builder: (context, state) => const AnnouncementDetail(),
-          ),
-          // GoRoute(
-          //   path: 'area_users',
-          //   name: RouteNames.areaPegawaiUsers,
-          //   builder: (context, state) => const AreaPegawaiUserPage(),
-          // ),
-          // GoRoute(
-          //   path: 'put_users',
-          //   name: RouteNames.putUsersProfile,
-          //   builder: (context, state) => const PutUsersPage(),
-          // ),
-          GoRoute(
-            path: 'notifikasi',
-            name: RouteNames.notifikasi,
-            builder: (context, state) => const NotificationPages(),
-          ),
-          GoRoute(
-            path: 'rekening',
-            name: RouteNames.rekening,
-            builder: (context, state) => const RekeningListPage(),
-            routes: [
-              // GoRoute(
-              //   path: 'post_rekening',
-              //   name: RouteNames.postRekening,
-              //   builder: (context, state) => const PostRekeningPage(),
-              // ),
-              // GoRoute(
-              //     path:
-              //         'detail/:rekeningId', // 🔥 Sub-route tidak pakai '/dashboard_user/rekening/'
-              //     name: RouteNames.rekeningDetail,
-              //     builder: (context, state) {
-              //       final rekeningId = int.tryParse(
-              //               state.pathParameters['rekeningId'] ?? '0') ??
-              //           0;
-              //       return RekeningDetailPage(rekeningId: rekeningId);
-              //     },
-              //     routes: [
-              //       GoRoute(
-              //         path: 'edit/:editRekeningId',
-              //         name: RouteNames.putRekening,
-              //         builder: (context, state) {
-              //           final editrekeningId = int.tryParse(
-              //                   state.pathParameters['editRekeningId'] ??
-              //                       '0') ??
-              //               0;
-              //           return PutRekeningPage(editRekeningId: editrekeningId);
-              //         },
-              //       ),
-              //     ]),
-            ],
-          ),
-          GoRoute(
-            path: 'get_meter',
-            name: RouteNames.getMeter,
-            builder: (context, state) => const MeterEmployee(),
-            routes: [
-              GoRoute(
-                path: 'post_meter',
-                name: RouteNames.postMeter,
-                builder: (context, state) => const FormMeterEmployee(),
-              ),
-            ],
-          ),
-          GoRoute(
-            path: 'list_complaint_users',
-            name: RouteNames.listComplaintUsersGet,
-            builder: (context, state) => const ComplaintListUsersPage(),
-            routes: [
-              GoRoute(
-                path: 'post_complain',
-                name: RouteNames.postComplaint,
-                builder: (context, state) => const PostComplaintPage(),
-              ),
-              GoRoute(
-                path: 'detail_complaint_users/:id',
-                name: RouteNames.detailComplaintUsersGet,
-                builder: (context, state) {
-                  final id = int.parse(state.pathParameters['id'] ?? '0');
-                  return ComplaintDetailUsersPage(id: id);
-                },
-              ),
-            ],
-          ),
-        ],
-      ),
+      _buildSplashRoute(),
+      _buildAuthRoutes(),
+      _buildEmployeeRoutes(),
+      _buildUserRoutes(),
     ],
   );
+
+  static String? _redirectLogic(BuildContext context, GoRouterState state) {
+    final userService = authInjec<UserLocalStorageService>();
+    final user = userService.getUser();
+    final path = state.uri.toString();
+
+    if (user == null) {
+      if (path.startsWith('/login') || path.startsWith('/login/regist')) {
+        return null;
+      }
+      return '/login';
+    }
+
+    if (user.role == "pembaca-meter") {
+      if (path.startsWith('/dashboard_employee/area_pegawai') ||
+          path.startsWith('/dashboard_employee/list_complaint')) {
+        return null;
+      }
+      return '/dashboard_employee';
+    }
+
+    if (user.role == "pelanggan") {
+      const allowedPaths = [
+        '/dashboard_user/list_complaint_users',
+        '/dashboard_user/list_complaint_users/detail_complaint_users/',
+        '/dashboard_user/rekening',
+        '/dashboard_user/notifikasi',
+        '/dashboard_user/list_complaint_users/post_complain',
+        '/dashboard_user/rekening/:pelangganId/post_rekening',
+        '/dashboard_user/rekening/:pelangganId/detail/:rekeningId/edit/:editRekeningId',
+        '/dashboard_user/put_users',
+        '/dashboard_user/get_meter',
+        '/dashboard_user/detail-pengumuman'
+      ];
+
+      if (allowedPaths.any((allowed) => path.startsWith(allowed))) {
+        return null;
+      }
+      return '/dashboard_user';
+    }
+
+    return null;
+  }
+
+  static GoRoute _buildSplashRoute() {
+    return GoRoute(
+      path: '/splash',
+      name: RouteNames.splashScreen,
+      builder: (context, state) => const SplashScreen(),
+    );
+  }
+
+  static GoRoute _buildAuthRoutes() {
+    return GoRoute(
+      path: '/login',
+      name: RouteNames.login,
+      builder: (context, state) => const LoginPages(),
+      routes: [
+        GoRoute(
+          path: 'regist',
+          name: RouteNames.regist,
+          builder: (context, state) => const RegisterPage(),
+        ),
+      ],
+    );
+  }
+
+  static GoRoute _buildEmployeeRoutes() {
+    return GoRoute(
+      path: '/dashboard_employee',
+      name: RouteNames.dashboardEmployee,
+      builder: (context, state) => const DashboardEmployeePages(),
+      routes: [
+        GoRoute(
+          path: 'area_pegawai',
+          name: RouteNames.areaPegawai,
+          builder: (context, state) => const AreaPegawaiPage(),
+        ),
+        GoRoute(
+          path: 'list_complaint',
+          name: RouteNames.listComplaintGet,
+          builder: (context, state) => const ComplaintListPage(),
+          routes: [
+            GoRoute(
+              path: 'detail_complaint/:id',
+              name: RouteNames.detailComplaintGet,
+              builder: (context, state) {
+                final id = int.parse(state.pathParameters['id'] ?? '0');
+                return ComplaintDetailPage(id: id);
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  static GoRoute _buildUserRoutes() {
+    return GoRoute(
+      path: '/dashboard_user',
+      name: RouteNames.dashboardUser,
+      builder: (context, state) => const DashboardUserPages(),
+      routes: [
+        GoRoute(
+          path: 'detail-pengumuman',
+          name: RouteNames.detailPengumuman,
+          builder: (context, state) => const AnnouncementDetail(),
+        ),
+        GoRoute(
+          path: 'notifikasi',
+          name: RouteNames.notifikasi,
+          builder: (context, state) => const NotificationPages(),
+        ),
+        GoRoute(
+          path: 'rekening',
+          name: RouteNames.rekening,
+          builder: (context, state) => const RekeningListPage(),
+        ),
+        GoRoute(
+          path: 'get_meter',
+          name: RouteNames.getMeter,
+          builder: (context, state) => const MeterEmployee(),
+          routes: [
+            GoRoute(
+              path: 'post_meter',
+              name: RouteNames.postMeter,
+              builder: (context, state) => const FormMeterEmployee(),
+            ),
+          ],
+        ),
+        GoRoute(
+          path: 'list_complaint_users',
+          name: RouteNames.listComplaintUsersGet,
+          builder: (context, state) => const ComplaintListUsersPage(),
+          routes: [
+            GoRoute(
+              path: 'post_complain',
+              name: RouteNames.postComplaint,
+              builder: (context, state) => const PostComplaintPage(),
+            ),
+            GoRoute(
+              path: 'detail_complaint_users/:id',
+              name: RouteNames.detailComplaintUsersGet,
+              builder: (context, state) {
+                final id = int.parse(state.pathParameters['id'] ?? '0');
+                return ComplaintDetailUsersPage(id: id);
+              },
+            ),
+          ],
+        ),
+      ],
+    );
+  }
 }

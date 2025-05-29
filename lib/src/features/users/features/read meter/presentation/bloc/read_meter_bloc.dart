@@ -27,7 +27,7 @@ class ReadMeterBloc extends Bloc<ReadMeterEvent, ReadMeterState> {
     emit(ReadMeterLoading());
 
     final result = await getListMeterUseCase.execute();
-
+    print(result);
     result.fold(
       (failure) => emit(ReadMeterError(message: failure.message)),
       (data) => emit(ReadMeterLoaded(meterList: data)),

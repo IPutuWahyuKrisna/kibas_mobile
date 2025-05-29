@@ -158,7 +158,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                             SizedBox(
                               width: 200,
                               child: Text(
-                                email, // Tampilkan email
+                                nama ?? email, // Tampilkan email
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -307,6 +307,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10, vertical: 10),
                           itemCount: announcements.length,
+                          scrollDirection: Axis.vertical,
                           itemBuilder: (context, index) {
                             final announcement = announcements[index];
                             return Padding(
