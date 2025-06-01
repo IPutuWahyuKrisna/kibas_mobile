@@ -24,8 +24,8 @@ class ApiUrls {
   static const getAllPengumuman = '$baseURL/pengumuman/general';
 
   //Pengmuman Pegawai
-  static const getPengumumanPegawai = '$baseURL/pengumuman';
-  static const postPengumumanPegawai = '$baseURL/pengumuman/all';
+  static const getPengaduanPegawai = '$baseURL/pengaduan/pelanggan';
+  static const putPengaduanPegawai = '$baseURL/pengaduan/pelanggan/update';
 
   static const logOut = '$baseURL/logout';
   static const userProfile = '${baseURL}users/profile';

@@ -9,7 +9,6 @@ import '../../core/utils/user_local_storage_service.dart';
 import '../../features/auth/presentation/pages/login.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/employee/features/area_employee/presentation/pages/area_pegawai_page.dart';
-import '../../features/employee/features/complaint/presentation/pages/complaint_detail_page.dart';
 import '../../features/employee/features/complaint/presentation/pages/complaint_list_page.dart';
 import '../../features/employee/features/dashbord_employee/presentation/pages/dashboard_employee.dart';
 import '../../features/users/features/dashboard_user/presentation/pages/announcement_detail.dart';

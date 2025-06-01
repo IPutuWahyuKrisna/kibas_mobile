@@ -1,7 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:get_storage/get_storage.dart';
 
+import '../../../../../../core/constant/apis.dart';
 import '../../../../../../core/error/exceptions.dart';
+import '../../../../../../core/services/global_service_locator.dart';
+import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../models/complaint_model.dart';
 
 abstract class ComplaintEmployeeRemoteDataSource {
@@ -18,9 +21,16 @@ class ComplaintEmployeeRemoteDataSourceImpl
 
   @override
   Future<List<ComplaintEmployeeModel>> getAllComplaintEmployee() async {
+    final userService = coreInjection<UserLocalStorageService>();
+    final user = userService.getUser();
+    final token = user?.token ?? "";
     try {
-      final response =
-          await dio.get('/complaint-employee'); // ganti sesuai endpoint
+      final response = await dio.get(ApiUrls.getPengaduanPegawai,
+          options: Options(
+            headers: {'Authorization': 'Bearer $token'},
+            sendTimeout: const Duration(seconds: 30),
+            receiveTimeout: const Duration(seconds: 30),
+          ));
 
       final data = response.data['data'] as List;
 
