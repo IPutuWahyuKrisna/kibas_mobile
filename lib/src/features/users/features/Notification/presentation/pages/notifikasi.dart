@@ -44,10 +44,10 @@ class _NotificationPagesState extends State<NotificationPages> {
           }
 
           if (state is NotificationError) {
-            return Center(
+            return const Center(
               child: Text(
                 "Belum ada notifikasi",
-                style: const TextStyle(color: ColorConstants.blackColorPrimary),
+                style: TextStyle(color: ColorConstants.blackColorPrimary),
               ),
             );
           }

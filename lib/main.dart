@@ -7,7 +7,6 @@ import 'package:kibas_mobile/src/config/routes/router.dart';
 import 'package:kibas_mobile/src/core/services/auth_service.dart';
 import 'package:kibas_mobile/src/features/auth/presentation/bloc/auth_bloc.dart';
 import 'package:kibas_mobile/src/features/users/features/Notification/presentation/bloc/notification_bloc.dart';
-import 'package:kibas_mobile/src/features/users/features/Notification/presentation/pages/notifikasi.dart';
 import 'package:kibas_mobile/src/features/users/features/complaint_users/presentation/bloc/complaint_usres_bloc.dart';
 import 'package:kibas_mobile/src/features/users/features/dashboard_user/presentation/bloc/dashboard_user_bloc.dart';
 import 'package:kibas_mobile/src/features/users/features/read meter/presentation/bloc/read_meter_bloc.dart';
@@ -78,7 +77,7 @@ void _initializeCoreServices() {
 void _initializeFeatureServices() {
   setupDashboardServices();
   initMeterServices();
-  initComplaintServices();
+  initComplaintEmployeeServices();
   complaintUsersServices();
   initAreaPegawaiServices();
   initPutUsersProfile();

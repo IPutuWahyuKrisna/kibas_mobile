@@ -77,7 +77,7 @@ class RekeningRemoteDataSourceImpl implements RekeningRemoteDataSource {
         final List data = response.data['data'];
         return data.map((e) => TagihanModel.fromJson(e)).toList();
       } else {
-        throw ServerException("Gagal mengambil data tagihan");
+        throw const ServerException("Gagal mengambil data tagihan");
       }
     } catch (e) {
       throw ServerException("Gagal terhubung ke server: $e");

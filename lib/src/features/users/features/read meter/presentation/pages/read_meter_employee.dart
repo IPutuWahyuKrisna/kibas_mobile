@@ -57,9 +57,22 @@ class MeterEmployee extends StatelessWidget {
                   itemCount: data.length,
                   itemBuilder: (context, index) {
                     final item = data[index];
+                    Color getStatusColor(String status) {
+                      switch (status.toLowerCase()) {
+                        case 'belum-terverifikasi':
+                          return Colors.amber;
+                        case 'gagal':
+                          return Colors.red;
+                        case 'terverifikasi':
+                          return Colors.green;
+                        default:
+                          return Colors.grey;
+                      }
+                    }
+
                     return Padding(
                       padding: const EdgeInsets.symmetric(
-                          vertical: 20, horizontal: 20),
+                          vertical: 5, horizontal: 20),
                       child: Card(
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
@@ -70,23 +83,39 @@ class MeterEmployee extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                formatDate(DateTime.parse(item
-                                    .createdAt)), // Parse the string to DateTime first
-                                style: TextStyle(
-                                  color: Colors.grey[700],
-                                  fontSize: 16,
-                                  fontWeight: FontWeight.bold,
-                                ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  Text(
+                                    formatDate(DateTime.parse(item
+                                        .createdAt)), // Parse the string to DateTime first
+                                    style: TextStyle(
+                                      color: Colors.grey[700],
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 4),
+                                    decoration: BoxDecoration(
+                                      color: getStatusColor(item.status),
+                                      borderRadius: BorderRadius.circular(8),
+                                    ),
+                                    child: Text(
+                                      item.status,
+                                      style:
+                                          TypographyStyle.captionsBold.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  )
+                                ],
                               ),
                               const SizedBox(height: 10),
                               Text(
                                 "Angka FInal : ${item.angkaFinal}",
-                                style: TypographyStyle.captionsBold.copyWith(
-                                    color: ColorConstants.blackColorPrimary),
-                              ),
-                              Text(
-                                "Status : ${item.status}",
                                 style: TypographyStyle.captionsBold.copyWith(
                                     color: ColorConstants.blackColorPrimary),
                               ),
@@ -103,7 +132,7 @@ class MeterEmployee extends StatelessWidget {
                 CustomSnackBar.show(context, "Tidak Ada Data",
                     backgroundColor: Colors.red);
               });
-              return Center(child: Text('No data found'));
+              return const Center(child: Text('No data found'));
             } else {
               return const Center(child: Text('No data found'));
             }

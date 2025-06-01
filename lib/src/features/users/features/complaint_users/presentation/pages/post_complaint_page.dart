@@ -5,8 +5,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:kibas_mobile/src/config/theme/colors.dart';
-import 'package:kibas_mobile/src/config/theme/index_style.dart';
 import 'package:kibas_mobile/src/core/constant/apis.dart';
 import '../../../../../../component/index_component.dart';
 import '../../../../../../component/snack_bar.dart';
@@ -19,7 +17,6 @@ class PostComplaintPage extends StatefulWidget {
   const PostComplaintPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _PostComplaintPageState createState() => _PostComplaintPageState();
 }
 
@@ -40,7 +37,6 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
     fetchJenisPengaduan();
   }
 
-  /// 🔹 Fungsi untuk memilih gambar dari galeri
   Future<void> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
@@ -87,34 +83,13 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
           },
         ),
       );
-      print('Raw response: ${response.data}');
       if (response.statusCode == 200) {
         final responseData = response.data;
 
-        if (responseData is! Map<String, dynamic>) {
-          throw Exception('Format response tidak valid');
-        }
-
         if (responseData['status'] == 'success') {
           final List<dynamic> data = responseData['data'] ?? [];
-
-          if (data.isEmpty) {
-            setState(() {
-              errorMessage = 'Tidak ada data jenis pengaduan tersedia';
-              isLoadingJenisPengaduan = false;
-            });
-            return;
-          }
-
-          final List<JenisPengaduanModel> loadedJenis = [];
-
-          for (var item in data) {
-            try {
-              loadedJenis.add(JenisPengaduanModel.fromJson(item));
-            } catch (e) {
-              debugPrint('Gagal memparsing item: $e');
-            }
-          }
+          final loadedJenis =
+              data.map((item) => JenisPengaduanModel.fromJson(item)).toList();
 
           setState(() {
             jenisPengaduanList = loadedJenis;
@@ -139,7 +114,6 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
         errorMessage = "Terjadi kesalahan: ${e.toString()}";
         isLoadingJenisPengaduan = false;
       });
-      debugPrint('Error fetchJenisPengaduan: $e');
     }
   }
 
@@ -152,21 +126,12 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
     }
   }
 
-  /// 🔹 Fungsi untuk mengirim data ke Bloc
   void submitComplaint() async {
-    if (selectedImage == null) {
+    isLoadingJenisPengaduan = true;
+    if (selectedImage == null || selectedJenis == null) {
       CustomSnackBar.show(
         context,
-        'Peringatan\nSilahkan pilih gambar terlebih dahulu',
-        backgroundColor: Colors.orange,
-      );
-      return;
-    }
-
-    if (selectedJenis == null) {
-      CustomSnackBar.show(
-        context,
-        'Peringatan\ntolong pilih jenis pengaduan',
+        'Lengkapi gambar dan jenis pengaduan',
         backgroundColor: Colors.orange,
       );
       return;
@@ -187,8 +152,10 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
               jenisPengaduan: selectedJenis!.id,
             ),
           );
+      isLoadingJenisPengaduan = false;
     } catch (e) {
       setState(() {
+        isLoadingJenisPengaduan = false;
         isSubmitting = false;
       });
       ScaffoldMessenger.of(context).showSnackBar(
@@ -197,37 +164,40 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
     }
   }
 
-  Widget _buildLoadingIndicator() {
-    return const Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CircularProgressIndicator(),
-          SizedBox(height: 20),
-          Text('Memuat jenis pengaduan...'),
-        ],
-      ),
-    );
-  }
+  Widget _buildLoadingIndicator() => const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+          ],
+        ),
+      );
 
-  Widget _buildErrorView() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const Icon(Icons.error_outline, color: Colors.red, size: 50),
-          const SizedBox(height: 20),
-          Text(errorMessage ?? 'Terjadi kesalahan',
-              style: const TextStyle(color: Colors.red)),
-          const SizedBox(height: 20),
-          ElevatedButton(
-            onPressed: fetchJenisPengaduan,
-            child: const Text('Coba Lagi'),
-          ),
-        ],
-      ),
-    );
-  }
+  Widget _loadingIndicator() => const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+          ],
+        ),
+      );
+
+  Widget _buildErrorView() => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, color: Colors.red, size: 50),
+            const SizedBox(height: 20),
+            Text(errorMessage ?? 'Terjadi kesalahan',
+                style: const TextStyle(color: Colors.red)),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: fetchJenisPengaduan,
+              child: const Text('Coba Lagi'),
+            ),
+          ],
+        ),
+      );
 
   @override
   Widget build(BuildContext context) {
@@ -235,17 +205,14 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.blue[50],
       appBar: AppBar(
-        title: const Text(
-          'Buat Pengaduan',
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
+        title: const Text('Buat Pengaduan',
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
         elevation: 0,
         backgroundColor: Colors.blue[400],
       ),
       body: BlocConsumer<ComplaintUsersBloc, ComplaintUsersState>(
         listener: (context, state) {
           if (state is PostComplaintSuccess) {
-            // Tampilkan pesan sukses dan reset UI
             SchedulerBinding.instance.addPostFrameCallback((_) {
               CustomSnackBar.show(context, state.message,
                   backgroundColor: Colors.green);
@@ -255,7 +222,6 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
               selectedImage = null;
               complaintController.clear();
             });
-
             Navigator.pop(context, true);
           } else if (state is ComplaintUsersError) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -268,180 +234,71 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
           }
         },
         builder: (context, state) {
-          if (isLoadingJenisPengaduan) {
+          if ((state is ComplaintUsersLoading && isSubmitting) ||
+              isLoadingJenisPengaduan) {
             return _buildLoadingIndicator();
           }
 
-          if (errorMessage != null) {
+          if (errorMessage != null || jenisPengaduanList.isEmpty) {
             return _buildErrorView();
           }
 
-          if (jenisPengaduanList.isEmpty) {
-            return _buildErrorView();
-          }
-
-          return Column(
-            children: [
-              /// 🔹 Header Styling
-              Container(
-                height: 35,
-                decoration: BoxDecoration(color: Colors.blue[400]),
-                child: Container(
-                  height: 35,
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            child: Column(
+              children: [
+                DropdownButtonFormField<JenisPengaduanModel>(
+                  isExpanded: true,
+                  value: selectedJenis,
+                  items: jenisPengaduanList.map((jenis) {
+                    return DropdownMenuItem<JenisPengaduanModel>(
+                      value: jenis,
+                      child: Text(jenis.nama),
+                    );
+                  }).toList(),
+                  onChanged: (value) => setState(() => selectedJenis = value),
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10)),
+                    contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 12),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                Container(
+                  height: 140,
                   decoration: BoxDecoration(
-                    color: Colors.lightBlue[50],
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(80),
-                      topRight: Radius.circular(80),
-                    ),
+                    color: Colors.grey[100],
+                    borderRadius: BorderRadius.circular(18),
                   ),
-                ),
-              ),
-
-              GestureDetector(
-                onTap: () {
-                  FocusScope.of(context).unfocus();
-                },
-                child: Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                  child: Column(
-                    children: [
-                      /// 🔹 Input untuk Jenis Pengaduan
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            'Jenis Pengaduan',
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 10),
-                          DropdownButtonFormField<JenisPengaduanModel>(
-                            isExpanded: true,
-                            value: selectedJenis,
-                            items: jenisPengaduanList.map((jenis) {
-                              return DropdownMenuItem<JenisPengaduanModel>(
-                                value: jenis,
-                                child: Text(jenis.nama),
-                              );
-                            }).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                selectedJenis = value;
-                              });
-                            },
-                            decoration: InputDecoration(
-                              border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(10)),
-                              contentPadding: const EdgeInsets.symmetric(
-                                  horizontal: 16, vertical: 12),
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      /// 🔹 Upload Gambar
-                      Container(
-                        height: 140,
-                        decoration: BoxDecoration(
-                          color: Colors.grey[100],
+                  child: selectedImage == null
+                      ? const Center(child: Icon(Icons.camera_alt, size: 40))
+                      : ClipRRect(
                           borderRadius: BorderRadius.circular(18),
+                          child: Image.file(selectedImage!,
+                              fit: BoxFit.cover, width: double.infinity),
                         ),
-                        child: selectedImage == null
-                            ? const Center(
-                                child: Icon(Icons.camera_alt, size: 40),
-                              )
-                            : ClipRRect(
-                                borderRadius: BorderRadius.circular(18),
-                                child: Image.file(
-                                  selectedImage!,
-                                  fit: BoxFit.cover,
-                                  width: double.infinity,
-                                ),
-                              ),
-                      ),
-                      const SizedBox(height: 10),
-
-                      /// 🔹 Tombol Upload dari Galeri
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          GestureDetector(
-                              onTap: () {
-                                pickImage();
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                    color: ColorConstants.whiteColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color:
-                                            ColorConstants.greyColorsecondary,
-                                        width: 0.5)),
-                                child: Center(
-                                  child: Text(
-                                    "Camera",
-                                    style: TypographyStyle.captionsBold
-                                        .copyWith(
-                                            color: ColorConstants
-                                                .blackColorPrimary),
-                                  ),
-                                ),
-                              )),
-                          GestureDetector(
-                              onTap: () {
-                                pickImageGalery();
-                              },
-                              child: Container(
-                                height: 40,
-                                width: 120,
-                                decoration: BoxDecoration(
-                                    color: ColorConstants.whiteColor,
-                                    borderRadius: BorderRadius.circular(10),
-                                    border: Border.all(
-                                        color:
-                                            ColorConstants.greyColorsecondary,
-                                        width: 0.5)),
-                                child: Center(
-                                  child: Text(
-                                    "Galery",
-                                    style: TypographyStyle.captionsBold
-                                        .copyWith(
-                                            color: ColorConstants
-                                                .blackColorPrimary),
-                                  ),
-                                ),
-                              )),
-                        ],
-                      ),
-
-                      const SizedBox(height: 20),
-
-                      /// 🔹 Tombol Simpan
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          PrimaryButton(
-                            label: "Simpan",
-                            onPressed: () {
-                              submitComplaint();
-                            },
-                            height: 45,
-                            width: MediaQuery.of(context).size.width,
-                            isLoading: state is ComplaintUsersLoading,
-                            enabled: state is! ComplaintUsersLoading,
-                          )
-                        ],
-                      ),
-                    ],
-                  ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                        onPressed: pickImage, child: const Text('Camera')),
+                    ElevatedButton(
+                        onPressed: pickImageGalery,
+                        child: const Text('Galeri')),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                PrimaryButton(
+                  label: "Simpan",
+                  onPressed: submitComplaint,
+                  height: 45,
+                  width: MediaQuery.of(context).size.width,
+                )
+              ],
+            ),
           );
         },
       ),

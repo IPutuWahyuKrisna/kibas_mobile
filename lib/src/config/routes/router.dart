@@ -5,7 +5,6 @@ import 'package:kibas_mobile/src/features/users/features/Notification/presentati
 import 'package:kibas_mobile/src/features/users/features/complaint_users/presentation/pages/complaint_users_detail_page.dart';
 import 'package:kibas_mobile/src/features/users/features/complaint_users/presentation/pages/complaint_users_list_page.dart';
 import 'package:kibas_mobile/src/features/users/features/complaint_users/presentation/pages/post_complaint_page.dart';
-import 'package:kibas_mobile/src/features/users/features/rekening/presentation/pages/put_rekening_page.dart';
 import '../../core/utils/user_local_storage_service.dart';
 import '../../features/auth/presentation/pages/login.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
@@ -17,11 +16,7 @@ import '../../features/users/features/dashboard_user/presentation/pages/announce
 import '../../features/users/features/read meter/presentation/pages/form_meter_employee.dart';
 import '../../features/users/features/read meter/presentation/pages/read_meter_employee.dart';
 import '../../features/start pages/presentation/splash__screen.dart';
-import '../../features/users/features/area_employee_users/area_pegawai_users_page.dart';
 import '../../features/users/features/dashboard_user/presentation/pages/dashboard_user.dart';
-import '../../features/users/features/dashboard_user/presentation/pages/put_user_page.dart';
-import '../../features/users/features/rekening/presentation/pages/post_rekening_page.dart';
-import '../../features/users/features/rekening/presentation/pages/rekening_detail_page.dart';
 import '../../features/users/features/rekening/presentation/pages/rekening_list_page.dart';
 export 'package:go_router/go_router.dart';
 
@@ -58,8 +53,8 @@ final class AppRouter {
     }
 
     if (user.role == "pembaca-meter") {
-      if (path.startsWith('/dashboard_employee/area_pegawai') ||
-          path.startsWith('/dashboard_employee/list_complaint')) {
+      if (path.startsWith('/dashboard_employee/notifikasi') ||
+          path.startsWith('/dashboard_employee/list_complaint_employee')) {
         return null;
       }
       return '/dashboard_employee';
@@ -125,17 +120,7 @@ final class AppRouter {
         GoRoute(
           path: 'list_complaint',
           name: RouteNames.listComplaintGet,
-          builder: (context, state) => const ComplaintListPage(),
-          routes: [
-            GoRoute(
-              path: 'detail_complaint/:id',
-              name: RouteNames.detailComplaintGet,
-              builder: (context, state) {
-                final id = int.parse(state.pathParameters['id'] ?? '0');
-                return ComplaintDetailPage(id: id);
-              },
-            ),
-          ],
+          builder: (context, state) => const ComplaintEmployeeListPage(),
         ),
       ],
     );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kibas_mobile/src/config/theme/colors.dart';
 import '../../../../../../component/basic_form_small.dart';
 import '../../../../../../component/index_component.dart';
 import '../../../../../../component/snack_bar.dart';

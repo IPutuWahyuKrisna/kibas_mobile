@@ -29,6 +29,16 @@ class DashboardError extends DashbordEmployeeState {
   List<Object?> get props => [message];
 }
 
+class DashboardUnauthenticated extends DashbordEmployeeState {
+  final String message;
+  final int statusCode;
+
+  const DashboardUnauthenticated(this.message, {this.statusCode = 401});
+
+  @override
+  List<Object?> get props => [message, statusCode];
+}
+
 class DashboardLoggedOut extends DashbordEmployeeState {
   final String message;
 

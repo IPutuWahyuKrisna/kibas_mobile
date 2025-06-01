@@ -39,10 +39,10 @@ class ReadMeterRemoteDataSourceImpl implements ReadMeterRemoteDataSource {
         final List<dynamic> data = response.data['data'];
         return data.map((json) => ReadMeterModel.fromJson(json)).toList();
       } else {
-        throw ServerException("Gagal mengambil data baca meter!");
+        throw const ServerException("Gagal mengambil data baca meter!");
       }
     } catch (e) {
-      throw UnknownException("Terjadi kesalahan tidak terduga.");
+      throw const UnknownException("Terjadi kesalahan tidak terduga.");
     }
   }
 

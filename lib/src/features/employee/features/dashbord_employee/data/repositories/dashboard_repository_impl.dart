@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
+import '../../../../../../core/error/exceptions.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../../domain/entities/announcement_entity.dart';
@@ -21,13 +22,25 @@ class DashboardRepositoryImpl implements DashboardRepositoryDomain {
       String token) async {
     try {
       final announcements = await remoteDataSource.getAllAnnouncements(token);
+
       return Right(announcements);
+    } on UnauthenticatedException catch (e) {
+      await localStorageService.clearUser();
+      return Left(UnauthenticatedFailure(message: e.message));
+    } on ServerException catch (e) {
+      return Left(ServerFailure(
+        message: e.message,
+        statusCode: e.statusCode,
+      ));
     } on DioException catch (e) {
+      await localStorageService.clearUser();
       return Left(
-          ServerFailure(message: e.message ?? "Terjadi kesalahan pada server"));
+          UnauthenticatedFailure(message: "Anda belum melakukan login"));
     } catch (e) {
-      return const Left(
-          UnknownFailure(message: "Terjadi kesalahan yang tidak diketahui"));
+      print("masuk kesini");
+      return const Left(UnknownFailure(
+        message: "Terjadi kesalahan yang tidak diketahui",
+      ));
     }
   }
 

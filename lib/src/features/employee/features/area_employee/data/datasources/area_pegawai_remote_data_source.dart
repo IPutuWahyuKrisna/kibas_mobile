@@ -38,7 +38,7 @@ class AreaPegawaiRemoteDataSourceImpl implements AreaPegawaiRemoteDataSource {
         ));
       }
     } catch (e) {
-      throw UnknownException("Terjadi kesalahan yang tidak diketahui");
+      throw const UnknownException("Terjadi kesalahan yang tidak diketahui");
     }
   }
 }

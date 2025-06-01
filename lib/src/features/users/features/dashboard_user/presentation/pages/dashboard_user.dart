@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kibas_mobile/src/component/index_component.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
@@ -168,22 +169,36 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                             ),
                           ],
                         ),
-                        const Flexible(
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image(
-                                image: AssetImage('assets/logo_kibas.png'),
-                                height: 190,
-                                fit: BoxFit.contain,
-                              ),
-                              SizedBox(height: 10),
-                              Text(
-                                'Tirta Danu Arta',
-                                style: TextStyle(color: Colors.white),
-                                textAlign: TextAlign.center,
-                              )
-                            ],
+                        Flexible(
+                          child: Container(
+                            margin: EdgeInsets.only(right: 20),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                const Image(
+                                  image: AssetImage('assets/logo_kibas.png'),
+                                  height: 190,
+                                  fit: BoxFit.contain,
+                                ),
+                                const SizedBox(height: 10),
+                                GestureDetector(
+                                  child: Container(
+                                    width: 200,
+                                    height: 50,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(10),
+                                        color: Colors.white),
+                                    child: Center(
+                                      child: Text("Informasi Tarif",
+                                          style: TypographyStyle.bodyMedium
+                                              .copyWith(
+                                                  color: ColorConstants
+                                                      .blackColorPrimary)),
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ],
@@ -280,8 +295,9 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
             // Pengumuman List
+            const SizedBox(height: 20),
+
             Expanded(
               child: BlocProvider(
                 create: (context) =>
@@ -290,6 +306,23 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                           token)), // Ambil data pengumuman awal
                 child: BlocBuilder<DashbordEmployeeBloc, DashbordEmployeeState>(
                   builder: (context, state) {
+                    print(state);
+                    if (state is DashboardUnauthenticated) {
+                      // Clear user data
+                      coreInjection<UserLocalStorageService>().clearUser();
+
+                      // Navigate to login after current frame is rendered
+                      SchedulerBinding.instance.addPostFrameCallback((_) {
+                        context.goNamed(RouteNames.login);
+                      });
+
+                      // Show snackbar
+                      CustomSnackBar.show(
+                        context,
+                        "Anda belum login, silahkan login terlebih dahulu",
+                        backgroundColor: Colors.red,
+                      );
+                    }
                     if (state is DashboardLoading) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is DashboardLoaded) {
@@ -365,11 +398,6 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                         ),
                       );
                     } else if (state is DashboardError) {
-                      SchedulerBinding.instance.addPostFrameCallback((_) {
-                        CustomSnackBar.show(context, state.message,
-                            backgroundColor: Colors.red);
-                      });
-
                       return const Center(child: Text("Data Tidak ditemukan"));
                     } else {
                       return const Center(child: Text('No data found!'));

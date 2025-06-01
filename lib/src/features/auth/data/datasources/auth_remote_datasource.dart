@@ -52,7 +52,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
     } on DioException catch (e) {
       throw ServerException.fromDioError(e);
     } catch (e) {
-      throw UnknownException("Terjadi kesalahan yang tidak diketahui");
+      throw const UnknownException("Terjadi kesalahan yang tidak diketahui");
     }
   }
 
@@ -82,7 +82,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       return Left(
           ServerFailure(message: e.message ?? "Terjadi kesalahan di server."));
     } catch (e) {
-      throw UnknownException("Terjadi kesalahan yang tidak diketahui");
+      throw const UnknownException("Terjadi kesalahan yang tidak diketahui");
     }
   }
 

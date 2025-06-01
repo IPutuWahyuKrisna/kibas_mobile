@@ -36,7 +36,7 @@ class MyAnnouncementRemoteDataSourceImpl
         final List data = response.data['data'];
         return data.map((e) => MyAnnouncementModel.fromJson(e)).toList();
       } else {
-        throw ServerException("Gagal memuat pengumuman pribadi");
+        throw const ServerException("Gagal memuat pengumuman pribadi");
       }
     } catch (e) {
       throw ServerException("Terjadi kesalahan: ${e.toString()}");

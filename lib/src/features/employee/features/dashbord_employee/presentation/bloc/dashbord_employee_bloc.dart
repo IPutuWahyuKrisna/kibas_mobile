@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 
+import '../../../../../../core/error/failure.dart';
 import '../../domain/entities/announcement_entity.dart';
 import '../../domain/usecases/get_all_announcement_usecase.dart';
 import '../../domain/usecases/log_out_usecase.dart';
@@ -21,13 +22,22 @@ class DashbordEmployeeBloc
     on<LogoutEvent>(_onLogout);
   }
 
+  // BLoC Event Handling
   Future<void> _onGetAnnouncements(
-      GetAnnouncementsEvent event, Emitter<DashbordEmployeeState> emit) async {
+    GetAnnouncementsEvent event,
+    Emitter<DashbordEmployeeState> emit,
+  ) async {
     emit(DashboardLoading());
     final result = await getAllAnnouncementsUseCase.execute(event.token);
-    print(result);
+
     result.fold(
-      (failure) => emit(DashboardError(failure.message)),
+      (failure) {
+        if (failure is UnauthenticatedFailure) {
+          emit(DashboardUnauthenticated(failure.message));
+        } else {
+          emit(DashboardError(failure.message));
+        }
+      },
       (announcements) => emit(DashboardLoaded(announcements)),
     );
   }

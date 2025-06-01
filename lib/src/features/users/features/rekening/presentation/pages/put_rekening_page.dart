@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kibas_mobile/src/config/theme/colors.dart';
 import 'package:kibas_mobile/src/component/basic_form_small.dart';
 import 'package:kibas_mobile/src/component/index_component.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';

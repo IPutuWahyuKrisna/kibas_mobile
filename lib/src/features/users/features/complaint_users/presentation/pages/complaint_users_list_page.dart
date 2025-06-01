@@ -106,7 +106,7 @@ class _ComplaintListUsersPageState extends State<ComplaintListUsersPage> {
                               '/dashboard_user/list_complaint_users/detail_complaint_users/${complaint.id}');
                         },
                         child: Container(
-                          padding: EdgeInsets.all(20),
+                          padding: const EdgeInsets.all(20),
                           decoration: BoxDecoration(
                             color: ColorConstants.whiteColor,
                             borderRadius: BorderRadius.circular(20),
@@ -172,7 +172,7 @@ class _ComplaintListUsersPageState extends State<ComplaintListUsersPage> {
                 CustomSnackBar.show(context, state.message,
                     backgroundColor: Colors.red);
               });
-              return Center(child: Text('Tidak ada data.'));
+              return const Center(child: Text('Tidak ada data.'));
             } else {
               return const Center(child: Text('Tidak ada data.'));
             }

@@ -112,7 +112,7 @@ class _RekeningDetailPageState extends State<RekeningDetailPage> {
                       backgroundColor: Colors.red);
                 },
               );
-              return Center(
+              return const Center(
                 child: Text("Belum Ada Data"),
               );
             } else {

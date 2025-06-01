@@ -14,18 +14,14 @@ class FormMeterEmployee extends StatefulWidget {
   const FormMeterEmployee({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _FormMeterEmployeeState createState() => _FormMeterEmployeeState();
 }
 
 class _FormMeterEmployeeState extends State<FormMeterEmployee> {
-  final TextEditingController noRekeningController = TextEditingController();
   final TextEditingController angkaFinalController = TextEditingController();
   File? selectedImage;
   final ImagePicker _picker = ImagePicker();
-  bool isSubmitting = false;
 
-  /// 🔹 Fungsi untuk memilih gambar dari galeri
   Future<void> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.camera);
     if (pickedFile != null) {
@@ -35,7 +31,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
     }
   }
 
-  Future<void> pickImageGalery() async {
+  Future<void> pickImageGallery() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       setState(() {
@@ -44,7 +40,6 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
     }
   }
 
-  /// 🔹 Fungsi untuk mengirim data ke Bloc
   void submit() {
     if (selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -60,23 +55,14 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
       );
       return;
     }
-    if (angkaFinalController.text.isEmpty) {
+
+    if (angkaFinalController.text.length > 4) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Harap isi semua bidang terlebih dahulu!"),
-        ),
+        const SnackBar(content: Text("Angka maksimal hanya 4 digit!")),
       );
       return;
     }
 
-    if (angkaFinalController.text.length > 4) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Angka maksimal hanya 4 digit!"),
-        ),
-      );
-      return;
-    }
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
     final noSambungan = "${user?.pelanggan?.noPelanggan}";
@@ -93,6 +79,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
     final token = user?.token ?? "";
+
     return Scaffold(
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.blue[50],
@@ -110,19 +97,15 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
             SchedulerBinding.instance.addPostFrameCallback((_) {
               CustomSnackBar.show(context, state.message,
                   backgroundColor: Colors.green);
-              context.read<ReadMeterBloc>().add(
-                    GetListMeterEvent(token),
-                  );
+              context.read<ReadMeterBloc>().add(GetListMeterEvent(token));
             });
+
             setState(() {
-              isSubmitting = false;
               selectedImage = null;
-              noRekeningController.clear();
               angkaFinalController.clear();
             });
 
             Future.delayed(const Duration(seconds: 2), () {
-              // ignore: use_build_context_synchronously
               Navigator.pop(context, true);
             });
           } else if (state is PostMeterFailure) {
@@ -130,15 +113,13 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
               CustomSnackBar.show(context, state.error,
                   backgroundColor: Colors.red);
             });
-            setState(() {
-              isSubmitting = false;
-            });
           }
         },
         builder: (context, state) {
-          if (state is ReadMeterLoading) {
+          if (state is PostMeterLoading) {
             return const Center(child: CircularProgressIndicator());
           }
+
           return Column(
             children: [
               Container(
@@ -165,47 +146,36 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
                   child: Column(
                     children: [
                       Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                textAlign: TextAlign.left,
-                                'Angka Meter',
-                                style: TextStyle(
-                                  color: ColorConstants.blackColorPrimary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
+                          const Text(
+                            'Angka Meter',
+                            style: TextStyle(
+                              color: ColorConstants.blackColorPrimary,
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(height: 10),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 3),
+                            height: 50,
+                            decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(15),
+                                color: ColorConstants.backgroundColor),
+                            child: Center(
+                              child: TextFormField(
+                                controller: angkaFinalController,
+                                keyboardType: TextInputType.number,
+                                decoration: const InputDecoration(
+                                  border: InputBorder.none,
+                                  hintText: 'Masukkan angka',
                                 ),
+                                style: TypographyStyle.bodyLight
+                                    .copyWith(color: Colors.black),
                               ),
-                              const SizedBox(
-                                height: 10,
-                              ),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 3),
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: ColorConstants.backgroundColor),
-                                child: Center(
-                                  child: TextFormField(
-                                    controller: angkaFinalController,
-                                    keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Masukan angka',
-                                    ),
-                                    style: TypographyStyle.bodyLight
-                                        .copyWith(color: Colors.black),
-                                    // const TextStyle(
-                                    //     fontSize: 16,
-                                    //     fontWeight: FontWeight.bold,
-                                    //     color: Colors.black),
-                                  ),
-                                ),
-                              ),
-                            ],
+                            ),
                           ),
                           const SizedBox(height: 20),
                           Container(
@@ -232,53 +202,55 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               GestureDetector(
-                                  onTap: () {
-                                    pickImage();
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                        color: ColorConstants.whiteColor,
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: ColorConstants
-                                                .greyColorsecondary,
-                                            width: 0.5)),
-                                    child: Center(
-                                      child: Text(
-                                        "Camera",
-                                        style: TypographyStyle.captionsBold
-                                            .copyWith(
-                                                color: ColorConstants
-                                                    .blackColorPrimary),
-                                      ),
+                                onTap: () {
+                                  pickImage();
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                      color: ColorConstants.whiteColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color:
+                                              ColorConstants.greyColorsecondary,
+                                          width: 0.5)),
+                                  child: Center(
+                                    child: Text(
+                                      "Camera",
+                                      style: TypographyStyle.captionsBold
+                                          .copyWith(
+                                              color: ColorConstants
+                                                  .blackColorPrimary),
                                     ),
-                                  )),
+                                  ),
+                                ),
+                              ),
                               GestureDetector(
-                                  onTap: () {
-                                    pickImageGalery();
-                                  },
-                                  child: Container(
-                                    height: 40,
-                                    width: 120,
-                                    decoration: BoxDecoration(
-                                        color: ColorConstants.whiteColor,
-                                        borderRadius: BorderRadius.circular(10),
-                                        border: Border.all(
-                                            color: ColorConstants
-                                                .greyColorsecondary,
-                                            width: 0.5)),
-                                    child: Center(
-                                      child: Text(
-                                        "Galery",
-                                        style: TypographyStyle.captionsBold
-                                            .copyWith(
-                                                color: ColorConstants
-                                                    .blackColorPrimary),
-                                      ),
+                                onTap: () {
+                                  pickImageGallery();
+                                },
+                                child: Container(
+                                  height: 40,
+                                  width: 120,
+                                  decoration: BoxDecoration(
+                                      color: ColorConstants.whiteColor,
+                                      borderRadius: BorderRadius.circular(10),
+                                      border: Border.all(
+                                          color:
+                                              ColorConstants.greyColorsecondary,
+                                          width: 0.5)),
+                                  child: Center(
+                                    child: Text(
+                                      "Galeri",
+                                      style: TypographyStyle.captionsBold
+                                          .copyWith(
+                                              color: ColorConstants
+                                                  .blackColorPrimary),
                                     ),
-                                  )),
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ],
@@ -289,13 +261,9 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
                         children: [
                           PrimaryButton(
                             label: "Simpan",
-                            onPressed: () {
-                              submit();
-                            },
+                            onPressed: submit,
                             height: 45,
                             width: MediaQuery.of(context).size.width,
-                            isLoading: state is ReadMeterLoading,
-                            enabled: state is! ReadMeterLoading,
                           )
                         ],
                       ),

@@ -128,7 +128,7 @@ class ComplaintUsersRemoteDataSourceImpl
         throw ServerException(response.data['message']);
       }
     } catch (e) {
-      throw ServerException("Terjadi kesalahan saat menghapus pengaduan");
+      throw const ServerException("Terjadi kesalahan saat menghapus pengaduan");
     }
   }
 

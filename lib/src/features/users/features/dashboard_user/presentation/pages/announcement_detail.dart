@@ -191,7 +191,7 @@ class _AnnouncementDetailState extends State<AnnouncementDetail> {
             Expanded(
                 child: SingleChildScrollView(
               child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -212,7 +212,7 @@ class _AnnouncementDetailState extends State<AnnouncementDetail> {
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(20),
                           )),
-                      SizedBox(
+                      const SizedBox(
                         height: 20,
                       ),
                       Container(
@@ -224,7 +224,7 @@ class _AnnouncementDetailState extends State<AnnouncementDetail> {
                           textAlign: TextAlign.justify,
                         ),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 10,
                       ),
                       Container(

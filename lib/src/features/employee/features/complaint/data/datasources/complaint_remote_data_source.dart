@@ -1,43 +1,35 @@
 import 'package:dio/dio.dart';
-import 'package:kibas_mobile/src/core/constant/apis.dart';
+import 'package:get_storage/get_storage.dart';
+
+import '../../../../../../core/error/exceptions.dart';
 import '../models/complaint_model.dart';
 
-abstract class ComplaintRemoteDataSource {
-  Future<List<ComplaintModel>> getAllComplaints(String token);
-  Future<ComplaintModel> getComplaintDetail(String token, int id);
+abstract class ComplaintEmployeeRemoteDataSource {
+  Future<List<ComplaintEmployeeModel>> getAllComplaintEmployee();
 }
 
-class ComplaintRemoteDataSourceImpl implements ComplaintRemoteDataSource {
+class ComplaintEmployeeRemoteDataSourceImpl
+    implements ComplaintEmployeeRemoteDataSource {
   final Dio dio;
+  final GetStorage storage;
 
-  ComplaintRemoteDataSourceImpl(this.dio);
-
-  @override
-  Future<List<ComplaintModel>> getAllComplaints(String token) async {
-    final response = await dio.get(
-      ApiUrls.getAllPengaduan,
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
-    );
-
-    if (response.statusCode == 200) {
-      final data = List<Map<String, dynamic>>.from(response.data['data']);
-      return data.map((json) => ComplaintModel.fromJson(json)).toList();
-    } else {
-      throw Exception('Gagal mengambil data pengaduan!');
-    }
-  }
+  ComplaintEmployeeRemoteDataSourceImpl(
+      {required this.dio, required this.storage});
 
   @override
-  Future<ComplaintModel> getComplaintDetail(String token, int id) async {
-    final response = await dio.get(
-      "https://kibas.tirtadanuarta.com/api/v1/pengaduan/$id",
-      options: Options(headers: {'Authorization': 'Bearer $token'}),
-    );
+  Future<List<ComplaintEmployeeModel>> getAllComplaintEmployee() async {
+    try {
+      final response =
+          await dio.get('/complaint-employee'); // ganti sesuai endpoint
 
-    if (response.statusCode == 200) {
-      return ComplaintModel.fromJson(response.data['data']);
-    } else {
-      throw Exception('Gagal mengambil detail pengaduan!');
+      final data = response.data['data'] as List;
+
+      return data.map((e) => ComplaintEmployeeModel.fromJson(e)).toList();
+    } on DioException catch (e) {
+      if (e.response?.statusCode == 401) {
+        await storage.remove('user');
+      }
+      throw ServerException.fromDioError(e);
     }
   }
 }
