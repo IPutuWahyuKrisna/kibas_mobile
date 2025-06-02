@@ -1,30 +1,52 @@
 part of 'complaint_bloc.dart';
 
-abstract class ComplaintEmployeeState extends Equatable {
-  const ComplaintEmployeeState();
-
-  @override
-  List<Object?> get props => [];
+enum ComplaintFailureType {
+  unauthenticated,
+  server,
+  network,
+  unknown,
 }
 
-class ComplaintEmployeeInitial extends ComplaintEmployeeState {}
-
-class ComplaintEmployeeLoading extends ComplaintEmployeeState {}
-
-class ComplaintEmployeeLoaded extends ComplaintEmployeeState {
-  final List<ComplaintEmployeeEntity> complaints;
-
-  const ComplaintEmployeeLoaded(this.complaints);
+abstract class ComplaintState extends Equatable {
+  const ComplaintState();
 
   @override
-  List<Object?> get props => [complaints];
+  List<Object> get props => [];
 }
 
-class ComplaintEmployeeError extends ComplaintEmployeeState {
+class ComplaintInitial extends ComplaintState {}
+
+class ComplaintLoading extends ComplaintState {}
+
+class ComplaintSubmitting extends ComplaintState {}
+
+class ComplaintLoaded extends ComplaintState {
+  final List<ComplaintEmployee> complaints;
+
+  const ComplaintLoaded({required this.complaints});
+
+  @override
+  List<Object> get props => [complaints];
+}
+
+class ComplaintSubmittedSuccess extends ComplaintState {
   final String message;
 
-  const ComplaintEmployeeError(this.message);
+  const ComplaintSubmittedSuccess({required this.message});
 
   @override
-  List<Object?> get props => [message];
+  List<Object> get props => [message];
+}
+
+class ComplaintError extends ComplaintState {
+  final String message;
+  final ComplaintFailureType failureType;
+
+  const ComplaintError({
+    required this.message,
+    required this.failureType,
+  });
+
+  @override
+  List<Object> get props => [message, failureType];
 }

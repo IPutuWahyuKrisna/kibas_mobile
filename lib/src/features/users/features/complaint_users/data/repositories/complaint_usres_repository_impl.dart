@@ -40,7 +40,6 @@ class ComplaintUsersRepositoryImpl implements ComplaintRepositoryDomainUsers {
   }
 
   @override
-  @override
   Future<Either<Failure, String>> postComplaint({
     required File image,
     required String complaint,

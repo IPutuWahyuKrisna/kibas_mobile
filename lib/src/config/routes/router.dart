@@ -9,7 +9,9 @@ import '../../core/utils/user_local_storage_service.dart';
 import '../../features/auth/presentation/pages/login.dart';
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/employee/features/area_employee/presentation/pages/area_pegawai_page.dart';
+import '../../features/employee/features/complaint/domain/entities/complaint_entity.dart';
 import '../../features/employee/features/complaint/presentation/pages/complaint_list_page.dart';
+import '../../features/employee/features/complaint/presentation/pages/edit_pengaduan_page.dart';
 import '../../features/employee/features/dashbord_employee/presentation/pages/dashboard_employee.dart';
 import '../../features/users/features/dashboard_user/presentation/pages/announcement_detail.dart';
 import '../../features/users/features/read meter/presentation/pages/form_meter_employee.dart';
@@ -53,7 +55,9 @@ final class AppRouter {
 
     if (user.role == "pembaca-meter") {
       if (path.startsWith('/dashboard_employee/notifikasi') ||
-          path.startsWith('/dashboard_employee/list_complaint_employee')) {
+          path.startsWith('/dashboard_employee/list_complaint_employee') ||
+          path.startsWith(
+              '/dashboard_employee/list_complaint_employee/edit_complaint')) {
         return null;
       }
       return '/dashboard_employee';
@@ -119,7 +123,17 @@ final class AppRouter {
         GoRoute(
           path: 'list_complaint',
           name: RouteNames.listComplaintGet,
-          builder: (context, state) => const ComplaintEmployeeListPage(),
+          builder: (context, state) => const ComplaintListEmployeePage(),
+          routes: [
+            GoRoute(
+              path: 'edit_complaint',
+              name: RouteNames.editComplaintEmployee,
+              builder: (context, state) {
+                final complaint = state.extra as ComplaintEmployee;
+                return PostComplaintEmployeePage(complaint: complaint);
+              },
+            ),
+          ],
         ),
       ],
     );

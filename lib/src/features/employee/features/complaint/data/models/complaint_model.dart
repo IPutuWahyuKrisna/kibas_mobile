@@ -1,6 +1,6 @@
 import '../../domain/entities/complaint_entity.dart';
 
-class ComplaintEmployeeModel extends ComplaintEmployeeEntity {
+class ComplaintEmployeeModel extends ComplaintEmployee {
   const ComplaintEmployeeModel({
     required int id,
     required int pengaduanId,
@@ -26,16 +26,5 @@ class ComplaintEmployeeModel extends ComplaintEmployeeEntity {
       linkUrl: json['link_url'],
       tanggalPengaduan: DateTime.parse(json['tanggal_pengaduan']),
     );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'pengaduan_id': pengaduanId,
-      'nama_pelanggan': namaPelanggan,
-      'jenis_pengaduan': jenisPengaduan,
-      'link_url': linkUrl,
-      'tanggal_pengaduan': tanggalPengaduan.toIso8601String(),
-    };
   }
 }

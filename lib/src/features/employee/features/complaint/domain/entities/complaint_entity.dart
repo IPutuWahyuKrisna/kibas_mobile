@@ -1,6 +1,7 @@
+// complaint_entity.dart
 import 'package:equatable/equatable.dart';
 
-class ComplaintEmployeeEntity extends Equatable {
+class ComplaintEmployee extends Equatable {
   final int id;
   final int pengaduanId;
   final String namaPelanggan;
@@ -8,7 +9,7 @@ class ComplaintEmployeeEntity extends Equatable {
   final String linkUrl;
   final DateTime tanggalPengaduan;
 
-  const ComplaintEmployeeEntity({
+  const ComplaintEmployee({
     required this.id,
     required this.pengaduanId,
     required this.namaPelanggan,
@@ -16,6 +17,17 @@ class ComplaintEmployeeEntity extends Equatable {
     required this.linkUrl,
     required this.tanggalPengaduan,
   });
+
+  factory ComplaintEmployee.fromJson(Map<String, dynamic> json) {
+    return ComplaintEmployee(
+      id: json['id'],
+      pengaduanId: json['pengaduan_id'],
+      namaPelanggan: json['nama_pelanggan'],
+      jenisPengaduan: json['jenis_pengaduan'],
+      linkUrl: json['link_url'],
+      tanggalPengaduan: DateTime.parse(json['tanggal_pengaduan']),
+    );
+  }
 
   @override
   List<Object?> get props => [

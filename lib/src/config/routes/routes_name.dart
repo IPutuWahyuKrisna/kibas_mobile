@@ -26,7 +26,7 @@ abstract class RouteNames {
   //Pegawai
   static const dashboardEmployee = '/dashboard_employee';
   static const listComplaintGet = 'list_complaint';
-  static const detailComplaintGet = 'detail_complaint/:id';
+  static const editComplaintEmployee = 'edit_complaint/:id';
 
   static const complaint = 'complaint';
   static const announcementDetail = 'announcement_detail';

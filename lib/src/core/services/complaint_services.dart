@@ -4,17 +4,19 @@ import '../../features/employee/features/complaint/data/datasources/complaint_re
 import '../../features/employee/features/complaint/data/repositories/complaint_repository_impl.dart';
 import '../../features/employee/features/complaint/domain/repositories/complaint_repository.dart';
 import '../../features/employee/features/complaint/domain/usecases/get_all_complaints_usecase.dart';
+import '../../features/employee/features/complaint/domain/usecases/post_complaint_employee_usecase.dart';
 import '../../features/employee/features/complaint/presentation/bloc/complaint_bloc.dart';
 
-final complaintInjec =
-    GetIt.instance; // 🟢 Injeksi khusus untuk ComplaintEmployee
+final complaintInjec = GetIt.instance;
 
+/// 🟢 Injeksi layanan untuk fitur ComplaintEmployee
 Future<void> initComplaintEmployeeServices() async {
-  // 🟢 Data Sources
-  complaintInjec.registerLazySingleton<ComplaintEmployeeRemoteDataSource>(
-    () => ComplaintEmployeeRemoteDataSourceImpl(
+  // 🟢 Data Source
+  complaintInjec.registerLazySingleton<ComplaintRemoteDataSource>(
+    () => ComplaintRemoteDataSourceImpl(
       dio: complaintInjec(),
-      storage: complaintInjec(),
+      compressionService:
+          complaintInjec(), // pastikan dio sudah di-inject sebelumnya // contoh: GetStorageService
     ),
   );
 
@@ -27,17 +29,18 @@ Future<void> initComplaintEmployeeServices() async {
 
   // 🟢 Use Cases
   complaintInjec.registerLazySingleton(
-    () => GetAllComplaintEmployeeUseCase(complaintInjec()),
+    () => FetchComplaintEmployeeUseCase(complaintInjec()),
   );
 
-  // complaintInjec.registerLazySingleton(
-  //   () => GetComplaintEmployeeDetailUseCase(complaintInjec()),
-  // );
+  complaintInjec.registerLazySingleton(
+    () => PostComplaintEmployeeUseCase(complaintInjec()),
+  );
 
   // 🟢 Bloc
   complaintInjec.registerFactory(
-    () => ComplaintEmployeeBloc(
-      getAllComplaintEmployeeUseCase: complaintInjec(),
+    () => ComplaintBloc(
+      fetchComplaints: complaintInjec(),
+      postComplaint: complaintInjec(),
     ),
   );
 }
