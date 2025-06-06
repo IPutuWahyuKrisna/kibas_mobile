@@ -198,7 +198,7 @@ class _AnnouncementDetailState extends State<AnnouncementDetail> {
                       Container(
                           height: 350,
                           decoration: BoxDecoration(
-                            image: announcement.linkFoto != null
+                            image: announcement.linkFoto != "-"
                                 ? DecorationImage(
                                     fit: BoxFit.cover,
                                     image: NetworkImage(announcement.linkFoto),

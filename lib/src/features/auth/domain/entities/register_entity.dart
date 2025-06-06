@@ -6,6 +6,7 @@ class RegisterEntity extends Equatable {
   final String passwordConfirmation;
   final String noRekening;
   final String nikPelanggan;
+  final String noTelepon;
 
   const RegisterEntity({
     required this.email,
@@ -13,6 +14,7 @@ class RegisterEntity extends Equatable {
     required this.passwordConfirmation,
     required this.noRekening,
     required this.nikPelanggan,
+    required this.noTelepon,
   });
 
   @override
@@ -22,5 +24,6 @@ class RegisterEntity extends Equatable {
         passwordConfirmation,
         noRekening,
         nikPelanggan,
+        noTelepon
       ];
 }

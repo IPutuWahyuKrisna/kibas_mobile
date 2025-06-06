@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kibas_mobile/src/component/index_component.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
@@ -171,7 +170,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                         ),
                         Flexible(
                           child: Container(
-                            margin: EdgeInsets.only(right: 20),
+                            margin: const EdgeInsets.only(right: 20),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

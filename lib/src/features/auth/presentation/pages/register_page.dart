@@ -23,6 +23,7 @@ class _RegisterPageState extends State<RegisterPage> {
       TextEditingController();
   final TextEditingController noRekeningController = TextEditingController();
   final TextEditingController nikPelangganController = TextEditingController();
+  final TextEditingController noTeleponController = TextEditingController();
 
   int? selectedGolongan;
   int? selectedKecamatan;
@@ -92,7 +93,39 @@ class _RegisterPageState extends State<RegisterPage> {
       });
       return;
     }
+    if (noTeleponController.text.isEmpty) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        CustomSnackBar.show(
+          context,
+          "No telepon pelanggan tidak boleh kosong!",
+          backgroundColor: Colors.red,
+        );
+      });
+      return;
+    }
 
+    if (noTeleponController.text.length < 10 ||
+        noTeleponController.text.length > 17) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        CustomSnackBar.show(
+          context,
+          "No telepon harus antara 10 dan 17 digit!",
+          backgroundColor: Colors.red,
+        );
+      });
+      return;
+    }
+
+    if (noTeleponController.text.isEmpty) {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        CustomSnackBar.show(
+          context,
+          "No telepon pelanggan tidak boleh kosong!",
+          backgroundColor: Colors.red,
+        );
+      });
+      return;
+    }
     // Validasi panjang NIK harus 16 digit
     if (nik.length != 16 || !RegExp(r'^\d{16}$').hasMatch(nik)) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -115,6 +148,7 @@ class _RegisterPageState extends State<RegisterPage> {
       password: passwordController.text,
       passwordConfirmation: passwordConfirmController.text,
       nikPelanggan: nik,
+      noTelepon: noTeleponController.text,
     );
 
     context
@@ -177,6 +211,12 @@ class _RegisterPageState extends State<RegisterPage> {
                   hintText: "Masukan NIK",
                   inputType: TextInputType.number,
                   controller: nikPelangganController,
+                ),
+                BasicForm(
+                  label: "No Telepon",
+                  hintText: "Masukan No telepon",
+                  inputType: TextInputType.number,
+                  controller: noTeleponController,
                 ),
                 const SizedBox(height: 40),
                 PasswordForm(

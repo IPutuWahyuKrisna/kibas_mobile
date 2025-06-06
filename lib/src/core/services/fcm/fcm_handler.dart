@@ -1,5 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:kibas_mobile/src/config/routes/router.dart';
+import '../../utils/user_local_storage_service.dart';
+import '../global_service_locator.dart';
 import 'notification_service.dart';
 
 class FCMHandler {
@@ -61,10 +63,20 @@ class FCMHandler {
         router.push('/dashboard_user/rekening');
         break;
       case 'pengumuman':
-        router.push('/dashboard_user/detail-pengumuman');
+        router.push('/dashboard_user/notifikasi');
         break;
       case 'pengaduan':
-        router.push('/dashboard_user/list_complaint_users');
+        // Cek role pengguna
+        final userService = coreInjection<UserLocalStorageService>();
+        final user = userService.getUser();
+        final isEmployee = user?.role ==
+            'petugas'; // Sesuaikan dengan field role di model user Anda
+
+        if (isEmployee) {
+          router.push('/dashboard_employee/list_complaint_employee');
+        } else {
+          router.push('/dashboard_user/list_complaint_users');
+        }
         break;
       default:
         router.push('/dashboard_user');

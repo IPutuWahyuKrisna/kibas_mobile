@@ -27,6 +27,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   Future<UserModel> login(String email, String password) async {
     try {
       final fcmToken = await FirebaseMessaging.instance.getToken();
+      print(fcmToken);
       final response = await dio.post(
         ApiUrls.login,
         data: {'email': email, 'password': password, 'fcm_token': fcmToken},
@@ -35,7 +36,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           receiveTimeout: const Duration(seconds: 30),
         ),
       );
-
+      print(response.data["message"]);
       if (response.statusCode == 200) {
         print("berhasil");
         final userModel = UserModel.fromJson(response.data["data"]);

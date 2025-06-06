@@ -32,9 +32,9 @@ class DashboardRepositoryImpl implements DashboardRepositoryDomain {
         message: e.message,
         statusCode: e.statusCode,
       ));
-    } on DioException catch (e) {
+    } on DioException {
       await localStorageService.clearUser();
-      return Left(
+      return const Left(
           UnauthenticatedFailure(message: "Anda belum melakukan login"));
     } catch (e) {
       print("masuk kesini");

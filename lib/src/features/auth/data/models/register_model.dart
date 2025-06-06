@@ -1,20 +1,24 @@
 import '../../domain/entities/register_entity.dart';
 
 class RegisterModel extends RegisterEntity {
-  const RegisterModel(
-      {required super.email,
-      required super.password,
-      required super.passwordConfirmation,
-      required super.noRekening,
-      required super.nikPelanggan});
+  const RegisterModel({
+    required super.email,
+    required super.password,
+    required super.passwordConfirmation,
+    required super.noRekening,
+    required super.nikPelanggan,
+    required super.noTelepon,
+  });
 
   factory RegisterModel.fromJson(Map<String, dynamic> json) {
     return RegisterModel(
-        email: json['email'],
-        password: json['password'],
-        passwordConfirmation: json['password_confirmation'],
-        noRekening: json['no_sambungan'],
-        nikPelanggan: json['nik']);
+      email: json['email'],
+      password: json['password'],
+      passwordConfirmation: json['password_confirmation'],
+      noRekening: json['no_sambungan'],
+      nikPelanggan: json['nik'],
+      noTelepon: json['no_telepon'],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -23,7 +27,8 @@ class RegisterModel extends RegisterEntity {
       "email": email,
       "password": password,
       "password_confirmation": passwordConfirmation,
-      "nik": nikPelanggan
+      "nik": nikPelanggan,
+      "no_telepon": noTelepon
     };
   }
 }

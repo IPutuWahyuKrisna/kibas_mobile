@@ -165,7 +165,7 @@ class DashboardEmployeePages extends StatelessWidget {
                         ),
                         Flexible(
                           child: Container(
-                            margin: EdgeInsets.only(right: 20),
+                            margin: const EdgeInsets.only(right: 20),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -211,8 +211,7 @@ class DashboardEmployeePages extends StatelessWidget {
                   InkWell(
                     onTap: () {
                       try {
-                        context
-                            .go('/dashboard_employee/list_complaint_employee');
+                        context.goNamed(RouteNames.listComplaintGet);
                         // ignore: empty_catches
                       } catch (e) {}
                     },

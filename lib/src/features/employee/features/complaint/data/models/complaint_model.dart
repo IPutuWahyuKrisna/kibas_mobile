@@ -2,20 +2,13 @@ import '../../domain/entities/complaint_entity.dart';
 
 class ComplaintEmployeeModel extends ComplaintEmployee {
   const ComplaintEmployeeModel({
-    required int id,
-    required int pengaduanId,
-    required String namaPelanggan,
-    required String jenisPengaduan,
-    required String linkUrl,
-    required DateTime tanggalPengaduan,
-  }) : super(
-          id: id,
-          pengaduanId: pengaduanId,
-          namaPelanggan: namaPelanggan,
-          jenisPengaduan: jenisPengaduan,
-          linkUrl: linkUrl,
-          tanggalPengaduan: tanggalPengaduan,
-        );
+    required super.id,
+    required super.pengaduanId,
+    required super.namaPelanggan,
+    required super.jenisPengaduan,
+    required super.linkUrl,
+    required super.tanggalPengaduan,
+  });
 
   factory ComplaintEmployeeModel.fromJson(Map<String, dynamic> json) {
     return ComplaintEmployeeModel(

@@ -61,7 +61,7 @@ class _LoginPagesState extends State<LoginPages> {
             print("Role di UI: ${state.userModel.role}");
             if (state.userModel.role == "pelanggan") {
               context.goNamed(RouteNames.dashboardUser);
-            } else if (state.userModel.role == "pembaca-meter") {
+            } else if (state.userModel.role == "petugas") {
               context.goNamed(RouteNames.dashboardEmployee);
             }
           } else if (state is AuthStateFailure) {

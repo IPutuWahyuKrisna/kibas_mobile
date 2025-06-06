@@ -52,8 +52,8 @@ final class AppRouter {
       }
       return '/login';
     }
-
-    if (user.role == "pembaca-meter") {
+    print(user.role);
+    if (user.role == "petugas") {
       if (path.startsWith('/dashboard_employee/notifikasi') ||
           path.startsWith('/dashboard_employee/list_complaint_employee') ||
           path.startsWith(
@@ -121,7 +121,7 @@ final class AppRouter {
           builder: (context, state) => const AreaPegawaiPage(),
         ),
         GoRoute(
-          path: 'list_complaint',
+          path: 'list_complaint_employee',
           name: RouteNames.listComplaintGet,
           builder: (context, state) => const ComplaintListEmployeePage(),
           routes: [

@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/intl.dart';
 import '../../../../../../component/snack_bar.dart';
-import '../../../../../../core/services/global_service_locator.dart';
-import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../../domain/entities/complaint_entity.dart';
 import '../bloc/complaint_bloc.dart';
 
@@ -69,6 +67,7 @@ class _ComplaintListEmployeePageState extends State<ComplaintListEmployeePage> {
                       padding: const EdgeInsets.symmetric(vertical: 4),
                       child: InkWell(
                         onTap: () {
+                          print(complaint.pengaduanId);
                           context.go(
                             '/dashboard_employee/list_complaint_employee/edit_complaint',
                             extra: complaint,

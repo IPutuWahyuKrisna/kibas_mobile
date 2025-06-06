@@ -48,7 +48,8 @@ class ComplaintRemoteDataSourceImpl implements ComplaintRemoteDataSource {
     } on DioException catch (e) {
       throw ServerException.fromDioError(e);
     } catch (e) {
-      throw ServerException('Terjadi kesalahan saat mengambil data pengaduan');
+      throw const ServerException(
+          'Terjadi kesalahan saat mengambil data pengaduan');
     }
   }
 
@@ -67,10 +68,11 @@ class ComplaintRemoteDataSourceImpl implements ComplaintRemoteDataSource {
               "Gagal mengompresi gambar! Pastikan ukuran gambar di bawah 2MB.",
         ));
       }
+      print(complaint.pengaduanId);
       final formData = FormData.fromMap({
-        'pengaduan_id': complaint.pengaduanId,
+        'pengaduan_id': "${complaint.pengaduanId}",
         'catatan': complaint.catatan,
-        'bukti_foto': await MultipartFile.fromFile(compressedFile.path),
+        'bukti_foto_selesai': await MultipartFile.fromFile(compressedFile.path),
       });
 
       final response = await dio.post(
@@ -98,6 +100,7 @@ class ComplaintRemoteDataSourceImpl implements ComplaintRemoteDataSource {
         return const Left(ServerFailure(message: "Gagal mengirim pengaduan!"));
       }
     } catch (e) {
+      print(e);
       return const Left(ServerFailure(message: "Terjadi kesalahan"));
     }
   }

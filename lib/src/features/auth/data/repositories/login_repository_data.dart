@@ -48,6 +48,7 @@ class AuthRepositoryImpl implements AuthRepository {
         passwordConfirmation: registerData.passwordConfirmation,
         noRekening: registerData.noRekening,
         nikPelanggan: registerData.nikPelanggan,
+        noTelepon: registerData.noTelepon,
       ));
 
       // Propagasi hasil langsung ke atas

@@ -187,6 +187,47 @@ class _ComplaintDetailUsersPageState extends State<ComplaintDetailUsersPage> {
                           ),
                         ),
                         const SizedBox(height: 20),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            image: complaint.linkUrl != "-"
+                                ? DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage("${complaint.linkUrl}"),
+                                  )
+                                : const DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                      "assets/image.png",
+                                    ),
+                                  ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
+                        Container(
+                          width: MediaQuery.of(context).size.width,
+                          height: 200,
+                          decoration: BoxDecoration(
+                            image: complaint.buktiFotoSelesai != "-"
+                                ? DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        complaint.buktiFotoSelesai),
+                                  )
+                                : const DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage(
+                                      "assets/image.png",
+                                    ),
+                                  ),
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                        ),
+                        const SizedBox(height: 20),
                         Row(
                           mainAxisSize: MainAxisSize.min,
                           children: List.generate(5, (index) {

@@ -25,6 +25,7 @@ import 'src/core/services/permission_service.dart';
 import 'src/core/services/put_user_services.dart';
 import 'src/core/services/read_meter_services.dart';
 import 'src/core/services/rekening_injec.dart';
+import 'src/features/employee/features/complaint/presentation/bloc/complaint_bloc.dart';
 
 void main() async {
   await _initializeApp();
@@ -111,6 +112,9 @@ List<BlocProvider> _getBlocProviders() {
     ),
     BlocProvider<RekeningBloc>(
       create: (_) => rekeningInjec<RekeningBloc>(),
+    ),
+    BlocProvider<ComplaintBloc>(
+      create: (_) => complaintInjec<ComplaintBloc>(),
     ),
   ];
 }

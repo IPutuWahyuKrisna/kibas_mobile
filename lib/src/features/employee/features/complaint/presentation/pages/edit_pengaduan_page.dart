@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:intl/intl.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../component/index_component.dart';
 import '../../domain/entities/complaint_entity.dart';
@@ -48,7 +49,7 @@ class _PostComplaintEmployeePageState extends State<PostComplaintEmployeePage> {
           backgroundColor: Colors.orange);
       return;
     }
-
+    print(widget.complaint.pengaduanId);
     setState(() => isSubmitting = true);
 
     context.read<ComplaintBloc>().add(
@@ -63,6 +64,7 @@ class _PostComplaintEmployeePageState extends State<PostComplaintEmployeePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: const Text("Selesaikan Pengaduan",
             style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
@@ -93,6 +95,66 @@ class _PostComplaintEmployeePageState extends State<PostComplaintEmployeePage> {
             padding: const EdgeInsets.all(20),
             child: Column(
               children: [
+                Container(
+                  padding: const EdgeInsets.all(20),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        widget.complaint.jenisPengaduan,
+                        style: const TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 16,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Tanggal pengaduan: $widget.complaint.tanggalPengaduan',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black54,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        'Status: ${DateFormat("d MMMM yyyy").format(DateTime.parse("${widget.complaint.tanggalPengaduan}"))}',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Colors.black87,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                Container(
+                  width: MediaQuery.of(context).size.width,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    image: widget.complaint.linkUrl != "-"
+                        ? DecorationImage(
+                            fit: BoxFit.cover,
+                            image: NetworkImage(widget.complaint.linkUrl),
+                          )
+                        : const DecorationImage(
+                            fit: BoxFit.cover,
+                            image: AssetImage(
+                              "assets/image.png",
+                            ),
+                          ),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
                 TextFormField(
                   controller: catatanController,
                   maxLines: 4,

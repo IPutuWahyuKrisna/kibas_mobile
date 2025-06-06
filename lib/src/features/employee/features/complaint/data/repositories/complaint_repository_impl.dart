@@ -5,7 +5,6 @@ import 'package:dartz/dartz.dart';
 import '../../../../../../core/error/exceptions.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../domain/entities/complaint_entity.dart';
-import '../../domain/entities/postcomplaintemployee.dart';
 import '../../domain/repositories/complaint_repository.dart';
 import '../datasources/complaint_remote_data_source.dart';
 import '../models/post_complaint_employee.dart';
@@ -28,7 +27,8 @@ class ComplaintEmployeeRepositoryImpl implements ComplaintEmployeeRepository {
     } on NetworkException catch (e) {
       return Left(NetworkFailure(message: e.message));
     } catch (e) {
-      return Left(UnknownFailure(message: 'Terjadi kesalahan tidak diketahui'));
+      return const Left(
+          UnknownFailure(message: 'Terjadi kesalahan tidak diketahui'));
     }
   }
 

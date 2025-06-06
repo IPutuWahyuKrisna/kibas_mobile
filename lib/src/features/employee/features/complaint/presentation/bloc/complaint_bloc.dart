@@ -2,10 +2,8 @@
 import 'dart:io';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 import '../../../../../../core/error/failure.dart';
 import '../../domain/entities/complaint_entity.dart';
-import '../../domain/entities/postcomplaintemployee.dart';
 import '../../domain/usecases/get_all_complaints_usecase.dart';
 import '../../domain/usecases/post_complaint_employee_usecase.dart';
 
@@ -54,7 +52,7 @@ class ComplaintBloc extends Bloc<ComplaintEvent, ComplaintState> {
       buktiFotoSelesai: event.buktiFotoSelesai,
       catatan: event.catatan,
     );
-
+    print(result);
     result.fold(
       (failure) => emit(
         ComplaintError(
@@ -67,8 +65,9 @@ class ComplaintBloc extends Bloc<ComplaintEvent, ComplaintState> {
   }
 
   ComplaintFailureType _mapFailure(Failure failure) {
-    if (failure is UnauthenticatedFailure)
+    if (failure is UnauthenticatedFailure) {
       return ComplaintFailureType.unauthenticated;
+    }
     if (failure is ServerFailure) return ComplaintFailureType.server;
     if (failure is NetworkFailure) return ComplaintFailureType.network;
     return ComplaintFailureType.unknown;
