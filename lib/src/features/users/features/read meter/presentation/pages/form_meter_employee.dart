@@ -42,10 +42,12 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
   }
 
   void submit() {
+    _isLoading = true;
     if (selectedImage == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Silakan pilih gambar terlebih dahulu!")),
       );
+      _isLoading = false;
       return;
     }
 
@@ -54,6 +56,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
         const SnackBar(
             content: Text("Harap isi semua bidang terlebih dahulu!")),
       );
+      _isLoading = false;
       return;
     }
 
@@ -63,6 +66,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
         CustomSnackBar.show(context, "Angka final harus 4 digit!",
             backgroundColor: Colors.yellow);
       });
+      _isLoading = false;
       return;
     }
 
@@ -75,6 +79,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
           noRekening: noSambungan,
           angkaFinal: angkaFinalController.text,
         ));
+    _isLoading = false;
   }
 
   @override
@@ -97,10 +102,11 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
       body: BlocConsumer<ReadMeterBloc, ReadMeterState>(
         listener: (context, state) {
           if (state is PostMeterSuccess) {
-            SchedulerBinding.instance.addPostFrameCallback((_) {
+            SchedulerBinding.instance.addPostFrameCallback((_) async {
               CustomSnackBar.show(context, state.message,
                   backgroundColor: Colors.green);
               context.read<ReadMeterBloc>().add(GetListMeterEvent(token));
+              await Future.delayed(const Duration(seconds: 1));
             });
 
             setState(() {
@@ -109,9 +115,7 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
               _isLoading = false; // Set loading to false when done
             });
 
-            Future.delayed(const Duration(seconds: 2), () {
-              Navigator.pop(context, true);
-            });
+            Navigator.pop(context, true);
           } else if (state is PostMeterFailure) {
             setState(() {
               _isLoading = false; // Set loading to false on failure
@@ -123,174 +127,173 @@ class _FormMeterEmployeeState extends State<FormMeterEmployee> {
           }
         },
         builder: (context, state) {
-          return Stack(
-            children: [
-              Column(
-                children: [
-                  Container(
-                    height: 35,
-                    decoration: BoxDecoration(color: Colors.blue[400]),
-                    child: Container(
+          if (_isLoading == true) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            return Stack(
+              children: [
+                Column(
+                  children: [
+                    Container(
                       height: 35,
-                      decoration: BoxDecoration(
-                        color: Colors.lightBlue[50],
-                        borderRadius: const BorderRadius.only(
-                          topLeft: Radius.circular(80),
-                          topRight: Radius.circular(80),
+                      decoration: BoxDecoration(color: Colors.blue[400]),
+                      child: Container(
+                        height: 35,
+                        decoration: BoxDecoration(
+                          color: Colors.lightBlue[50],
+                          borderRadius: const BorderRadius.only(
+                            topLeft: Radius.circular(80),
+                            topRight: Radius.circular(80),
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      FocusScope.of(context).unfocus();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      child: Column(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                'Angka Meter',
-                                style: TextStyle(
-                                  color: ColorConstants.blackColorPrimary,
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              const SizedBox(height: 10),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 20, vertical: 3),
-                                height: 50,
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    color: ColorConstants.backgroundColor),
-                                child: Center(
-                                  child: TextFormField(
-                                    controller: angkaFinalController,
-                                    keyboardType: TextInputType.number,
-                                    decoration: const InputDecoration(
-                                      border: InputBorder.none,
-                                      hintText: 'Masukkan angka',
-                                    ),
-                                    style: TypographyStyle.bodyLight
-                                        .copyWith(color: Colors.black),
+                    GestureDetector(
+                      onTap: () {
+                        FocusScope.of(context).unfocus();
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 10),
+                        child: Column(
+                          children: [
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                const Text(
+                                  'Angka Meter',
+                                  style: TextStyle(
+                                    color: ColorConstants.blackColorPrimary,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ),
-                              const SizedBox(height: 20),
-                              Container(
-                                height: 140,
-                                decoration: BoxDecoration(
-                                  color: Colors.grey[100],
-                                  borderRadius: BorderRadius.circular(18),
-                                ),
-                                child: selectedImage == null
-                                    ? const Center(
-                                        child: Icon(Icons.camera_alt, size: 40),
-                                      )
-                                    : ClipRRect(
-                                        borderRadius: BorderRadius.circular(18),
-                                        child: Image.file(
-                                          selectedImage!,
-                                          fit: BoxFit.cover,
-                                          width: double.infinity,
-                                        ),
+                                const SizedBox(height: 10),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 20, vertical: 3),
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(15),
+                                      color: ColorConstants.backgroundColor),
+                                  child: Center(
+                                    child: TextFormField(
+                                      controller: angkaFinalController,
+                                      keyboardType: TextInputType.number,
+                                      decoration: const InputDecoration(
+                                        border: InputBorder.none,
+                                        hintText: 'Masukkan angka',
                                       ),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  GestureDetector(
-                                    onTap: () {
-                                      pickImage();
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                          color: ColorConstants.whiteColor,
+                                      style: TypographyStyle.bodyLight
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(height: 20),
+                                Container(
+                                  height: 140,
+                                  decoration: BoxDecoration(
+                                    color: Colors.grey[100],
+                                    borderRadius: BorderRadius.circular(18),
+                                  ),
+                                  child: selectedImage == null
+                                      ? const Center(
+                                          child:
+                                              Icon(Icons.camera_alt, size: 40),
+                                        )
+                                      : ClipRRect(
                                           borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: ColorConstants
-                                                  .greyColorsecondary,
-                                              width: 0.5)),
-                                      child: Center(
-                                        child: Text(
-                                          "Camera",
-                                          style: TypographyStyle.captionsBold
-                                              .copyWith(
-                                                  color: ColorConstants
-                                                      .blackColorPrimary),
+                                              BorderRadius.circular(18),
+                                          child: Image.file(
+                                            selectedImage!,
+                                            fit: BoxFit.cover,
+                                            width: double.infinity,
+                                          ),
+                                        ),
+                                ),
+                                const SizedBox(height: 10),
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    GestureDetector(
+                                      onTap: () {
+                                        pickImage();
+                                      },
+                                      child: Container(
+                                        height: 40,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                            color: ColorConstants.whiteColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: ColorConstants
+                                                    .greyColorsecondary,
+                                                width: 0.5)),
+                                        child: Center(
+                                          child: Text(
+                                            "Camera",
+                                            style: TypographyStyle.captionsBold
+                                                .copyWith(
+                                                    color: ColorConstants
+                                                        .blackColorPrimary),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      pickImageGallery();
-                                    },
-                                    child: Container(
-                                      height: 40,
-                                      width: 120,
-                                      decoration: BoxDecoration(
-                                          color: ColorConstants.whiteColor,
-                                          borderRadius:
-                                              BorderRadius.circular(10),
-                                          border: Border.all(
-                                              color: ColorConstants
-                                                  .greyColorsecondary,
-                                              width: 0.5)),
-                                      child: Center(
-                                        child: Text(
-                                          "Galeri",
-                                          style: TypographyStyle.captionsBold
-                                              .copyWith(
-                                                  color: ColorConstants
-                                                      .blackColorPrimary),
+                                    GestureDetector(
+                                      onTap: () {
+                                        pickImageGallery();
+                                      },
+                                      child: Container(
+                                        height: 40,
+                                        width: 120,
+                                        decoration: BoxDecoration(
+                                            color: ColorConstants.whiteColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10),
+                                            border: Border.all(
+                                                color: ColorConstants
+                                                    .greyColorsecondary,
+                                                width: 0.5)),
+                                        child: Center(
+                                          child: Text(
+                                            "Galeri",
+                                            style: TypographyStyle.captionsBold
+                                                .copyWith(
+                                                    color: ColorConstants
+                                                        .blackColorPrimary),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 50),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            children: [
-                              PrimaryButton(
-                                label: "Simpan",
-                                onPressed:
-                                    submit, // Disable button when loading
-                                height: 45,
-                                width: MediaQuery.of(context).size.width,
-                              )
-                            ],
-                          ),
-                        ],
+                                  ],
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 50),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                PrimaryButton(
+                                  label: "Simpan",
+                                  onPressed:
+                                      submit, // Disable button when loading
+                                  height: 45,
+                                  width: MediaQuery.of(context).size.width,
+                                )
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              if (_isLoading) // Show loading indicator when _isLoading is true
-                Container(
-                  color: Colors.black.withOpacity(0.3),
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  ],
                 ),
-            ],
-          );
+              ],
+            );
+          }
         },
       ),
     );

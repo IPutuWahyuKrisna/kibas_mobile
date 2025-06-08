@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
 import '../../../../../../config/theme/index_style.dart';
@@ -27,6 +32,66 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
     final email = user.email;
     final rekening = user.pelanggan?.rekening;
     final nama = user.pelanggan?.namaPelanggan;
+
+    Future<File?> downloadFile(String url, String fileName) async {
+      final appStorage = await getApplicationDocumentsDirectory();
+      final file = File("${appStorage.path}/$fileName");
+
+      try {
+        // Tampilkan loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible:
+              false, // User tidak bisa menutup dialog dengan tap di luar
+          builder: (context) => const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text("Mengunduh file..."),
+              ],
+            ),
+          ),
+        );
+
+        final response = await Dio().get(
+          url,
+          options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            receiveTimeout: const Duration(seconds: 0),
+          ),
+        );
+
+        final raf = file.openSync(mode: FileMode.write);
+        raf.writeFromSync(response.data);
+        await raf.close();
+
+        // Tutup dialog setelah selesai
+        Navigator.of(context).pop();
+
+        return file;
+      } catch (e) {
+        // Tutup dialog jika terjadi error
+        Navigator.of(context).pop();
+        return null;
+      }
+    }
+
+    Future openFile({required String url, required String fileName}) async {
+      final file = await downloadFile(url, fileName);
+      if (file == null) {
+        // Tampilkan pesan error jika download gagal
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Gagal mengunduh file")),
+        );
+        return;
+      }
+
+      print("Path: ${file.path}");
+      OpenFile.open(file.path);
+    }
 
     String truncateText(String text, [int length = 25]) {
       if (text.length <= length) {
@@ -181,6 +246,12 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                                 ),
                                 const SizedBox(height: 10),
                                 GestureDetector(
+                                  onTap: () {
+                                    openFile(
+                                        url:
+                                            "https://kibas.tirtadanuarta.com/storage/files/informasi_tarif.pdf",
+                                        fileName: "informasi_tarif.pdf");
+                                  },
                                   child: Container(
                                     width: 200,
                                     height: 50,

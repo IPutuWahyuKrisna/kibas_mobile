@@ -39,7 +39,7 @@ class ReadMeterBloc extends Bloc<ReadMeterEvent, ReadMeterState> {
     PostMeterRequested event,
     Emitter<ReadMeterState> emit,
   ) async {
-    emit(PostmeterLoading());
+    emit(ReadMeterLoading());
 
     final result = await postMeterUseCase.execute(
       imageFile: event.imageFile,

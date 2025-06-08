@@ -11,8 +11,6 @@ class ReadMeterInitial extends ReadMeterState {}
 
 class ReadMeterLoading extends ReadMeterState {}
 
-class PostmeterLoading extends ReadMeterState {}
-
 class ReadMeterLoaded extends ReadMeterState {
   final List<ReadMeterEntity> meterList;
 
@@ -30,8 +28,6 @@ class ReadMeterError extends ReadMeterState {
   @override
   List<Object?> get props => [message];
 }
-
-class PostMeterLoading extends ReadMeterState {}
 
 class PostMeterSuccess extends ReadMeterState {
   final String message;

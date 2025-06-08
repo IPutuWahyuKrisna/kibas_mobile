@@ -1,7 +1,12 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';
+import 'package:open_file/open_file.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../../../../component/snack_bar.dart';
 import '../../../../../../config/routes/router.dart';
 import '../../../../../../config/theme/index_style.dart';
@@ -18,10 +23,9 @@ class DashboardEmployeePages extends StatelessWidget {
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
     final token = user?.token ?? "";
-    final idUsers = user!.pegawai?.id ?? "";
-    final email = user.email;
-    final jabatan = user.pegawai?.jabatan;
-    final nama = user.pegawai?.nama;
+    final email = user?.email;
+    final jabatan = user?.pegawai?.jabatan;
+    final nama = user?.pegawai?.nama;
 
     String truncateText(String text, [int length = 25]) {
       if (text.length <= length) {
@@ -37,6 +41,66 @@ class DashboardEmployeePages extends StatelessWidget {
       } else {
         return '${text.substring(0, length)}...';
       }
+    }
+
+    Future<File?> downloadFile(String url, String fileName) async {
+      final appStorage = await getApplicationDocumentsDirectory();
+      final file = File("${appStorage.path}/$fileName");
+
+      try {
+        // Tampilkan loading dialog
+        showDialog(
+          context: context,
+          barrierDismissible:
+              false, // User tidak bisa menutup dialog dengan tap di luar
+          builder: (context) => const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircularProgressIndicator(),
+                SizedBox(height: 16),
+                Text("Mengunduh file..."),
+              ],
+            ),
+          ),
+        );
+
+        final response = await Dio().get(
+          url,
+          options: Options(
+            responseType: ResponseType.bytes,
+            followRedirects: false,
+            receiveTimeout: const Duration(seconds: 0),
+          ),
+        );
+
+        final raf = file.openSync(mode: FileMode.write);
+        raf.writeFromSync(response.data);
+        await raf.close();
+
+        // Tutup dialog setelah selesai
+        Navigator.of(context).pop();
+
+        return file;
+      } catch (e) {
+        // Tutup dialog jika terjadi error
+        Navigator.of(context).pop();
+        return null;
+      }
+    }
+
+    Future openFile({required String url, required String fileName}) async {
+      final file = await downloadFile(url, fileName);
+      if (file == null) {
+        // Tampilkan pesan error jika download gagal
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Gagal mengunduh file")),
+        );
+        return;
+      }
+
+      print("Path: ${file.path}");
+      OpenFile.open(file.path);
     }
 
     return Scaffold(
@@ -153,7 +217,7 @@ class DashboardEmployeePages extends StatelessWidget {
                             SizedBox(
                               width: 200,
                               child: Text(
-                                nama ?? email, // Tampilkan email
+                                nama ?? email!, // Tampilkan email
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,
@@ -176,6 +240,12 @@ class DashboardEmployeePages extends StatelessWidget {
                                 ),
                                 const SizedBox(height: 10),
                                 GestureDetector(
+                                  onTap: () {
+                                    openFile(
+                                        url:
+                                            "https://kibas.tirtadanuarta.com/storage/files/informasi_tarif.pdf",
+                                        fileName: "informasi_tarif.pdf");
+                                  },
                                   child: Container(
                                     width: 200,
                                     height: 50,

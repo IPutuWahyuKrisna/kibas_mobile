@@ -19,10 +19,8 @@ class _AnnouncementDetailState extends State<AnnouncementDetail> {
     // 🟢 Ambil data user dari local storage
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
-    final token = user?.token ?? "";
-    final idUsers = user!.pelanggan?.id ?? "";
-    final email = user.email;
-    final rekening = user.pelanggan?.rekening;
+    final email = user?.email;
+    final rekening = user?.pelanggan?.rekening;
 
     String truncateText(String text, [int length = 25]) {
       if (text.length <= length) {
@@ -152,7 +150,7 @@ class _AnnouncementDetailState extends State<AnnouncementDetail> {
                             SizedBox(
                               width: 200,
                               child: Text(
-                                email, // Tampilkan email
+                                email!, // Tampilkan email
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.bold,

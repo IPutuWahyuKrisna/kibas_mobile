@@ -56,7 +56,7 @@ class ComplaintBloc extends Bloc<ComplaintEvent, ComplaintState> {
     result.fold(
       (failure) => emit(
         ComplaintError(
-          message: failure.message ?? 'Gagal mengirim penyelesaian',
+          message: failure.message ?? 'Gagal mengirim pengaduan',
           failureType: _mapFailure(failure),
         ),
       ),

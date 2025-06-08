@@ -3,8 +3,6 @@ import 'package:dio/dio.dart';
 import '../../../../../../core/constant/apis.dart';
 import '../../../../../../core/error/exceptions.dart';
 import '../../../../../../core/error/failure.dart';
-import '../../../../../../core/services/global_service_locator.dart';
-import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../models/anoouncement_models.dart';
 import '../models/logout_models.dart';
 
@@ -20,9 +18,6 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
 
   @override
   Future<List<AnnouncementModel>> getAllAnnouncements(String token) async {
-    final userService = coreInjection<UserLocalStorageService>();
-    final user = userService.getUser();
-    final tokenUser = user?.token ?? "";
     print(token);
     if (token != "") {
       final response = await dio.get(
