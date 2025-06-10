@@ -12,7 +12,6 @@ class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _RegisterPageState createState() => _RegisterPageState();
 }
 
@@ -29,12 +28,6 @@ class _RegisterPageState extends State<RegisterPage> {
   int? selectedKecamatan;
   int? selectedKelurahan;
   int? selectedArea;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   context.read<AuthBloc>().add(FetchDropdownEvent());
-  // }
 
   void submitRegister() {
     final nik = nikPelangganController.text;
@@ -116,16 +109,6 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    if (noTeleponController.text.isEmpty) {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        CustomSnackBar.show(
-          context,
-          "No telepon pelanggan tidak boleh kosong!",
-          backgroundColor: Colors.red,
-        );
-      });
-      return;
-    }
     // Validasi panjang NIK harus 16 digit
     if (nik.length != 16 || !RegExp(r'^\d{16}$').hasMatch(nik)) {
       SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -169,9 +152,8 @@ class _RegisterPageState extends State<RegisterPage> {
         elevation: 0,
         backgroundColor: ColorConstants.backgroundColor,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: BlocConsumer<AuthBloc, AuthState>(listener: (context, state) {
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
           if (state is RegisterSuccess) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
               CustomSnackBar.show(context, state.message,
@@ -186,64 +168,78 @@ class _RegisterPageState extends State<RegisterPage> {
                   backgroundColor: Colors.red);
             });
           }
-        }, builder: (context, state) {
+        },
+        builder: (context, state) {
           if (state is AuthStateLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          return SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BasicForm(
-                    label: "No Sambungan",
-                    hintText: "Masukan no sambungan air",
-                    inputType: TextInputType.text,
-                    controller: noRekeningController),
-                const SizedBox(height: 40),
-                BasicForm(
-                    label: "Email",
-                    hintText: "Masukan email",
-                    inputType: TextInputType.emailAddress,
-                    controller: emailController),
-                const SizedBox(height: 40),
-                BasicForm(
-                  label: "NIK Pelanggan",
-                  hintText: "Masukan NIK",
-                  inputType: TextInputType.number,
-                  controller: nikPelangganController,
+          return LayoutBuilder(
+            builder: (context, constraints) {
+              return SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: constraints.maxHeight,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        BasicForm(
+                            label: "No Sambungan",
+                            hintText: "Masukan no sambungan air",
+                            inputType: TextInputType.text,
+                            controller: noRekeningController),
+                        const SizedBox(height: 20),
+                        BasicForm(
+                            label: "Email",
+                            hintText: "Masukan email",
+                            inputType: TextInputType.emailAddress,
+                            controller: emailController),
+                        const SizedBox(height: 20),
+                        BasicForm(
+                          label: "NIK Pelanggan",
+                          hintText: "Masukan NIK",
+                          inputType: TextInputType.number,
+                          controller: nikPelangganController,
+                        ),
+                        const SizedBox(height: 20),
+                        BasicForm(
+                          label: "No Telepon",
+                          hintText: "Masukan No telepon",
+                          inputType: TextInputType.number,
+                          controller: noTeleponController,
+                        ),
+                        const SizedBox(height: 20),
+                        PasswordForm(
+                            label: "Password",
+                            controller: passwordController,
+                            hintText: "Masukan password"),
+                        const SizedBox(height: 20),
+                        PasswordForm(
+                            label: "Konfirmasi Password",
+                            controller: passwordConfirmController,
+                            hintText: "Masukan konfirmasi password"),
+                        const SizedBox(height: 30),
+                        PrimaryButton(
+                          label: "Daftar",
+                          onPressed: submitRegister,
+                          height: 45,
+                          width: double.infinity,
+                          isLoading: state is AuthStateLoading,
+                          enabled: state is! AuthStateLoading,
+                        ),
+                        const SizedBox(
+                            height: 20), // Added extra space at bottom
+                      ],
+                    ),
+                  ),
                 ),
-                BasicForm(
-                  label: "No Telepon",
-                  hintText: "Masukan No telepon",
-                  inputType: TextInputType.number,
-                  controller: noTeleponController,
-                ),
-                const SizedBox(height: 40),
-                PasswordForm(
-                    label: "Password",
-                    controller: passwordController,
-                    hintText: "Masukan password"),
-                const SizedBox(height: 40),
-                PasswordForm(
-                    label: "Konfirmasi Password",
-                    controller: passwordConfirmController,
-                    hintText: "Masukan konfirmasi password"),
-                const SizedBox(height: 40),
-                const SizedBox(height: 30),
-                PrimaryButton(
-                  label: "Daftar",
-                  onPressed: () {
-                    submitRegister();
-                  },
-                  height: 45,
-                  width: MediaQuery.of(context).size.width,
-                  isLoading: state is AuthStateLoading,
-                  enabled: state is! AuthStateLoading,
-                )
-              ],
-            ),
+              );
+            },
           );
-        }),
+        },
       ),
     );
   }

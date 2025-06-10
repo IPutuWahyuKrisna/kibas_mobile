@@ -18,6 +18,7 @@ class LoginPages extends StatefulWidget {
 class _LoginPagesState extends State<LoginPages> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+
   void _validateAndSubmit() async {
     final email = emailController.text.trim();
     final password = passwordController.text.trim();
@@ -76,134 +77,142 @@ class _LoginPagesState extends State<LoginPages> {
 
           return Stack(
             children: [
-              Container(
-                decoration: const BoxDecoration(
-                  color: ColorConstants.backgroundSecondary,
-                ),
-                height: MediaQuery.of(context).size.height,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 100),
-                    const Padding(
-                      padding: Margin.mediumMargin,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Selamat Datang di Kibas Mobile",
-                            style: TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                              color: ColorConstants.blackColorPrimary,
-                            ),
-                          ),
-                          SizedBox(height: 16),
-                          Text(
-                            "Silahkan masukkan username dan password untuk masuk ke aplikasi",
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: ColorConstants.greyColorPrimary,
-                            ),
-                          ),
-                        ],
-                      ),
+              SingleChildScrollView(
+                child: ConstrainedBox(
+                  constraints: BoxConstraints(
+                    minHeight: MediaQuery.of(context).size.height,
+                  ),
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      color: ColorConstants.backgroundSecondary,
                     ),
-                    const SizedBox(height: 40),
-                    Padding(
-                      padding: Margin.mediumMargin,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          BasicForm(
-                            inputType: TextInputType.text,
-                            label: "Email Pengguna",
-                            hintText:
-                                "Silahkan masukan email atau nomor sambungan",
-                            controller: emailController,
-                          ),
-                          const SizedBox(height: 30),
-                          PasswordForm(
-                            label: "Sandi",
-                            hintText: "Silahkan masukan password",
-                            controller: passwordController,
-                          ),
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Padding(
-                      padding: Margin.mediumMargin,
-                      child: PrimaryButton(
-                        label: "Masuk",
-                        onPressed: _validateAndSubmit,
-                        height: 55,
-                        width: 400,
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Tidak mempunyai akun?",
-                            style: TextStyle(
-                              color: ColorConstants.greyColorPrimary,
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              context.go('/login/regist');
-                            },
-                            child: const Text(
-                              " Daftar",
-                              style: TextStyle(
-                                color: ColorConstants.purpleColor,
-                                fontWeight: FontWeight.bold,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        const SizedBox(height: 100),
+                        const Padding(
+                          padding: Margin.mediumMargin,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Selamat Datang di Kibas Mobile",
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: ColorConstants.blackColorPrimary,
+                                ),
                               ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    Container(
-                      margin: const EdgeInsets.only(bottom: 20),
-                      padding: Margin.mediumMargin,
-                      width: MediaQuery.of(context).size.width,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: _launchPrivacyPolicy,
-                            child: const Text(
-                              "Kebijakan Privasi",
-                              style: TextStyle(
-                                color: ColorConstants.purpleColor,
-                                fontWeight: FontWeight.bold,
-                                decoration: TextDecoration
-                                    .underline, // opsional, biar kelihatan bisa diklik
+                              SizedBox(height: 16),
+                              Text(
+                                "Silahkan masukkan username dan password untuk masuk ke aplikasi",
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  color: ColorConstants.greyColorPrimary,
+                                ),
                               ),
-                            ),
+                            ],
                           ),
-                          const Text(
-                            "Tirta Danu Arta",
-                            style: TextStyle(
-                              color: ColorConstants.greyColorPrimary,
-                            ),
+                        ),
+                        const SizedBox(height: 40),
+                        Padding(
+                          padding: Margin.mediumMargin,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              BasicForm(
+                                inputType: TextInputType.text,
+                                label: "Email Pengguna",
+                                hintText:
+                                    "Silahkan masukan email atau nomor sambungan",
+                                controller: emailController,
+                              ),
+                              const SizedBox(height: 30),
+                              PasswordForm(
+                                label: "Sandi",
+                                hintText: "Silahkan masukan password",
+                                controller: passwordController,
+                              ),
+                            ],
                           ),
-                          const Text(
-                            "Powered By Wedya Pancer",
-                            style: TextStyle(
-                              color: ColorConstants.greyColorPrimary,
-                            ),
+                        ),
+                        const SizedBox(height: 20),
+                        Padding(
+                          padding: Margin.mediumMargin,
+                          child: PrimaryButton(
+                            label: "Masuk",
+                            onPressed: _validateAndSubmit,
+                            height: 55,
+                            width: 400,
                           ),
-                        ],
-                      ),
-                    )
-                  ],
+                        ),
+                        const SizedBox(height: 20),
+                        Center(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              const Text(
+                                "Tidak mempunyai akun?",
+                                style: TextStyle(
+                                  color: ColorConstants.greyColorPrimary,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: () {
+                                  context.go('/login/regist');
+                                },
+                                child: const Text(
+                                  " Daftar",
+                                  style: TextStyle(
+                                    color: ColorConstants.purpleColor,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                        ),
+                        Container(
+                          margin: const EdgeInsets.only(bottom: 20),
+                          padding: Margin.mediumMargin,
+                          width: MediaQuery.of(context).size.width,
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: _launchPrivacyPolicy,
+                                child: const Text(
+                                  "Kebijakan Privasi",
+                                  style: TextStyle(
+                                    color: ColorConstants.purpleColor,
+                                    fontWeight: FontWeight.bold,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                                ),
+                              ),
+                              const Text(
+                                "Tirta Danu Arta",
+                                style: TextStyle(
+                                  color: ColorConstants.greyColorPrimary,
+                                ),
+                              ),
+                              const Text(
+                                "Powered By Wedya Pancer",
+                                style: TextStyle(
+                                  color: ColorConstants.greyColorPrimary,
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
                 ),
               ),
               if (isLoading)
