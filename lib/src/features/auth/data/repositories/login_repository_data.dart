@@ -62,9 +62,9 @@ class AuthRepositoryImpl implements AuthRepository {
     } on UnknownException catch (e) {
       return Left(UnknownFailure(message: e.message));
     } catch (e) {
-      print(e);
-      return const Left(
-          UnknownFailure(message: "Terjadi kesalahan yang tidak diketahui"));
+      print(e.toString());
+      return const Left(UnknownFailure(
+          message: "Terjadi kesalahan yang tidak diketahui(repository)"));
     }
   }
   // return remoteDataSource.register(RegisterModel(

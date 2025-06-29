@@ -164,7 +164,8 @@ class _RegisterPageState extends State<RegisterPage> {
             });
           } else if (state is RegisterError) {
             SchedulerBinding.instance.addPostFrameCallback((_) {
-              CustomSnackBar.show(context, "Data Pengguna tidak ditemukan",
+              CustomSnackBar.show(context,
+                  "gagal melakukan register, coba cek email atau nomor sambungan anda, mungkin itu sudah terdaftar",
                   backgroundColor: Colors.red);
             });
           }

@@ -46,6 +46,7 @@ class ComplaintRemoteDataSourceImpl implements ComplaintRemoteDataSource {
           .map((e) => ComplaintEmployee.fromJson(e))
           .toList();
     } on DioException catch (e) {
+      print(e.message);
       throw ServerException.fromDioError(e);
     } catch (e) {
       throw const ServerException(

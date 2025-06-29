@@ -10,6 +10,7 @@ class UserLocalStorageService {
   Future<void> saveUser(UserModel user) async {
     try {
       final userData = user.toJson();
+      print("berhasil menyimpan user");
 
       await box.write('user', userData);
     } catch (e) {
@@ -21,9 +22,12 @@ class UserLocalStorageService {
   UserModel? getUser() {
     try {
       final userData = box.read('user');
+      
 
       if (userData != null) {
+        
         return UserModel.fromJson(Map<String, dynamic>.from(userData));
+        
       }
     } catch (e) {
       print("Error saat membaca user: $e"); // Jangan kosongkan catch

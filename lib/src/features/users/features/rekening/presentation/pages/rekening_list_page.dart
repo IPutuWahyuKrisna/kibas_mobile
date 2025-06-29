@@ -61,39 +61,49 @@ class _RekeningListPageState extends State<RekeningListPage> {
                 itemCount: state.tagihanList.length + 1,
                 itemBuilder: (context, index) {
                   if (index == 0) {
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 10),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 20),
-                      width: MediaQuery.of(context).size.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(20),
-                        color: ColorConstants.backgroundSecondary,
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text("No. Sambungan: ${user!.pelanggan?.rekening}",
-                              style: TypographyStyle.bodyBold.copyWith(
-                                  color: ColorConstants.blackColorPrimary)),
-                          Text("Nama: ${user.pelanggan?.namaPelanggan}",
-                              style: TypographyStyle.bodyLight.copyWith(
-                                  color: ColorConstants.blackColorPrimary)),
-                          Text("Alamat: ${user.pelanggan?.alamatPelanggan}",
-                              style: TypographyStyle.bodyLight.copyWith(
-                                  color: ColorConstants.blackColorPrimary)),
-                          Text("Kecamatan: ${user.pelanggan?.kecamatan}",
-                              style: TypographyStyle.bodyLight.copyWith(
-                                  color: ColorConstants.blackColorPrimary)),
-                          Text("Area: ${user.pelanggan?.area}",
-                              style: TypographyStyle.bodyLight.copyWith(
-                                  color: ColorConstants.blackColorPrimary)),
-                          Text("No Pelanggan: ${user.pelanggan?.noPelanggan}",
-                              style: TypographyStyle.bodyLight.copyWith(
-                                  color: ColorConstants.blackColorPrimary)),
-                        ],
-                      ),
+                    return Column(
+                      children: [
+                        Container(
+                          margin: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 20),
+                          width: MediaQuery.of(context).size.width,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: ColorConstants.backgroundSecondary,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                  "No. Sambungan: ${user!.pelanggan?.rekening}",
+                                  style: TypographyStyle.bodyBold.copyWith(
+                                      color: ColorConstants.blackColorPrimary)),
+                              Text("Nama: ${user.pelanggan?.namaPelanggan}",
+                                  style: TypographyStyle.bodyLight.copyWith(
+                                      color: ColorConstants.blackColorPrimary)),
+                              Text("Alamat: ${user.pelanggan?.alamatPelanggan}",
+                                  style: TypographyStyle.bodyLight.copyWith(
+                                      color: ColorConstants.blackColorPrimary)),
+                              Text("Kecamatan: ${user.pelanggan?.kecamatan}",
+                                  style: TypographyStyle.bodyLight.copyWith(
+                                      color: ColorConstants.blackColorPrimary)),
+                              Text("Area: ${user.pelanggan?.area}",
+                                  style: TypographyStyle.bodyLight.copyWith(
+                                      color: ColorConstants.blackColorPrimary)),
+                              Text(
+                                  "No Pelanggan: ${user.pelanggan?.noPelanggan}",
+                                  style: TypographyStyle.bodyLight.copyWith(
+                                      color: ColorConstants.blackColorPrimary)),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Text("Tagihan",
+                            style: TypographyStyle.headingBold.copyWith(
+                                color: ColorConstants.blackColorPrimary)),
+                      ],
                     );
                   } else {
                     final tagihan = state.tagihanList[index - 1];
@@ -103,9 +113,6 @@ class _RekeningListPageState extends State<RekeningListPage> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text("Tagihan",
-                              style: TypographyStyle.headingBold.copyWith(
-                                  color: ColorConstants.blackColorPrimary)),
                           const SizedBox(height: 10),
                           Container(
                             padding: const EdgeInsets.all(12),

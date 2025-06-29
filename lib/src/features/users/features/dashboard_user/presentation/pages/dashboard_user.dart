@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';
+import 'package:kibas_mobile/src/features/employee/features/dashbord_employee/domain/entities/announcement_entity.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../../../component/snack_bar.dart';
@@ -13,6 +14,7 @@ import '../../../../../../config/theme/index_style.dart';
 import '../../../../../../core/services/dashboard_employee_services.dart';
 import '../../../../../../core/utils/user_local_storage_service.dart';
 import '../../../../../employee/features/dashbord_employee/presentation/bloc/dashbord_employee_bloc.dart';
+import '../widgets/item_announemnt.dart';
 
 class DashboardUserPages extends StatefulWidget {
   const DashboardUserPages({super.key});
@@ -113,7 +115,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
       resizeToAvoidBottomInset: false,
       backgroundColor: Colors.lightBlue[50],
       body: SafeArea(
-        child: Column(
+        child: ListView(
           children: [
             // Header
             Container(
@@ -200,7 +202,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
               child: Column(
                 children: [
                   Padding(
-                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 15),
+                    padding: const EdgeInsets.fromLTRB(20, 0, 0, 20),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       crossAxisAlignment: CrossAxisAlignment.end,
@@ -208,10 +210,20 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            const CircleAvatar(
-                              backgroundImage: AssetImage('assets/unknown.jpg'),
-                              radius: 50,
+                            Container(
+                              height: 50,
+                              width: 50,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(30),
+                                image: const DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: AssetImage('assets/unknown.jpg')),
+                              ),
                             ),
+                            // const CircleAvatar(
+                            //   backgroundImage: AssetImage('assets/unknown.jpg'),
+                            //   radius: 50,
+                            // ),
                             const SizedBox(height: 10),
                             Text(
                               "$rekening", // Tampilkan role
@@ -235,40 +247,12 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                         ),
                         Flexible(
                           child: Container(
+                            height: 100,
                             margin: const EdgeInsets.only(right: 20),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                const Image(
-                                  image: AssetImage('assets/logo_kibas.png'),
-                                  height: 190,
-                                  fit: BoxFit.contain,
-                                ),
-                                const SizedBox(height: 10),
-                                GestureDetector(
-                                  onTap: () {
-                                    openFile(
-                                        url:
-                                            "https://kibas.tirtadanuarta.com/storage/files/informasi_tarif.pdf",
-                                        fileName: "informasi_tarif.pdf");
-                                  },
-                                  child: Container(
-                                    width: 200,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(10),
-                                        color: Colors.white),
-                                    child: Center(
-                                      child: Text("Informasi Tarif",
-                                          style: TypographyStyle.bodyMedium
-                                              .copyWith(
-                                                  color: ColorConstants
-                                                      .blackColorPrimary)),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
+                            decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/logo_kibas.png'))),
                           ),
                         ),
                       ],
@@ -367,8 +351,77 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
             ),
             // Pengumuman List
             const SizedBox(height: 20),
-
-            Expanded(
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "Informasi Tarif",
+                style: TypographyStyle.headingBold
+                    .copyWith(color: ColorConstants.blueColor),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {
+                    openFile(
+                        url:
+                            "https://kibas.tirtadanuarta.com/storage/files/informasi_tarif.pdf",
+                        fileName: "informasi_tarif.pdf");
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    height: 180,
+                    decoration: BoxDecoration(
+                        image: const DecorationImage(
+                          fit: BoxFit.cover,
+                          image: AssetImage(
+                            "assets/brosur1.png",
+                          ),
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        color: Colors.white),
+                    child: Center(
+                      child: Align(
+                        alignment: Alignment.bottomCenter,
+                        child: Container(
+                          height: 40,
+                          width: double.infinity,
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 5, vertical: 5),
+                          decoration: BoxDecoration(
+                            color: Colors.black.withOpacity(0.6),
+                            borderRadius: const BorderRadius.only(
+                              bottomLeft: Radius.circular(10),
+                              bottomRight: Radius.circular(10),
+                            ),
+                          ),
+                          child: Text(
+                            "Informasi Tarif",
+                            style: TypographyStyle.bodyBold
+                                .copyWith(color: ColorConstants.whiteColor),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: Text(
+                "Berita Bangli Terkini",
+                style: TypographyStyle.headingBold
+                    .copyWith(color: ColorConstants.blueColor),
+              ),
+            ),
+            SizedBox(
+              height: 200,
               child: BlocProvider(
                 create: (context) =>
                     dashboardEmployeeInjec<DashbordEmployeeBloc>()
@@ -377,94 +430,52 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                 child: BlocBuilder<DashbordEmployeeBloc, DashbordEmployeeState>(
                   builder: (context, state) {
                     print(state);
+
                     if (state is DashboardUnauthenticated) {
-                      // Clear user data
                       coreInjection<UserLocalStorageService>().clearUser();
 
-                      // Navigate to login after current frame is rendered
                       SchedulerBinding.instance.addPostFrameCallback((_) {
                         context.goNamed(RouteNames.login);
                       });
 
-                      // Show snackbar
                       CustomSnackBar.show(
                         context,
                         "Anda belum login, silahkan login terlebih dahulu",
                         backgroundColor: Colors.red,
                       );
                     }
+
                     if (state is DashboardLoading) {
                       return const Center(child: CircularProgressIndicator());
                     } else if (state is DashboardLoaded) {
-                      final announcements = state.announcements;
+                      // Clone list agar tidak mengubah state asli
+                      final announcements = [...state.announcements];
+
+                      // Urutkan berdasarkan tanggal terbaru (pastikan createdAt adalah DateTime atau bisa diparse)
+                      announcements.sort((a, b) =>
+                          DateTime.parse(b.tanggalMulai)
+                              .compareTo(DateTime.parse(a.tanggalMulai)));
+
                       return RefreshIndicator(
                         onRefresh: () async {
-                          // Trigger event refresh
                           context
                               .read<DashbordEmployeeBloc>()
                               .add(GetAnnouncementsEvent(token));
-                          // Opsional: beri delay agar animasi refresh terlihat
                           await Future.delayed(const Duration(seconds: 1));
                         },
-                        child: ListView.builder(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 10, vertical: 10),
-                          itemCount: announcements.length,
-                          scrollDirection: Axis.vertical,
-                          itemBuilder: (context, index) {
-                            final announcement = announcements[index];
-                            return Padding(
-                              padding: const EdgeInsets.symmetric(
-                                  vertical: 5, horizontal: 10),
-                              child: GestureDetector(
-                                onTap: () {
-                                  context.goNamed(
-                                    RouteNames.detailPengumuman,
-                                    extra:
-                                        announcement, // pastikan ini adalah AnnouncementEntity
-                                  );
-                                },
-                                child: Card(
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 20, vertical: 20),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                            truncateText(
-                                              announcement.judul,
-                                            ), // Judul pengumuman
-                                            textAlign: TextAlign.left,
-                                            style: TypographyStyle.bodyBold
-                                                .copyWith(
-                                                    color: ColorConstants
-                                                        .blackColorPrimary)),
-                                        const SizedBox(height: 15),
-                                        SizedBox(
-                                          width: 300,
-                                          child: Text(
-                                              truncateTextBody(announcement
-                                                  .content), // Detail pengumuman
-                                              textAlign: TextAlign.start,
-                                              style: TypographyStyle
-                                                  .captionsMedium
-                                                  .copyWith(
-                                                      color: ColorConstants
-                                                          .greyColorPrimary)),
-                                        ),
-                                        const SizedBox(height: 15),
-                                      ],
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 20),
+                          child: ListView.builder(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            itemCount: announcements.length,
+                            scrollDirection: Axis.horizontal,
+                            itemBuilder: (context, index) {
+                              final announcement = announcements[index];
+                              return ItemContantAnnouncement(
+                                  announcement: announcement);
+                            },
+                          ),
                         ),
                       );
                     } else if (state is DashboardError) {
@@ -475,7 +486,7 @@ class _DashboardUserPagesState extends State<DashboardUserPages> {
                   },
                 ),
               ),
-            ),
+            )
           ],
         ),
       ),

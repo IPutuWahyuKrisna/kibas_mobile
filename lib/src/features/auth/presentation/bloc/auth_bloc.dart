@@ -55,7 +55,9 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     print(result);
 
     result.fold(
-      (failure) => emit(RegisterError(message: failure.message)),
+      (failure) => emit(const RegisterError(
+          message:
+              "gagal melakukan register, coba cek email atau nomor sambungan anda, mungkin itu sudah terdaftar")),
       (message) => emit(RegisterSuccess(message: message)),
     );
   }

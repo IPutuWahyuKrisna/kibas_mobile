@@ -12,6 +12,7 @@ class UserModel extends User {
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
+    
     // Akses objek 'data' terlebih dahulu
     return UserModel(
       email: json['email'],

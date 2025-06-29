@@ -38,10 +38,12 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       );
       print(response.data["message"]);
       if (response.statusCode == 200) {
-        print("berhasil");
+        print(response.data["data"].toString());
+
         final userModel = UserModel.fromJson(response.data["data"]);
         await authInjec<UserLocalStorageService>().saveUser(userModel);
         authInjec<UserLocalStorageService>().getUser();
+
         return userModel;
       } else {
         throw ServerException.fromDioError(DioException(
@@ -51,9 +53,11 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         ));
       }
     } on DioException catch (e) {
+      print(e.toString());
       throw ServerException.fromDioError(e);
     } catch (e) {
-      throw const UnknownException("Terjadi kesalahan yang tidak diketahui");
+      throw const UnknownException(
+          "Terjadi kesalahan yang tidak diketahui(remote)");
     }
   }
 
