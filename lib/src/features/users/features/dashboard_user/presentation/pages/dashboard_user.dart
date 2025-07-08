@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kibas_mobile/src/core/services/global_service_locator.dart';
-import 'package:kibas_mobile/src/features/employee/features/dashbord_employee/domain/entities/announcement_entity.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../../../../component/snack_bar.dart';

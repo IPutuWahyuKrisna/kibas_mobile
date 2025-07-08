@@ -39,6 +39,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       print(response.data["message"]);
       if (response.statusCode == 200) {
         print(response.data["data"].toString());
+        print(response.data["data"].toString());
 
         final userModel = UserModel.fromJson(response.data["data"]);
         await authInjec<UserLocalStorageService>().saveUser(userModel);

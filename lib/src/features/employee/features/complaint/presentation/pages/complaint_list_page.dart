@@ -99,7 +99,15 @@ class _ComplaintListEmployeePageState extends State<ComplaintListEmployeePage> {
                               ),
                               const SizedBox(height: 4),
                               Text(
-                                'Status: ${complaint.namaPelanggan}',
+                                'Nama Pelanggan: ${complaint.namaPelanggan}',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: Colors.black87,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                'jenis pengaduan: ${complaint.jenisPengaduan}',
                                 style: const TextStyle(
                                   fontSize: 14,
                                   color: Colors.black87,
