@@ -249,7 +249,7 @@ class _PostComplaintPageState extends State<PostComplaintPage> {
               children: [
                 DropdownButtonFormField<JenisPengaduanModel>(
                   isExpanded: true,
-                  value: selectedJenis,
+                  initialValue: selectedJenis,
                   items: jenisPengaduanList.map((jenis) {
                     return DropdownMenuItem<JenisPengaduanModel>(
                       value: jenis,

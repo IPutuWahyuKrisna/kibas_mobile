@@ -158,6 +158,11 @@ class _RekeningListPageState extends State<RekeningListPage> {
                                     style: TypographyStyle.bodyLight.copyWith(
                                         color:
                                             ColorConstants.blackColorPrimary)),
+                                Text(
+                                    "Kubikasi Pemakaian: ${tagihan.detail.pemakaian.split(',')[0]}m³",
+                                    style: TypographyStyle.bodyLight.copyWith(
+                                        color:
+                                            ColorConstants.blackColorPrimary)),
                               ],
                             ),
                           ),

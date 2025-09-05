@@ -231,7 +231,7 @@ class _PutRekeningPageState extends State<PutRekeningPage> {
         contentPadding:
             const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
       ),
-      value: selectedValue,
+      initialValue: selectedValue,
       items: items.map((item) {
         return DropdownMenuItem<int>(
           value: item['id'] as int,
