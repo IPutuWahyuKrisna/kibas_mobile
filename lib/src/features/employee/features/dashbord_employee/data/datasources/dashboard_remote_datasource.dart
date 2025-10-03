@@ -32,7 +32,7 @@ class DashboardRemoteDataSourceImpl implements DashboardRemoteDataSource {
         ),
       );
       print(
-          "ini response datanya ${response.statusCode} ${response.statusMessage}");
+          "ini response datanya ${response.statusCode} ${response.data['data']}");
       if (response.statusCode == 200) {
         final data = List<Map<String, dynamic>>.from(response.data['data']);
         return data.map((json) => AnnouncementModel.fromJson(json)).toList();

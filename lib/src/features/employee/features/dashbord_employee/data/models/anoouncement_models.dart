@@ -16,7 +16,7 @@ class AnnouncementModel extends Announcement {
       id: json['id'],
       judul: json['judul'],
       content: json['content'],
-      linkFoto: json['link_foto'],
+      linkFoto: json['link_foto'] ?? "",
       tanggalMulai: json['tanggal_mulai'],
       tanggalBerakhir: json['tanggal_berakhir'],
       targetScope: json['target_scope'],

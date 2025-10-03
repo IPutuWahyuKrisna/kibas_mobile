@@ -25,7 +25,6 @@ class _RekeningListPageState extends State<RekeningListPage> {
   Widget build(BuildContext context) {
     final userService = coreInjection<UserLocalStorageService>();
     final user = userService.getUser();
-
     return Scaffold(
       backgroundColor: Colors.lightBlue[50],
       appBar: AppBar(
@@ -159,7 +158,7 @@ class _RekeningListPageState extends State<RekeningListPage> {
                                         color:
                                             ColorConstants.blackColorPrimary)),
                                 Text(
-                                    "Kubikasi Pemakaian: ${tagihan.detail.pemakaian.split(',')[0]}m³",
+                                    "Kubikasi Pemakaian: ${tagihan.detail.pemakaian.split(',')[0]}",
                                     style: TypographyStyle.bodyLight.copyWith(
                                         color:
                                             ColorConstants.blackColorPrimary)),

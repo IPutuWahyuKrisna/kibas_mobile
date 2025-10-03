@@ -37,7 +37,7 @@ class DashboardRepositoryImpl implements DashboardRepositoryDomain {
       return const Left(
           UnauthenticatedFailure(message: "Anda belum melakukan login"));
     } catch (e) {
-      print("masuk kesini");
+      print(e);
       return const Left(UnknownFailure(
         message: "Terjadi kesalahan yang tidak diketahui",
       ));
